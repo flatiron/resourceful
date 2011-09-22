@@ -5,13 +5,6 @@ var assert = require('assert'),
     vows = require('vows'),
     resourceful = require('../lib/resourceful');
 
-var connection = new(resourceful.engines.Memory)('cache-test').load([
-  { resource: 'Article', title: 'The Great Gatsby', published: true,  author: 'fitzgerald'},
-  { resource: 'Article', title: 'Finding vim',      published: false, author: 'cloudhead' },
-  { resource: 'Article', title: 'Channeling force', published: true,  author: 'yoda' },
-  { resource: 'Body',    name: 'fitzgerald' }
-]);
-
 var Article = resourceful.define('Article', function () {
   this.property('title');
   this.property('published', Boolean);
