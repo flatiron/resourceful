@@ -285,7 +285,7 @@ vows.describe('resourceful').addVows({
     "on the Resource factory": {
       "with default Resources": {
         topic: function () {
-          new(resourceful.engines.Memory)('data-queries').load({
+          new(resourceful.engines.Memory)({uri: 'data-queries'}).load({
             bob: { _id: 42, age: 35, hair: 'black'},
             tim: { _id: 43, age: 16, hair: 'brown'},
             mat: { _id: 44, age: 29, hair: 'black'}
@@ -351,16 +351,17 @@ vows.describe('resourceful').addVows({
         "a create() request": {
           topic: function (r) {
             this.Factory = r;
-            r.create({ _id: 99, age: 30, hair: 'red'}, this.callback);
+            r.create({ _id: '99', age: 30, hair: 'red'}, this.callback);
           },
           "should return the newly created object": function (e, obj) {
+            assert.isNull(e);
             assert.strictEqual(obj.constructor,this.Factory);
             assert.instanceOf(obj,this.Factory);
             assert.equal(obj.id,99);
           },
           "should create the record in the db": function (e, res) {
-            assert.isObject(resourceful.connection.store[99]);
-            assert.equal(resourceful.connection.store[99].age, 30);
+            assert.isObject(this.Factory.connection.store['99']);
+            assert.equal(this.Factory.connection.store['99'].age, 30);
           }
         }
       },
@@ -421,10 +422,10 @@ vows.describe('resourceful').addVows({
           this.Resource = resourceful.define(function () {
             this.connection = conn;
           });
-          return new(this.Resource)({ _id: 42, name: "bob" });
+          return new(this.Resource)({ _id: '42', name: "bob" });
         },
         "the `isNewRecord` flag should be true": function (r) {
-            assert.strictEqual(r.isNewRecord, true);
+          assert.strictEqual(r.isNewRecord, true);
         },
         "a save() query": {
           topic: function (r) {
@@ -432,11 +433,12 @@ vows.describe('resourceful').addVows({
             r.save(this.callback);
           },
           "should save the document in the store": function (res) {
-            assert.include(this.connection.store, '42');
-            assert.equal(this.connection.store[42].name, "bob");
+            assert.include(this.Resource._connection.store, '42');
+            assert.equal(this.Resource._connection.store[42].name, "bob");
           },
           "should set the `resource` attribute accordingly": function (res) {
-            assert.equal(this.connection.store[42].resource, this.Resource._resource);
+            assert.equal(this.Resource._connection.store[42].resource,
+                         this.Resource._resource);
           },
           "should set the `isNewRecord` flag to false": function () {
             assert.strictEqual(this.r.isNewRecord, false);
@@ -446,7 +448,7 @@ vows.describe('resourceful').addVows({
               r.update({ name: "bobby" }, this.callback);
             },
             "should update the document": function (res) {
-              assert.equal(this.connection.store[42].name, "bobby");
+              assert.equal(this.Resource._connection.store[42].name, "bobby");
             }
           }
         }
@@ -457,7 +459,7 @@ vows.describe('resourceful').addVows({
           this.User = resourceful.define('user', function () {
             this.connection = conn;
           });
-          return new(this.User)({ _id: 55, name: "fab" });
+          return new(this.User)({ _id: '55', name: "fab" });
         },
         "a save() query": {
           topic: function (r) {
@@ -465,18 +467,18 @@ vows.describe('resourceful').addVows({
             r.save(this.callback);
           },
           "should save the document in the store": function (res) {
-            assert.include(this.connection.store, '55');
-            assert.equal(this.connection.store[55].name, "fab");
+            assert.include(this.User._connection.store, '55');
+            assert.equal(this.User._connection.store[55].name, "fab");
           },
           "should set the `resource` attribute accordingly": function (res) {
-            assert.equal(this.connection.store[55].resource, "User");
+            assert.equal(this.User._connection.store[55].resource, "User");
           },
           "and an update query": {
             topic: function (_, r) {
               r.update({ name: "bobby" }, this.callback);
             },
             "should update the document": function (res) {
-              assert.equal(this.connection.store[55].name, "bobby");
+              assert.equal(this.User._connection.store[55].name, "bobby");
             }
           }
         }
