@@ -285,7 +285,7 @@ vows.describe('resourceful').addVows({
     "on the Resource factory": {
       "with default Resources": {
         topic: function () {
-          resourceful.use(resourceful.engines.memory).connect().connection.load({
+          resourceful.use('memory').connect().connection.load({
             bob: { _id: 42, age: 35, hair: 'black'},
             tim: { _id: 43, age: 16, hair: 'brown'},
             mat: { _id: 44, age: 29, hair: 'black'}
