@@ -285,12 +285,12 @@ vows.describe('resourceful').addVows({
     "on the Resource factory": {
       "with default Resources": {
         topic: function () {
-          resourceful.use('memory').connect().connection.load({
+          new(resourceful.engines.Memory)('data-queries').load({
             bob: { _id: 42, age: 35, hair: 'black'},
             tim: { _id: 43, age: 16, hair: 'brown'},
             mat: { _id: 44, age: 29, hair: 'black'}
           });
-          return resourceful.define('poop');
+          return resourceful.define('poop').connect('memory://data-queries');
         },
         "a get() request": {
           "when successful": {
@@ -367,7 +367,7 @@ vows.describe('resourceful').addVows({
       "with user Resources": {
         topic: function () {
           resourceful.resources.Article = resourceful.define('article');
-          var connection = new(resourceful.engines.memory.Connection)('articles').load({
+          var connection = new(resourceful.engines.Memory)('articles').load({
             42: { _id: 42, title: 'on flasks', resource: 'Article'},
             43: { _id: 43, title: 'on eras',   resource: 'Article'},
             44: { _id: 44, title: 'on people', resource: 'Article'}
@@ -392,7 +392,7 @@ vows.describe('resourceful').addVows({
       "with heterogenous data": {
         topic: function () {
           resourceful.resources.Article = resourceful.define('article');
-          var connection = new(resourceful.engines.memory.Connection)('heterogenous').load({
+          var connection = new(resourceful.engines.Memory)('heterogenous').load({
             42:  { _id: 42, title: 'on flasks', resource: 'Article'},
             bob: { _id: 42, age: 35, hair: 'black'},
             tim: { _id: 43, age: 16, hair: 'brown'},
@@ -417,7 +417,7 @@ vows.describe('resourceful').addVows({
     "on a Resource instance": {
       "with a default resource": {
         topic: function () {
-          var conn = this.connection = new(resourceful.engines.memory.Connection)();
+          var conn = this.connection = new(resourceful.engines.Memory)();
           this.Resource = resourceful.define(function () {
             this.connection = conn;
           });
@@ -453,7 +453,7 @@ vows.describe('resourceful').addVows({
       },
       "with a user resource": {
         topic: function () {
-          var conn = this.connection = new(resourceful.engines.memory.Connection)();
+          var conn = this.connection = new(resourceful.engines.Memory)();
           this.User = resourceful.define('user', function () {
             this.connection = conn;
           });
