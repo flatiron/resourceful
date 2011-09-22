@@ -6,9 +6,9 @@ var assert = require('assert'),
     resourceful = require('../lib/resourceful');
 
 var connection = new(resourceful.engines.Memory)('cache-test').load([
-  { resource: 'Article', title: 'The Great Gatsby', published: true,  author: 'fitzgerald'},    
-  { resource: 'Article', title: 'Finding vim',      published: false, author: 'cloudhead' },    
-  { resource: 'Article', title: 'Channeling force', published: true,  author: 'yoda' },    
+  { resource: 'Article', title: 'The Great Gatsby', published: true,  author: 'fitzgerald'},
+  { resource: 'Article', title: 'Finding vim',      published: false, author: 'cloudhead' },
+  { resource: 'Article', title: 'Channeling force', published: true,  author: 'yoda' },
   { resource: 'Body',    name: 'fitzgerald' }
 ]);
 
@@ -28,7 +28,7 @@ vows.describe('resourceful/resource/cache', {
         Article.get('43', this.callback);
       },
       "it should return the previous instance": function (res) {
-        assert.strictEqual (res._properties, this.article._properties);
+        assert.strictEqual(res._properties, this.article._properties);
       }
     },
     "and then loading it back up with `find()`": {
@@ -36,7 +36,7 @@ vows.describe('resourceful/resource/cache', {
         Article.find({ title: "The Last Article" }, this.callback);
       },
       "it should return the previous instance": function (res) {
-        assert.strictEqual (res[0]._properties, this.article._properties);
+        assert.strictEqual(res[0]._properties, this.article._properties);
       }
     }
   }
@@ -52,7 +52,7 @@ vows.describe('resourceful/resource/cache', {
         Article.get('43', this.callback);
       },
       "it should return a new instance": function (res) {
-        assert.notStrictEqual (res, this.article);
+        assert.notStrictEqual(res, this.article);
       }
     }
   }
