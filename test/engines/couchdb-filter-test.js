@@ -15,7 +15,7 @@ resourceful.env = 'test';
 vows.describe('resourceful/resource/view').addVows({
   "A database containing articles and other resources": {
     topic: function () {
-      resourceful.use('database');
+      resourceful.connect('couchdb://test');
       var promise = new(events.EventEmitter);
       var db = new(cradle.Connection)().database('test');
       db.destroy(function () {
@@ -40,7 +40,6 @@ vows.describe('resourceful/resource/view').addVows({
   "A Resource definition with filters": {
     topic: function () {
       Article = resourceful.define('Article', function () {
-        this.use('database');
         this.property('author');
         this.property('title');
         this.property('published', Boolean);
@@ -48,7 +47,7 @@ vows.describe('resourceful/resource/view').addVows({
         this.filter('all', {});
         this.filter('published', { published: true });
         this.filter('by', function (author) { return { author: author } });
-      });
+      }).connect('couchdb://test');
 
       Article.register();
       return Article;
