@@ -15,7 +15,7 @@ resourceful.env = 'test';
 vows.describe('resourceful/resource/view').addVows({
   "A database containing articles and other resources": {
     topic: function () {
-      resourceful.connect('couchdb://test');
+      resourceful.use('couchdb', 'couchdb://localhost:5984/test');
       var promise = new(events.EventEmitter);
       var db = new(cradle.Connection)().database('test');
       db.destroy(function () {
@@ -40,6 +40,7 @@ vows.describe('resourceful/resource/view').addVows({
   "A Resource definition with filters": {
     topic: function () {
       Article = resourceful.define('Article', function () {
+        this.use('couchdb', 'couchdb://localhost:5984/test');
         this.property('author');
         this.property('title');
         this.property('published', Boolean);
@@ -47,7 +48,7 @@ vows.describe('resourceful/resource/view').addVows({
         this.filter('all', {});
         this.filter('published', { published: true });
         this.filter('by', function (author) { return { author: author } });
-      }).connect('couchdb://test');
+      })
 
       Article.register();
       return Article;
@@ -115,7 +116,7 @@ vows.describe('resourceful/resource/view').addVows({
   "A second Resource definition with filters": {
     topic: function () {
       return resourceful.define('Person', function () {
-        this.use('database');
+        this.use('couchdb', 'couchdb://localhost:5984/test');
         this.property('name');
         this.property('position');
         this.property('age', Number);
