@@ -29,9 +29,10 @@ vows.describe('resourceful/events').addBatch({
       },
       "when calling save() on an instance of Article": {
         topic: function (A) {
-          new(A)({ _id: '64', title: 'an Article' }).save(this.callback);
+          new(A)({ _id: '66', title: 'an Article' }).save(this.callback);
         },
         "should trigger the bound function": function (e, res) {
+          assert.isNull(e);
           assert.isObject(this.obj);
           assert.equal(this.obj, res);
         }
