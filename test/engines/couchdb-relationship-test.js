@@ -6,7 +6,7 @@ var path = require('path'),
     fs = require('fs'),
     cradle = require('cradle'),
     vows = require('vows'),
-    resourceful = require('resourceful');
+    resourceful = require('../../lib/resourceful');
 
 var numberOfArticles = 5;
 

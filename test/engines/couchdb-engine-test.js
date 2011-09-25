@@ -7,7 +7,7 @@ var path = require('path'),
     fs = require('fs'),
     vows = require('vows'),
     cradle = require('cradle'),
-    resourceful = require('resourceful');
+    resourceful = require('../../lib/resourceful');
 
 resourceful.env = 'test';
 

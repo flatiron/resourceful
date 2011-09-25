@@ -1,9 +1,8 @@
 var path = require('path'),
     assert = require('assert'),
     events = require('events'),
-    vows = require('vows');
-
-var resourceful = require('resourceful');
+    vows = require('vows'),
+    resourceful = require('../lib/resourceful');
 
 vows.describe('resourceful/hooks').addBatch({
   "a Resource": {

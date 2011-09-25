@@ -5,7 +5,7 @@ var path = require('path'),
     http = require('http'),
     fs = require('fs'),
     vows = require('vows'),
-    resourceful = require('resourceful');
+    resourceful = require('../lib/resourceful');
 
 vows.describe('resourceful/events').addBatch({
   "an Article": {
