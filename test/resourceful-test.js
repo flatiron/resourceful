@@ -207,6 +207,15 @@ vows.describe('resourceful').addVows({
         "minLength": function (p) {},
         "maxLength": function (p) {},
         "length": function (p) {},
+        "sanitize": {
+          topic: function (p) {
+            p.sanitize('upper');
+            return new this.Resource({kind: 'test'});
+          },
+          "and pass check": function (instance) {
+            assert.equal(instance.kind, 'TEST');
+          }
+        },
       }
     },
     "with a 'number' type": {
