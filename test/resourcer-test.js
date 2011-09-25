@@ -243,6 +243,27 @@ vows.describe('resourceful').addVows({
         assert.equal(r.properties.description.type, "string");
       }
     },
+    "with constructor's call": {
+      topic: function () {
+        var r = resourceful.define({
+          properties: {
+            title: {
+              type: "string",
+              maxLength: 16
+            },
+            description: {
+              type: "string",
+              maxLength: 32
+            }
+          }
+        });
+        return r;
+      },
+      "should add entries to `properties`": function (r) {
+        assert.equal(r.properties.title.maxLength, 16);
+        assert.equal(r.properties.description.maxLength, 32);
+      }
+    },
     "with `define()`": {
       topic: function () {
         var r = resourceful.define();
