@@ -207,13 +207,49 @@ vows.describe('resourceful').addVows({
         "minLength": function (p) {},
         "maxLength": function (p) {},
         "length": function (p) {},
-        "sanitize": {
+        "sanitize('upper')": {
           topic: function (p) {
             p.sanitize('upper');
             return new this.Resource({kind: 'test'});
           },
           "and pass check": function (instance) {
             assert.equal(instance.kind, 'TEST');
+          }
+        },
+        "sanitize('lower')": {
+          topic: function (p) {
+            p.sanitize('lower');
+            return new this.Resource({kind: 'TEST'});
+          },
+          "and pass check": function (instance) {
+            assert.equal(instance.kind, 'test');
+          }
+        },
+        "sanitize('capitalize')": {
+          topic: function (p) {
+            p.sanitize('capitalize');
+            return new this.Resource({kind: 'mexico'});
+          },
+          "and pass check": function (instance) {
+            assert.equal(instance.kind, 'Mexico');
+          }
+        },
+        "sanitize('pluralize')": {
+          topic: function (p) {
+            p.sanitize('pluralize');
+            return new this.Resource({kind: 'test'});
+          },
+          "and pass check": function (instance) {
+            assert.equal(instance.kind, 'tests');
+          }
+        },
+        "sanitize('replace')": {
+          topic: function (p) {
+            p.sanitize('replace', /[^a-z]+/g, '-');
+            return new this.Resource({kind: 'hello world'});
+          },
+          "and pass check": function (instance) {
+            assert.equal(instance.kind, 'hello-world');
           }
         },
       }
@@ -227,6 +263,33 @@ vows.describe('resourceful').addVows({
         "minimum": function (p) {},
         "maximum": function (p) {},
         "within": function (p) {},
+        "sanitize('round')": {
+          topic: function (p) {
+            p.sanitize('round');
+            return new this.Resource({size: 10.5});
+          },
+          "and pass check": function (instance) {
+            assert.equal(instance.size, 11);
+          }
+        },
+        "sanitize(function () {...})": {
+          topic: function (p) {
+            p.sanitize(function (x) { return x * x; });
+            return new this.Resource({size: 3});
+          },
+          "and pass check": function (instance) {
+            assert.equal(instance.size, 9);
+          },
+          "with changing property\'s value": {
+            topic: function(instance) {
+              instance.size = 30;
+              return instance.size;
+            },
+            "and pass check": function (size) {
+              assert.equal(size, 900);
+            }
+          }
+        },
       },
       "return an object which doesn't implement String 'definers'": function (p) {
         assert.isUndefined(p.pattern);
