@@ -21,11 +21,12 @@ vows.describe('resourceful/resource/relationship').addBatch({
         db.destroy(function () {
           db.create(function () {
             db.save([
+              { resource: 'Author', _id: 'yoda', Article_ids: ['a-1']},
               { resource: 'Article', title: 'The Great Gatsby', author: 'fitzgerald', tags: ['classic'] },
               { resource: 'Article', title: 'Finding vim',      author: 'cloudhead', tags: ['hacking', 'vi'] },
               { resource: 'Article', title: 'On Writing',       author: 'cloudhead', tags: ['writing'] },
               { resource: 'Article', title: 'vi Zen',           author: 'cloudhead', tags: ['vi', 'zen'] },
-              { resource: 'Article', title: 'Channeling force', author: 'yoda',      tags: ['force', 'zen'] },
+              { resource: 'Article', _id: 'a-1', title: 'Channeling force', author_id: 'yoda',      tags: ['force', 'zen'] },
               { resource: 'Body',    name: 'fitzgerald' }
             ], callback);
           });
@@ -38,8 +39,15 @@ vows.describe('resourceful/resource/relationship').addBatch({
           this.Article.parent('author');
           return null;
         },
-        "Author should have a <articles> method": function () {
-          assert.isFunction(this.Author.articles);
+        "Author should have a <articles> method": {
+          topic: function () {
+            assert.isFunction(this.Author.articles);
+            this.Author.articles('yoda', this.callback);
+          },
+          "which will return all author's articles": function (articles) {
+            assert.equal(articles.length, 1);
+            assert.instanceOf(articles[0], this.Article);
+          }
         },
         "Author should have a <parents> property which is empty": function () {
           assert.isArray(this.Author.parents);
