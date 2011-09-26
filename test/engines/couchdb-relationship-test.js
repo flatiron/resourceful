@@ -39,9 +39,11 @@ vows.describe('resourceful/resource/relationship').addBatch({
           this.Article.parent('author');
           return null;
         },
+        "Author should have a <articles> method": function () {
+          assert.isFunction(this.Author.articles);
+        },
         "Author should have a <articles> method": {
           topic: function () {
-            assert.isFunction(this.Author.articles);
             this.Author.articles('yoda', this.callback);
           },
           "which will return all author's articles": function (articles) {
