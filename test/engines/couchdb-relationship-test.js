@@ -85,7 +85,7 @@ vows.describe('resourceful/resource/relationship').addBatch({
           },
           "article should have a <author_id> property": function (Author, Article) {
             assert.include(this.article,'author_id');
-            assert.isNull(this.article.author_id);
+            assert.isUndefined(this.article.author_id);
           },
           "article should have a <author> method": function (Author, Article) {
             assert.isFunction(this.article.author);
