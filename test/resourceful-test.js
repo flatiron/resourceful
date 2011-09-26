@@ -156,10 +156,10 @@ vows.describe('resourceful').addVows({
         assert.equal(p.property.type, "integer");
         assert.throws(function () { p.type('unknwon') }, TypeError);
       },
-      "optional": function (p) {
-        p.optional(true);
-        assert.equal(p.property.optional, true);
-        assert.throws(function () { p.optional(1) }, TypeError);
+      "required": function (p) {
+        p.required(true);
+        assert.equal(p.property.required, true);
+        assert.throws(function () { p.required(1) }, TypeError);
       },
       "unique": function (p) {
         p.unique(true);
