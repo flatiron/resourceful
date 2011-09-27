@@ -144,6 +144,23 @@ vows.describe('resourceful').addVows({
       assert.length(Object.keys(r.properties), 2); // 'dup' & 'id'
     },
   },
+  "A Resource with sanitized _id": {
+    topic: function () {
+      var r = this.r = resourceful.define();
+      r.use('memory', 'memory://testx');
+      r.property('_id', 'string').sanitize('lower');
+
+      new r({ _id: 'AbC'}).save(this.callback);
+    },
+    "should be saved": {
+      topic: function() {
+        this.r.get('aBc', this.callback);
+      },
+      "and be found by non-sanitized_id": function (r) {
+        console.error(r);
+      }
+    }
+  },
   "The `property()` method": {
     topic: function () {
       this.Resource = resourceful.define();
