@@ -17,6 +17,6 @@
   },
   "main": "./lib/resourceful",
   "scripts": {
-    "test": "vows --spec"
+    "test": "vows --spec -i"
   }
 }
