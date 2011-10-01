@@ -483,7 +483,8 @@ vows.describe('resourceful').addVows({
             43: { _id: 43, title: 'on eras',   resource: 'Article'},
             44: { _id: 44, title: 'on people', resource: 'Article'}
           });
-          return resourceful.define(function () { this.connection = connection });
+          resourceful.resources.Article.connection = connection;
+          return resourceful.resources.Article;
         },
         "a get() request": {
           topic: function (r) {
@@ -509,7 +510,9 @@ vows.describe('resourceful').addVows({
             tim: { _id: 43, age: 16, hair: 'brown'},
             44:  { _id: 44, title: 'on people', resource: 'Article'}
           });
-          return resourceful.define(function () { this.connection = connection });
+
+          resourceful.resources.Article.connection = connection;
+          return resourceful.resources.Article;
         },
         "an all() request": {
           topic: function (r) {
