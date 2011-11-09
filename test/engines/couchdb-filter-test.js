@@ -67,7 +67,7 @@ vows.describe('resourceful/resource/view').addVows({
         "should return an array of all published Articles": function (e, res) {
           var that = this;
           assert.isArray(res);
-          assert.length(res,3);
+          assert.lengthOf(res,3);
           res.forEach(function (d) {
             assert.isObject(d);
             assert.instanceOf(d,that.Article);
@@ -83,7 +83,7 @@ vows.describe('resourceful/resource/view').addVows({
         },
         "should return an array of all Article records": function (e, res) {
           assert.isArray(res);
-          assert.length(res,5);
+          assert.lengthOf(res,5);
         }
       },
       "<by> 'cloudhead'": {
@@ -92,7 +92,7 @@ vows.describe('resourceful/resource/view').addVows({
         },
         "should return an array of Article records by 'cloudhead'": function (e, res) {
           assert.isArray(res);
-          assert.length(res,3);
+          assert.lengthOf(res,3);
           res.forEach(function (d) {
             assert.isObject(d);
             assert.equal(d.resource,'Article');
@@ -106,7 +106,7 @@ vows.describe('resourceful/resource/view').addVows({
         },
         "should return an array of Article records by 'yoda'": function (e, res) {
           assert.isArray(res);
-          assert.length(res,1);
+          assert.lengthOf(res,1);
           assert.equal(res[0].author,'yoda');
         }
       }
