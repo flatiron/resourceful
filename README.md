@@ -190,7 +190,7 @@ These are the *prototype* methods, available on resource instances created with 
 ### Installing resourceful
 ``` bash 
   $ [sudo] npm install resourceful
-````
+```
 
 ## Tests
 All tests are written with [vows][0] and should be run with [npm][1]:
