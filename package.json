@@ -1,7 +1,7 @@
 {
   "name": "resourceful",
-  "version": "0.0.0",
-  "description": "A resource-oriented ODM with a high-level API for routing and validation",
+  "version": "0.1.0",
+  "description": "A storage agnostic resource-oriented ODM for building prototypical models with validation and sanitization.",
   "url": "http://github.com/flatiron/resourceful",
   "keywords": ["ODM", "database", "couchdb", "model", "resource"],
   "author": "Charlie Robbins <charlie@nodejitsu.com>",
