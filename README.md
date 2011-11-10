@@ -16,9 +16,9 @@ A storage agnostic resource-oriented ODM for building prototypical models with v
     //
     // Specify some properties with validation
     //
-    Creature.property('diet'); // Defaults to String
-    Creature.property('vertebrate', Boolean);
-    Creature.property('belly', Array);    
+    this.property('diet'); // Defaults to String
+    this.property('vertebrate', Boolean);
+    this.property('belly', Array);
   });
   
   //
@@ -205,3 +205,4 @@ All tests are written with [vows][0] and should be run with [npm][1]:
 
 [0]: http://vowsjs.org
 [1]: http://npmjs.org
+
