@@ -141,7 +141,7 @@ vows.describe('resourceful/engines/database').addVows({
       },
       "should respond with an array of all records": function (e, obj) {
         assert.isArray(obj);
-        assert.lengthOf(obj, 4);
+        assert.equal(obj.length, 4);
       }
     }
   }

@@ -88,7 +88,7 @@ vows.describe('resourceful').addVows({
     },
     "the `properties` accessor returns an object with only the '_id' property": function (r) {
       assert.isObject(r.properties);
-      assert.lengthOf(Object.keys(r.properties), 1);
+      assert.equal(Object.keys(r.properties).length, 1);
       assert.include(r.properties, '_id');
     },
     // Should it be a pointer to the 'id' property instead?
@@ -105,7 +105,7 @@ vows.describe('resourceful').addVows({
       return r;
     },
     "adds them to `Resource.properties`": function (r) {
-      assert.lengthOf(Object.keys(r.properties),3);
+      assert.equal(Object.keys(r.properties).length,3);
       assert.include(r.properties, 'title');
       assert.include(r.properties, 'kind');
     },
@@ -125,7 +125,7 @@ vows.describe('resourceful').addVows({
         assert.include(keys, 'title');
         assert.include(keys, 'kind');
         assert.include(keys, 'resource');
-        assert.lengthOf(keys, 4);
+        assert.equal(keys.length, 4);
       },
       "should set the unspecified values to `undefined`": function (r) {
         assert.include(r, 'kind');
@@ -141,7 +141,7 @@ vows.describe('resourceful').addVows({
       return r;
     },
     "only keeps the last copy": function (r) {
-      assert.lengthOf(Object.keys(r.properties), 2); // 'dup' & 'id'
+      assert.equal(Object.keys(r.properties).length, 2); // 'dup' & 'id'
     },
   },
   "A Resource with sanitized _id": {
@@ -433,7 +433,7 @@ vows.describe('resourceful').addVows({
               r.find({ hair: "black" }, this.callback);
             },
             "should respond with an array of length 2": function (e, obj) {
-              assert.lengthOf(obj, 2);
+              assert.equal(obj.length, 2);
             },
             "should respond with an array of Resource instances": function (e, obj) {
               assert.isArray(obj);
@@ -445,7 +445,7 @@ vows.describe('resourceful').addVows({
             topic: function (r) { r.find({ hair: "blue" }, this.callback); },
             "should respond with an empty array": function (e, obj) {
               assert.isArray(obj);
-              assert.lengthOf(obj, 0)
+              assert.equal(obj.length, 0);
             }
           }
         },
@@ -455,7 +455,7 @@ vows.describe('resourceful').addVows({
           },
           "should respond with an array of all records": function (e, obj) {
             assert.isArray(obj);
-            assert.lengthOf(obj, 3);
+            assert.equal(obj.length, 3);
           }
         },
         "a create() request": {
