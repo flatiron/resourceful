@@ -88,7 +88,7 @@ vows.describe('resourceful/hooks').addBatch({
       },
       "when calling create() on an instance of Article": {
         topic: function (A) {
-          A.create({ _id: '66', counter: 0, title: 'foobar' }, this.callback);
+          A.create({ _id: '69', counter: 0, title: 'foobar' }, this.callback);
         },
         "should trigger both hooks in the right order": function (e, res) {
           assert.isNull(e);
