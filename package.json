@@ -8,6 +8,10 @@
   "contributors": [
     { "name": "Alexis Sellier", "email": "self@cloudhead.io" }
   ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/flatiron/resourceful.git"
+  },
   "dependencies": {
     "cradle": "0.5.x",
     "revalidator": "*" 
