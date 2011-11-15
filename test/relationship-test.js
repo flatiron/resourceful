@@ -37,6 +37,81 @@ function authorAndArticles(name) {
   };
 };
 
+function category(parentName,childName){
+  return {
+    topic: function () {
+      this.Category.create({
+        _id: 'category-'+parentName,
+        name: parentName
+      },this.callback)
+    },
+    'should not fail': function (err,parent) {
+      assert.isNull(err);
+      assert.equal(parent.name,parentName)
+    },
+    'with parent Category': {
+      topic: function(parent){
+        parent.createCategory({
+          _id: 'category-'+childName,
+          name: childName
+        },this.callback)
+      },
+      'should not fail': function(err,child){
+        assert.isNull(err);
+        assert.equal(child.name,childName)
+      }
+    }
+  }
+}
+
+function categoryParentTest(name) {
+  var parent_id = 'category-'+name
+  return {
+    topic: function(){
+      // FIXME category pluralized should be categories (maybe use https://github.com/MSNexploder/inflect?)
+      this.Category.categorys(parent_id,this.callback);
+    },
+    'should return the children': function(err,children){
+      assert.isNull(err);
+      assert.ok(Array.isArray(children));
+      assert.ok(children.every(function (category) {
+        return category.category_id === parent_id;
+      }));
+    },
+    'and .category() of the first child': {
+      topic: function(children){
+        children[0].category(this.callback)
+      },
+      'should return the parent': function(err,parent){
+        assert.isNull(err);
+        assert.equal(parent_id,parent.id);
+      }
+    }
+  }
+}
+
+function categoryChildTest(name) {
+  var child_id = 'category-'+name
+  return {
+    topic: function(){
+      this.Category.get(child_id,this.callback);
+    },
+    'should return the child': function(err,child){
+      assert.isNull(err);
+      assert.equal(child.name,name);
+    },
+    'and child.category()': {
+      topic: function(child){
+        child.category(this.callback)
+      },
+      'should return the parent': function(err,parent){
+        assert.isNull(err);
+        assert.notEqual(parent.name,name);
+      }
+    }
+  }
+}
+
 function authorTest(name) {
   var author_id = 'author-' + name;
 
@@ -93,7 +168,7 @@ function articleTest(name) {
   };
 };
 
-vows.describe('resourcefule/memory/relationship').addBatch({
+vows.describe('resourceful/memory/relationship').addBatch({
   'Initializing': {
     'A memory store': {
       topic: function () {
@@ -101,7 +176,7 @@ vows.describe('resourcefule/memory/relationship').addBatch({
         return null;
       },
       'with': {
-        'author and article models': {
+        'author, category and article models': {
           topic: function () {
             this.Author = resourceful.define('author', function () {
               this.property('name', String);
@@ -110,11 +185,17 @@ vows.describe('resourcefule/memory/relationship').addBatch({
               this.property('title', String);
               this.parent('Author');
             });
+            this.Category = resourceful.define('category', function () {
+              this.property('name', String);
+              // FIXME Allow this.parent('category') by resourceful.register() earlier in resourceful.define()
+            });
+            this.Category.parent('category')
             return null;
           },
           'with': {
             'Author #1': authorAndArticles('paul'),
-            'Author #2': authorAndArticles('bob')
+            'Author #2': authorAndArticles('bob'),
+            'Category #1 & #2': category('alice','bob')
           }
         }
       }
@@ -125,11 +206,14 @@ vows.describe('resourcefule/memory/relationship').addBatch({
     topic: function () {
       this.Author = resourceful.resources['Author'];
       this.Article = resourceful.resources['Article'];
+      this.Category = resourceful.resources['Category'];
       return null;
     },
     'paul.articles': authorTest('paul'),
     'bob.articles': authorTest('bob'),
     'Article.byAuthor(\'paul\')': articleTest('paul'),
-    'Article.byAuthor(\'bob\')': articleTest('bob')
+    'Article.byAuthor(\'bob\')': articleTest('bob'),
+    'Category.categories()': categoryParentTest('alice'),
+    'Category.category()': categoryChildTest('bob')
   }
 }).export(module);
