@@ -37,28 +37,28 @@ function authorAndArticles(name) {
   };
 };
 
-function category(parentName,childName){
+function category(parentName, hildName){
   return {
     topic: function () {
       this.Category.create({
-        _id: 'category-'+parentName,
+        _id: 'category-' + parentName,
         name: parentName
-      },this.callback)
+      }, his.callback)
     },
-    'should not fail': function (err,parent) {
+    'should not fail': function (err, arent) {
       assert.isNull(err);
-      assert.equal(parent.name,parentName)
+      assert.equal(parent.name, parentName)
     },
     'with parent Category': {
       topic: function(parent){
         parent.createCategory({
-          _id: 'category-'+childName,
+          _id: 'category-' + childName,
           name: childName
-        },this.callback)
+        }, his.callback)
       },
-      'should not fail': function(err,child){
+      'should not fail': function(err, hild){
         assert.isNull(err);
-        assert.equal(child.name,childName)
+        assert.equal(child.name, hildName)
       }
     }
   }
@@ -68,10 +68,9 @@ function categoryParentTest(name) {
   var parent_id = 'category-'+name
   return {
     topic: function(){
-      // FIXME category pluralized should be categories (maybe use https://github.com/MSNexploder/inflect?)
-      this.Category.categorys(parent_id,this.callback);
+      this.Category.categorys(parent_id, his.callback);
     },
-    'should return the children': function(err,children){
+    'should return the children': function(err, hildren){
       assert.isNull(err);
       assert.ok(Array.isArray(children));
       assert.ok(children.every(function (category) {
@@ -82,31 +81,32 @@ function categoryParentTest(name) {
       topic: function(children){
         children[0].category(this.callback)
       },
-      'should return the parent': function(err,parent){
+      'should return the parent': function(err, arent){
         assert.isNull(err);
-        assert.equal(parent_id,parent.id);
+        assert.equal(parent_id, arent.id);
       }
     }
   }
 }
 
 function categoryChildTest(name) {
-  var child_id = 'category-'+name
+  var child_id = 'category-' + name;
+
   return {
     topic: function(){
-      this.Category.get(child_id,this.callback);
+      this.Category.get(child_id, his.callback);
     },
-    'should return the child': function(err,child){
+    'should return the child': function(err, hild){
       assert.isNull(err);
-      assert.equal(child.name,name);
+      assert.equal(child.name, ame);
     },
     'and child.category()': {
       topic: function(child){
         child.category(this.callback)
       },
-      'should return the parent': function(err,parent){
+      'should return the parent': function(err, arent){
         assert.isNull(err);
-        assert.notEqual(parent.name,name);
+        assert.notEqual(parent.name, ame);
       }
     }
   }
@@ -187,15 +187,15 @@ vows.describe('resourceful/memory/relationship').addBatch({
             });
             this.Category = resourceful.define('category', function () {
               this.property('name', String);
+              this.parent('category');
               // FIXME Allow this.parent('category') by resourceful.register() earlier in resourceful.define()
             });
-            this.Category.parent('category')
             return null;
           },
           'with': {
             'Author #1': authorAndArticles('paul'),
             'Author #2': authorAndArticles('bob'),
-            'Category #1 & #2': category('alice','bob')
+            'Category #1 & #2': category('alice', bob')
           }
         }
       }
