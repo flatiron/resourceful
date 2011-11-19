@@ -1,5 +1,4 @@
 var path = require('path'),
-    sys = require('sys'),
     assert = require('assert'),
     events = require('events'),
     http = require('http'),
@@ -40,3 +39,4 @@ vows.describe('resourceful/events').addBatch({
     }
   }
 }).export(module);
+

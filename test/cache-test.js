@@ -1,7 +1,6 @@
 var assert = require('assert'),
     events = require('events'),
     path = require('path'),
-    sys = require('sys'),
     vows = require('vows'),
     resourceful = require('../lib/resourceful');
 
