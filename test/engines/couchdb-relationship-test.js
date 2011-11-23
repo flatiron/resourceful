@@ -13,30 +13,32 @@ resourceful.env = 'test';
 
 vows.describe('resourceful/resource/relationship').addBatch({
   "One-To-Many:": {
-    "A database containing authors and articles": {
+    "An empty database": {
       topic: function () {
         resourceful.use('couchdb', 'couchdb://localhost:5984/test');
         var db = new(cradle.Connection)().database('test'), callback = this.callback;
         db.destroy(function () {
           db.create(function () {
-            db.save([
-              { resource: 'Author', _id: 'yoda', article_ids: ['a-1']},
-              { resource: 'Article', title: 'The Great Gatsby', author: 'fitzgerald', tags: ['classic'] },
-              { resource: 'Article', title: 'Finding vim',      author: 'cloudhead', tags: ['hacking', 'vi'] },
-              { resource: 'Article', title: 'On Writing',       author: 'cloudhead', tags: ['writing'] },
-              { resource: 'Article', title: 'vi Zen',           author: 'cloudhead', tags: ['vi', 'zen'] },
-              { resource: 'Article', _id: 'a-1', title: 'Channeling force', author_id: 'yoda',      tags: ['force', 'zen'] },
-              { resource: 'Body',    name: 'fitzgerald' }
-            ], callback);
+            callback();
           });
         })
       },
       "and a Resource definition for Author and Article": {
         topic: function () {
-          this.Article = resourceful.define('article', function () {});
+          var Article = this.Article = resourceful.define('article', function () {});
           this.Author  = resourceful.define('author',  function () { this.child('article') });
           this.Article.parent('author');
-          return null;
+
+          var callback = this.callback;
+          this.Author.create({_id:'yoda'},function(err,author){
+            var pending = numberOfArticles;
+            function done(){--pending || callback()}
+            author.createArticle({ _id: 'a-1', title: 'Channeling force',  tags: ['force', 'zen'] },done)
+            Article.create({ _id: 'a-2', title: 'The Great Gatsby',  author: 'fitzgerald', tags: ['classic'] },done)
+            Article.create({ _id: 'a-3', title: 'Finding vim',       author: 'cloudhead', tags: ['hacking', 'vi'] },done)
+            Article.create({ _id: 'a-4', title: 'On Writing',        author: 'cloudhead', tags: ['writing'] },done)
+            Article.create({ _id: 'a-5', title: 'vi Zen',            author: 'cloudhead', tags: ['vi', 'zen'] },done)
+          })
         },
         "Author should have a <articles> method": function () {
           assert.isFunction(this.Author.articles);
