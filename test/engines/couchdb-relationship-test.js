@@ -20,7 +20,7 @@ vows.describe('resourceful/resource/relationship').addBatch({
         db.destroy(function () {
           db.create(function () {
             db.save([
-              { resource: 'Author', _id: 'yoda', Article_ids: ['a-1']},
+              { resource: 'Author', _id: 'yoda', article_ids: ['a-1']},
               { resource: 'Article', title: 'The Great Gatsby', author: 'fitzgerald', tags: ['classic'] },
               { resource: 'Article', title: 'Finding vim',      author: 'cloudhead', tags: ['hacking', 'vi'] },
               { resource: 'Article', title: 'On Writing',       author: 'cloudhead', tags: ['writing'] },
@@ -88,6 +88,17 @@ vows.describe('resourceful/resource/relationship').addBatch({
           },
           "article should have a <author> method": function (Author, Article) {
             assert.isFunction(this.article.author);
+          }
+        },
+        "Article should have a <byAuthor> method":{
+          topic: function () {
+            this.Article.byAuthor('yoda',this.callback);
+          },
+          "which will return all articles by that author": function (articles) {
+            assert.isArray(articles);
+            assert.equal(articles.length, 1);
+            assert.equal(articles[0].author_id,'yoda');
+            assert.equal(articles[0].id,'a-1');
           }
         }
       }
