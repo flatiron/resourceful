@@ -29,16 +29,17 @@ vows.describe('resourceful/resource/relationship').addBatch({
           this.Author  = resourceful.define('author',  function () { this.child('article') });
           this.Article.parent('author');
 
-          var callback = this.callback;
+          var callback = this.callback,
+              pending = numberOfArticles,
+              done = function(){--pending || callback()}
+
           this.Author.create({_id:'yoda'},function(err,author){
-            var pending = numberOfArticles;
-            function done(){--pending || callback()}
             author.createArticle({ _id: 'a-1', title: 'Channeling force',  tags: ['force', 'zen'] },done)
-            Article.create({ _id: 'a-2', title: 'The Great Gatsby',  author: 'fitzgerald', tags: ['classic'] },done)
-            Article.create({ _id: 'a-3', title: 'Finding vim',       author: 'cloudhead', tags: ['hacking', 'vi'] },done)
-            Article.create({ _id: 'a-4', title: 'On Writing',        author: 'cloudhead', tags: ['writing'] },done)
-            Article.create({ _id: 'a-5', title: 'vi Zen',            author: 'cloudhead', tags: ['vi', 'zen'] },done)
           })
+          Article.create({ _id: 'a-2', title: 'The Great Gatsby',  author: 'fitzgerald', tags: ['classic'] },done)
+          Article.create({ _id: 'a-3', title: 'Finding vim',       author: 'cloudhead', tags: ['hacking', 'vi'] },done)
+          Article.create({ _id: 'a-4', title: 'On Writing',        author: 'cloudhead', tags: ['writing'] },done)
+          Article.create({ _id: 'a-5', title: 'vi Zen',            author: 'cloudhead', tags: ['vi', 'zen'] },done)
         },
         "Author should have a <articles> method": function () {
           assert.isFunction(this.Author.articles);
