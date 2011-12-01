@@ -16,9 +16,9 @@ A storage agnostic resource-oriented ODM for building prototypical models with v
     //
     // Specify some properties with validation
     //
-    this.property('diet'); // Defaults to String
-    this.property('vertebrate', Boolean);
-    this.property('belly', Array);
+    this.string('diet');
+    this.bool('vertebrate');
+    this.array('belly');
   });
   
   //
@@ -49,6 +49,11 @@ Here's the simplest of resources:
 The returned `Creature` object is a *resource constructor*, in other words, a *function*. Now let's add some properties to this constructor:
 
 ``` js
+  Creature.string('diet');
+  Creature.bool('vertebrate');
+  Creature.array('belly');
+
+  // Are equivalent to
   Creature.property('diet'); // Defaults to String
   Creature.property('vertebrate', Boolean);
   Creature.property('belly', Array);
@@ -78,9 +83,9 @@ You can also define resources this way:
 
 ``` js
   var Creature = resourceful.define('creature', function () {
-    this.property('diet');
-    this.property('vertebrate', Boolean);
-    this.property('belly', Array);
+    this.string('diet');
+    this.bool('vertebrate');
+    this.array('belly');
 
     this.prototype.feed = function (food) {
       this.belly.push(food);
@@ -93,19 +98,21 @@ You can also define resources this way:
 Lets define a *legs* property, which is the number of legs the creature has:
 
 ``` js
-  Creature.property('legs', Number);
+  Creature.number('legs');
 ```
 
 Note that this form is equivalent:
 
 ``` js
+  Creature.property('legs', Number);
+  /* or */
   Creature.property('legs', 'number');
 ```
 
 If we wanted to constrain the possible values the property could take, we could pass in an object as the last parameter:
 
 ``` js
-  Creature.property('legs', Number, {
+  Creature.number('legs', {
     required: true,
 
     minimum: 0,
@@ -122,7 +129,7 @@ Now resourceful won't let `Creature` instances be saved unless the *legs* proper
 This style is also valid for defining properties:
 
 ``` js
-  Creature.property('legs', Number)
+  Creature.number('legs')
           .required()
           .minimum(0)
           .maximum(8)

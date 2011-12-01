@@ -2,9 +2,9 @@ var resourceful = require('../lib/resourceful');
 
 var Creature = resourceful.define('creature');
 
-Creature.property('diet'); // Defaults to String
-Creature.property('vertebrate', Boolean);
-Creature.property('belly', Array);
+Creature.string('diet');
+Creature.bool('vertebrate');
+Creature.array('belly');
 
 Creature.prototype.feed = function (food) {
   this.belly.push(food);
