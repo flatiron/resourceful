@@ -19,7 +19,7 @@
     "revalidator": "*" 
   },
   "devDependencies": {
-    "vows": "0.5.x >=0.5.11"
+    "vows": "~0.6.0"
   },
   "main": "./lib/resourceful",
   "scripts": {
