@@ -77,10 +77,14 @@ vows.describe('resourceful').addVows({
     topic: function () {
       return resourceful.define();
     },
-    "have the `resource`, `property` and `define` methods": function (r) {
+    "have the `resource`, `define` and `property` methods": function (r) {
       assert.isString(r.resource);
-      assert.isFunction(r.property);
       assert.isFunction(r.define);
+      assert.isFunction(r.property);
+      assert.isFunction(r.string);
+      assert.isFunction(r.bool);
+      assert.isFunction(r.array);
+      assert.isFunction(r.number);
     },
     "resource should be set to 'Resource'": function (r) {
       assert.match(r.resource, /^Resource\d+/);
@@ -331,6 +335,58 @@ vows.describe('resourceful').addVows({
         assert.equal(r.properties.description.type, "string");
       }
     },
+    "with `string()`": {
+      topic: function () {
+        var r = resourceful.define();
+        r.string('title', { maxLength: 16 });
+        return r;
+      },
+      "should add an entry to `properties`": function (r) {
+        assert.equal(r.properties.title.maxLength, 16);
+      },
+      "should be type:'string'": function (r) {
+        assert.equal(r.properties.title.type, "string");
+      }
+    },
+    "with `number()`": {
+      topic: function () {
+        var r = resourceful.define();
+        r.number('rank', { minimum: 1 });
+        return r;
+      },
+      "should add an entry to `properties`": function (r) {
+        assert.equal(r.properties.rank.minimum, 1);
+      },
+      "should be type:'number'": function (r) {
+        assert.equal(r.properties.rank.type, "number");
+      }
+    },
+    "with `bool()`": {
+      topic: function () {
+        var r = resourceful.define();
+        r.bool('active', {default: true});
+        return r;
+      },
+      "should add an entry to `properties`": function (r) {
+        assert.equal(r.properties.active.default, true);
+      },
+      "should be type:'boolean'": function (r) {
+        assert.equal(r.properties.active.type, "boolean");
+      }
+    },
+    "with `array()`": {
+      topic: function () {
+        var r = resourceful.define();
+        r.array('emails', {minimum: 1});
+        return r;
+      },
+      "should add an entry to `properties`": function (r) {
+        assert.equal(r.properties.emails.minimum, 1);
+      },
+      "should be type:'array'": function (r) {
+        assert.equal(r.properties.emails.type, "array");
+      }
+    },
     "with constructor's call": {
       topic: function () {
         var r = resourceful.define({
@@ -380,6 +436,20 @@ vows.describe('resourceful').addVows({
         r.property('title').type('string')
                            .maxLength(16)
                            .minLength(0);
+        return r;
+      },
+      "should work just the same": function (r) {
+        assert.equal(r.properties.title.type, "string");
+        assert.equal(r.properties.title.maxLength, 16);
+        assert.equal(r.properties.title.minLength, 0);
+      }
+    },
+    "by chaining attribute setters with `string()`": {
+      topic: function () {
+        var r = resourceful.define();
+        r.string('title')
+           .maxLength(16)
+           .minLength(0);
         return r;
       },
       "should work just the same": function (r) {
