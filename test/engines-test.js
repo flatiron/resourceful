@@ -510,7 +510,7 @@ engines.forEach(function (e) {
   }).addBatch({
     "Creating a new instance": {
       topic: function () {
-        new(resources[e].Author)({_id: 'kim', age: 32, hair: 'gold'});
+        return new(resources[e].Author)({_id: 'kim', age: 32, hair: 'gold'});
       },
       "should be a new record": function (obj) {
         assert.isTrue(obj.isNewRecord);
