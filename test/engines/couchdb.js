@@ -3,10 +3,10 @@ var cradle = require('cradle');
 var engine = exports;
 
 engine.name = 'couchdb'
-engine.options = { db: 'test' }
+engine.options = { database: 'test' }
 
 engine.load = function (resourceful, data, callback) {
-  var db = new(cradle.Connection)(engine.options).database(engine.options.db);
+  var db = new(cradle.Connection)(engine.options).database(engine.options.database);
   db.destroy(function () {
     db.create(function () {
       db.save(data, function (e, res) {

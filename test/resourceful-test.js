@@ -471,31 +471,6 @@ vows.describe('resourceful').addVows({
           ]);
           return resourceful.define('poop').connect('memory://data-queries');
         },
-        "a get() request": {
-          "when successful": {
-            topic: function (r) {
-              this.Factory = r;
-              r.get("bob", this.callback);
-            },
-            "should respond with a Resource instance": function (e, obj) {
-              assert.isObject(obj);
-              assert.instanceOf(obj, resourceful.Resource);
-              assert.equal(obj.constructor, this.Factory);
-            },
-            "should respond with the right object": function (e, obj) {
-              assert.equal(obj._id, 'bob');
-            }
-          },
-          "when unsuccessful": {
-            topic: function (r) {
-              r.get("david", this.callback);
-            },
-            "should respond with an error": function (e, obj) {
-              assert.equal(e.status, 404);
-              assert.isUndefined(obj);
-            }
-          }
-        },
         "a find() request": {
           "when successful": {
             topic: function (r) {
