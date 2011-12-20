@@ -21,6 +21,8 @@ engines.forEach(function (e) {
           { _id: 'bob/1', title: 'Nodejs sucks!', year: 2003, fiction: true, resource: 'Book'},
           { _id: 'tim/1', title: 'Nodejitsu rocks!', year: 2008, fiction: false, resource: 'Book'},
           { _id: 'bob/2', title: 'Loling at you', year: 2011, fiction: true, resource: 'Book'},
+          { _id: 'd-1', hair: 'black', resource: 'Dummy'},
+          { _id: 'd-1', hair: 'blue', resource: 'Dummy'}
         ], this.callback);
       },
       'Defining resource "book"': {
@@ -84,6 +86,34 @@ engines.forEach(function (e) {
         "should respond with an array of all records": function (err, obj) {
           assert.isArray(obj);
           assert.equal(obj.length, 3);
+        }
+      },
+      "a find() request": {
+        "when successful": {
+          topic: function (r) {
+            resources[e].Author.find({ hair: "black" }, this.callback);
+          },
+          "should respond with an array of length 2": function (e, obj) {
+            assert.equal(obj.length, 2);
+          },
+          "should respond with an array of Resource instances": function (e, obj) {
+            assert.isArray(obj);
+            assert.instanceOf(obj[0], resourceful.Resource);
+            assert.instanceOf(obj[1], resourceful.Resource);
+            assert.equal(obj[0]._id, 'bob');
+            assert.equal(obj[0].age, 35);
+            assert.equal(obj[0].hair, 'black');
+            assert.equal(obj[0].resource, 'Author');
+          }
+        },
+        "when unsuccessful": {
+          topic: function (r) {
+            resources[e].Author.find({ hair: "blue" }, this.callback);
+          },
+          "should respond with an empty array": function (e, obj) {
+            assert.isArray(obj);
+            assert.equal(obj.length, 0);
+          }
         }
       }
     }

@@ -471,28 +471,6 @@ vows.describe('resourceful').addVows({
           ]);
           return resourceful.define('poop').connect('memory://data-queries');
         },
-        "a find() request": {
-          "when successful": {
-            topic: function (r) {
-              r.find({ hair: "black" }, this.callback);
-            },
-            "should respond with an array of length 2": function (e, obj) {
-              assert.equal(obj.length, 2);
-            },
-            "should respond with an array of Resource instances": function (e, obj) {
-              assert.isArray(obj);
-              assert.instanceOf(obj[0], resourceful.Resource);
-              assert.instanceOf(obj[1], resourceful.Resource);
-            }
-          },
-          "when unsuccessful": {
-            topic: function (r) { r.find({ hair: "blue" }, this.callback); },
-            "should respond with an empty array": function (e, obj) {
-              assert.isArray(obj);
-              assert.equal(obj.length, 0);
-            }
-          }
-        },
         "a create() request": {
           topic: function (r) {
             this.Factory = r;
