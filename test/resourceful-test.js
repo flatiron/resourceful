@@ -464,11 +464,11 @@ vows.describe('resourceful').addVows({
     "on the Resource factory": {
       "with default Resources": {
         topic: function () {
-          new(resourceful.engines.Memory)({uri: 'data-queries'}).load({
-            bob: { _id: 42, age: 35, hair: 'black'},
-            tim: { _id: 43, age: 16, hair: 'brown'},
-            mat: { _id: 44, age: 29, hair: 'black'}
-          });
+          new(resourceful.engines.Memory)({uri: 'data-queries'}).load([
+            { _id: 'bob', age: 35, hair: 'black'},
+            { _id: 'tim', age: 16, hair: 'brown'},
+            { _id: 'mat', age: 29, hair: 'black'}
+          ]);
           return resourceful.define('poop').connect('memory://data-queries');
         },
         "a get() request": {
@@ -483,7 +483,7 @@ vows.describe('resourceful').addVows({
               assert.equal(obj.constructor, this.Factory);
             },
             "should respond with the right object": function (e, obj) {
-              assert.equal(obj._id, 42);
+              assert.equal(obj._id, 'bob');
             }
           },
           "when unsuccessful": {
@@ -547,11 +547,11 @@ vows.describe('resourceful').addVows({
       "with user Resources": {
         topic: function () {
           resourceful.resources.Article = resourceful.define('article');
-          var connection = new(resourceful.engines.Memory)('articles').load({
-            42: { _id: 42, title: 'on flasks', resource: 'Article'},
-            43: { _id: 43, title: 'on eras',   resource: 'Article'},
-            44: { _id: 44, title: 'on people', resource: 'Article'}
-          });
+          var connection = new(resourceful.engines.Memory)('articles').load([
+            { _id: 42, title: 'on flasks', resource: 'Article'},
+            { _id: 43, title: 'on eras',   resource: 'Article'},
+            { _id: 44, title: 'on people', resource: 'Article'}
+          ]);
           resourceful.resources.Article.connection = connection;
           return resourceful.resources.Article;
         },
@@ -573,12 +573,12 @@ vows.describe('resourceful').addVows({
       "with heterogenous data": {
         topic: function () {
           resourceful.resources.Article = resourceful.define('article');
-          var connection = new(resourceful.engines.Memory)('heterogenous').load({
-            42:  { _id: 42, title: 'on flasks', resource: 'Article'},
-            bob: { _id: 42, age: 35, hair: 'black'},
-            tim: { _id: 43, age: 16, hair: 'brown'},
-            44:  { _id: 44, title: 'on people', resource: 'Article'}
-          });
+          var connection = new(resourceful.engines.Memory)('heterogenous').load([
+            { _id: 42, title: 'on flasks', resource: 'Article'},
+            { _id: 'bob', age: 35, hair: 'black'},
+            { _id: 'tim', age: 16, hair: 'brown'},
+            { _id: 44, title: 'on people', resource: 'Article'}
+          ]);
 
           resourceful.resources.Article.connection = connection;
           return resourceful.resources.Article;
