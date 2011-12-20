@@ -134,23 +134,6 @@ vows.describe('resourceful/engines/database').addVows({
         this.use('couchdb', 'couchdb://localhost:5984/test');
       });
     },
-    "an all() request": {
-      topic: function (r) {
-        r.all(this.callback);
-      },
-      "should respond with an array of all records": function (e, obj) {
-        assert.isArray(obj);
-        assert.equal(obj.length, 4);
-      }
-    }
-  }
-}).addBatch({
-  "A default Resource factory" : {
-    topic: function() {
-      return this.Factory = resourceful.define('user', function () {
-        this.use('couchdb', 'couchdb://localhost:5984/test');
-      });
-    },
     "a get() request": {
       topic: function (r) {
         r.get('bob', this.callback);

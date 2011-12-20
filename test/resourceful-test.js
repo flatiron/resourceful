@@ -465,9 +465,9 @@ vows.describe('resourceful').addVows({
       "with default Resources": {
         topic: function () {
           new(resourceful.engines.Memory)({uri: 'data-queries'}).load([
-            { _id: 'bob', age: 35, hair: 'black'},
-            { _id: 'tim', age: 16, hair: 'brown'},
-            { _id: 'mat', age: 29, hair: 'black'}
+            { _id: 'bob', age: 35, hair: 'black', resource: 'Poop'},
+            { _id: 'tim', age: 16, hair: 'brown', resource: 'Poop'},
+            { _id: 'mat', age: 29, hair: 'black', resource: 'Poop'}
           ]);
           return resourceful.define('poop').connect('memory://data-queries');
         },
@@ -493,15 +493,6 @@ vows.describe('resourceful').addVows({
             }
           }
         },
-        "an all() request": {
-          topic: function (r) {
-            r.all(this.callback);
-          },
-          "should respond with an array of all records": function (e, obj) {
-            assert.isArray(obj);
-            assert.equal(obj.length, 3);
-          }
-        },
         "a create() request": {
           topic: function (r) {
             this.Factory = r;
@@ -516,58 +507,6 @@ vows.describe('resourceful').addVows({
           "should create the record in the db": function (e, res) {
             assert.isObject(this.Factory.connection.store['99']);
             assert.equal(this.Factory.connection.store['99'].age, 30);
-          }
-        }
-      },
-      "with user Resources": {
-        topic: function () {
-          resourceful.resources.Article = resourceful.define('article');
-          var connection = new(resourceful.engines.Memory)('articles').load([
-            { _id: 42, title: 'on flasks', resource: 'Article'},
-            { _id: 43, title: 'on eras',   resource: 'Article'},
-            { _id: 44, title: 'on people', resource: 'Article'}
-          ]);
-          resourceful.resources.Article.connection = connection;
-          return resourceful.resources.Article;
-        },
-        "a get() request": {
-          topic: function (r) {
-            r.get(42, this.callback);
-          },
-          "should respond with an Article instance": function (e, obj) {
-            assert.isObject(obj);
-            assert.instanceOf(obj, resourceful.resources.Article);
-            assert.equal(obj.constructor, resourceful.resources.Article);
-            assert.equal(obj.resource, 'Article');
-          },
-          "should respond with the right object": function (e, obj) {
-            assert.equal(obj._id, 42);
-          }
-        }
-      },
-      "with heterogenous data": {
-        topic: function () {
-          resourceful.resources.Article = resourceful.define('article');
-          var connection = new(resourceful.engines.Memory)('heterogenous').load([
-            { _id: 42, title: 'on flasks', resource: 'Article'},
-            { _id: 'bob', age: 35, hair: 'black'},
-            { _id: 'tim', age: 16, hair: 'brown'},
-            { _id: 44, title: 'on people', resource: 'Article'}
-          ]);
-
-          resourceful.resources.Article.connection = connection;
-          return resourceful.resources.Article;
-        },
-        "an all() request": {
-          topic: function (r) {
-            this.Factory = r;
-            r.all(this.callback);
-          },
-          "should respond with a mix of Resource and Article instances": function (e, obj) {
-            assert.equal(obj[0].constructor, resourceful.resources.Article);
-            assert.equal(obj[1].constructor, resourceful.resources.Article);
-            assert.equal(obj[2].constructor, this.Factory);
-            assert.equal(obj[3].constructor, this.Factory);
           }
         }
       }

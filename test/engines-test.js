@@ -76,6 +76,15 @@ engines.forEach(function (e) {
             assert.isUndefined(obj);
           }
         }
+      },
+      "an all() request": {
+        topic: function () {
+          resources[e].Author.all(this.callback);
+        },
+        "should respond with an array of all records": function (err, obj) {
+          assert.isArray(obj);
+          assert.equal(obj.length, 3);
+        }
       }
     }
   }).export(module)
