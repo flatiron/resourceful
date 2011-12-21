@@ -175,6 +175,7 @@ These methods are available on all user-defined resource constructors, as well a
 * `Resource.update(id, properties, [callback])`: Update a resource with properties.
 * `Resource.destroy(id, [callback])`: Destroy a resource by *id*.
 * `Resource.all([callback])`: Fetches all resources of this type.
+* `Resource.find(obj, [callback])`: Find all resources of this type which satisfy `obj` conditions
 * `Resource.save(inst, [callback])`: Saves the specified resource instance `inst` by overwriting all properties. 
 * `Resource.create(properties, [callback])`: Creates a new instance of the Resource with the specified `properties`
 
