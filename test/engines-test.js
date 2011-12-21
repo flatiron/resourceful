@@ -138,15 +138,21 @@ engines.forEach(function (e) {
             assert.equal(obj.age, 30);
             assert.equal(obj.hair, 'red');
             assert.equal(obj.resource, 'Author');
-          },
-          "and a Resource.destroy() request": {
-            topic: function () {
-              resources[e].Author.destroy('han', this.callback);
-            },
-            "should be successful": function (err, obj) {
-              assert.isNull(err);
-            }
           }
+        }
+      }
+    }
+  }).addBatch({
+    'In database "test"': {
+      topic: function () {
+        return null;
+      },
+      "and a Resource.destroy() request": {
+        topic: function () {
+          resources[e].Author.destroy('han', this.callback);
+        },
+        "should be successful": function (err, obj) {
+          assert.isNull(err);
         }
       }
     }
@@ -283,6 +289,152 @@ engines.forEach(function (e) {
             assert.equal(obj.hair, 'black');
             assert.equal(obj.resource, 'Author');
           }
+        }
+      }
+    }
+  }).addBatch({
+    'In database "test"': {
+      topic: function () {
+        resources[e].Author.get('bob', this.callback);
+      },
+      "it should have 'bob' object": function (err, obj) {
+        assert.isNull(err);
+        assert.equal(obj._id, 'bob');
+        assert.equal(obj.age, 35);
+        assert.equal(obj.hair, 'black');
+        assert.equal(obj.resource, 'Author');
+      },
+      "a Resource.prototype.save() request": {
+        topic: function (obj) {
+          obj.age = 31;
+          obj.hair = 'red';
+          obj.save(this.callback);
+        },
+        "should respond with a Resource instance": function (err, obj) {
+          assert.isNull(err);
+          assert.isObject(obj);
+          assert.instanceOf(obj, resourceful.Resource);
+          assert.equal(obj.constructor, resources[e].Author);
+        },
+        "should respond with the right object": function (err, obj) {
+          assert.isNull(err);
+          assert.equal(obj._id, 'bob');
+          assert.equal(obj.age, 31);
+          assert.equal(obj.hair, 'red');
+          assert.equal(obj.resource, 'Author');
+        },
+        "should save the object in db": {
+          topic: function () {
+            resources[e].Author.get('bob', this.callback);
+          },
+          "should respond with a Resource instance": function (err, obj) {
+            assert.isNull(err);
+            assert.isObject(obj);
+            assert.instanceOf(obj, resourceful.Resource);
+            assert.equal(obj.constructor, resources[e].Author);
+          },
+          "should respond with the right object": function (err, obj) {
+            assert.isNull(err);
+            assert.equal(obj._id, 'bob');
+            assert.equal(obj.age, 31);
+            assert.equal(obj.hair, 'red');
+            assert.equal(obj.resource, 'Author');
+          }
+        }
+      }
+    }
+  }).addBatch({
+    'In database "test"': {
+      topic: function () {
+        resources[e].Author.get('bob', this.callback);
+      },
+      "it should have 'bob' object": function (err, obj) {
+        assert.isNull(err);
+        assert.equal(obj._id, 'bob');
+        assert.equal(obj.age, 31);
+        assert.equal(obj.hair, 'red');
+        assert.equal(obj.resource, 'Author');
+      },
+      "a Resource.prototype.update() request": {
+        topic: function (obj) {
+          obj.update({ age: 35, hair: 'black' }, this.callback);
+        },
+        "should respond with a Resource instance": function (err, obj) {
+          assert.isNull(err);
+          assert.isObject(obj);
+          assert.instanceOf(obj, resourceful.Resource);
+          assert.equal(obj.constructor, resources[e].Author);
+        },
+        "should respond with the right object": function (err, obj) {
+          assert.isNull(err);
+          assert.equal(obj._id, 'bob');
+          assert.equal(obj.age, 35);
+          assert.equal(obj.hair, 'black');
+          assert.equal(obj.resource, 'Author');
+        },
+        "should update the object in db": {
+          topic: function () {
+            resources[e].Author.get('bob', this.callback);
+          },
+          "should respond with a Resource instance": function (err, obj) {
+            assert.isNull(err);
+            assert.isObject(obj);
+            assert.instanceOf(obj, resourceful.Resource);
+            assert.equal(obj.constructor, resources[e].Author);
+          },
+          "should respond with the right object": function (err, obj) {
+            assert.isNull(err);
+            assert.equal(obj._id, 'bob');
+            assert.equal(obj.age, 35);
+            assert.equal(obj.hair, 'black');
+            assert.equal(obj.resource, 'Author');
+          }
+        }
+      }
+    }
+  }).addBatch({
+    'In database "test"': {
+      topic: function () {
+        resources[e].Author.create({ _id: 'han', age: 30, hair: 'red'}, this.callback);
+      },
+      "a Resource.prototype.destroy() request": {
+        topic: function (obj) {
+          obj.destroy(this.callback);
+        },
+        "should be successful": function (err, obj) {
+          assert.isNull(err);
+        },
+        "should delete the object in db": {
+          topic: function (obj) {
+            resources[e].Author.get('han', this.callback);
+          },
+          "should be missing": function (err, obj) {
+            assert.equal(err.status, 404);
+          }
+        }
+      }
+    }
+  }).addBatch({
+    'In database "test"': {
+      topic: function () {
+        resources[e].Author.get('bob', this.callback);
+      },
+      "a Resource.prototype.reload() request": {
+        topic: function (obj) {
+          obj.reload(this.callback);
+        },
+        "should respond with a Resource instance": function (err, obj) {
+          assert.isNull(err);
+          assert.isObject(obj);
+          assert.instanceOf(obj, resourceful.Resource);
+          assert.equal(obj.constructor, resources[e].Author);
+        },
+        "should respond with the right object": function (err, obj) {
+          assert.isNull(err);
+          assert.equal(obj._id, 'bob');
+          assert.equal(obj.age, 35);
+          assert.equal(obj.hair, 'black');
+          assert.equal(obj.resource, 'Author');
         }
       }
     }
