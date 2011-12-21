@@ -21,8 +21,8 @@ engines.forEach(function (e) {
           { _id: 'bob/1', title: 'Nodejs sucks!', year: 2003, fiction: true, resource: 'Book'},
           { _id: 'tim/1', title: 'Nodejitsu rocks!', year: 2008, fiction: false, resource: 'Book'},
           { _id: 'bob/2', title: 'Loling at you', year: 2011, fiction: true, resource: 'Book'},
-          { _id: 'd-1', hair: 'black', resource: 'Dummy'},
-          { _id: 'd-1', hair: 'blue', resource: 'Dummy'}
+          { _id: 'dummy/1', hair: 'black', resource: 'Dummy'},
+          { _id: 'dummy/2', hair: 'blue', resource: 'Dummy'}
         ], this.callback);
       },
       'Defining resource "book"': {
@@ -51,8 +51,29 @@ engines.forEach(function (e) {
         'will be successful': function (author) {
           assert.equal(Object.keys(author.properties).length, 3);
         }
+      }
+    }
+  }).addBatch({
+    'In database "test"': {
+      topic: function () {
+        return null;
       },
-      'a get() request': {
+      "an all() request": {
+        topic: function () {
+          resources[e].Author.all(this.callback);
+        },
+        "should respond with an array of all records": function (err, obj) {
+          assert.isArray(obj);
+          assert.equal(obj.length, 3);
+        }
+      }
+    }
+  }).addBatch({
+    'In database "test"': {
+      topic: function () {
+        return null;
+      },
+      "a get() request": {
         "when successful": {
           topic: function () {
             resources[e].Author.get("bob", this.callback);
@@ -78,15 +99,57 @@ engines.forEach(function (e) {
             assert.isUndefined(obj);
           }
         }
+      }
+    }
+  }).addBatch({
+    'In database "test"': {
+      topic: function () {
+        return null;
       },
-      "an all() request": {
-        topic: function () {
-          resources[e].Author.all(this.callback);
+      "a create() request": {
+        topic: function (r) {
+          resources[e].Author.create({ _id: 'han', age: 30, hair: 'red'}, this.callback);
         },
-        "should respond with an array of all records": function (err, obj) {
-          assert.isArray(obj);
-          assert.equal(obj.length, 3);
+        "should return the newly created object": function (err, obj) {
+          assert.isNull(err);
+          assert.strictEqual(obj.constructor, resources[e].Author);
+          assert.instanceOf(obj, resources[e].Author);
+          assert.equal(obj._id, 'han');
+          assert.equal(obj.age, 30);
+          assert.equal(obj.hair, 'red');
+          assert.equal(obj.resource, 'Author');
+        },
+        "should create the record in the db": {
+          topic: function () {
+            resources[e].Author.get('han', this.callback);
+          },
+          "should respond with a Resource instance": function (err, obj) {
+            assert.isNull(err);
+            assert.isObject(obj);
+            assert.instanceOf(obj, resourceful.Resource);
+            assert.equal(obj.constructor, resources[e].Author);
+          },
+          "should respond with the right object": function (err, obj) {
+            assert.equal(obj._id, 'han');
+            assert.equal(obj.age, 30);
+            assert.equal(obj.hair, 'red');
+            assert.equal(obj.resource, 'Author');
+          },
+          "a destroy() request": {
+            topic: function () {
+              resources[e].Author.destroy('han', this.callback);
+            },
+            "should be successful": function (err, obj) {
+              assert.isNull(err);
+            }
+          }
         }
+      }
+    }
+  }).addBatch({
+    'In database "test"': {
+      topic: function () {
+        return null;
       },
       "a find() request": {
         "when successful": {

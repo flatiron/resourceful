@@ -470,22 +470,6 @@ vows.describe('resourceful').addVows({
             { _id: 'mat', age: 29, hair: 'black', resource: 'Poop'}
           ]);
           return resourceful.define('poop').connect('memory://data-queries');
-        },
-        "a create() request": {
-          topic: function (r) {
-            this.Factory = r;
-            r.create({ _id: '99', age: 30, hair: 'red'}, this.callback);
-          },
-          "should return the newly created object": function (e, obj) {
-            assert.isNull(e);
-            assert.strictEqual(obj.constructor,this.Factory);
-            assert.instanceOf(obj,this.Factory);
-            assert.equal(obj.id,99);
-          },
-          "should create the record in the db": function (e, res) {
-            assert.isObject(this.Factory.connection.store['99']);
-            assert.equal(this.Factory.connection.store['99'].age, 30);
-          }
         }
       }
     },
