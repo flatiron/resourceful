@@ -286,5 +286,18 @@ engines.forEach(function (e) {
         }
       }
     }
+  }).addBatch({
+    "Creating object without 'id'": {
+      topic: function () {
+        resources[e].Author.create({ age: 51, hair: 'white' }, this.callback);
+      },
+      "should be successful": function (err, obj) {
+        assert.isNull(err);
+        assert.notEqual(obj._id, undefined);
+        assert.equal(obj.age, 51);
+        assert.equal(obj.hair, 'white');
+        assert.equal(obj.resource, 'Author');
+      }
+    }
   }).export(module)
 });

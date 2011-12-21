@@ -71,7 +71,7 @@ Now lets instantiate a Creature, and feed it:
 
 ``` js
   var wolf = new(Creature)({
-    diet:      'carnivor',
+    diet:      'carnivore',
     vertebrate: true
   });
   

@@ -11,7 +11,7 @@ var Creature = resourceful.define('creature', function () {
 });
 
 var wolf = new(Creature)({
-  diet:      'carnivor',
+  diet:      'carnivore',
   vertebrate: true
 });
 
