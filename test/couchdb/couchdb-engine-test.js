@@ -37,7 +37,7 @@ vows.describe('resourceful/engines/database').addVows({
   "A default Resource factory" : {
     topic: function() {
       return this.Factory = resourceful.define('user', function () {
-        this.use('couchdb', 'couchdb://localhost:5984/test');
+        this.use('couchdb', 'couchdb://127.0.0.1:5984/test');
       });
     },
     "a create() request": {
@@ -131,7 +131,7 @@ vows.describe('resourceful/engines/database').addVows({
   "A default Resource factory" : {
     topic: function() {
       return this.Factory = resourceful.define('user', function () {
-        this.use('couchdb', 'couchdb://localhost:5984/test');
+        this.use('couchdb', 'couchdb://127.0.0.1:5984/test');
       });
     },
     "a get() request": {

@@ -15,7 +15,7 @@ vows.describe('resourceful/resource/relationship').addBatch({
   "One-To-Many:": {
     "An empty database": {
       topic: function () {
-        resourceful.use('couchdb', 'couchdb://localhost:5984/test');
+        resourceful.use('couchdb', 'couchdb://127.0.0.1:5984/test');
         var db = new(cradle.Connection)().database('test'), callback = this.callback;
         db.destroy(function () {
           db.create(function () {
