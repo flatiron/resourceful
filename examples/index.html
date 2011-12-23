@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <script type="text/javascript" src="../build/resourceful.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+      var Creature = resourceful.define('creature', function () {
+        this.string('diet');
+        this.bool('vertebrate');
+        this.array('belly');
+
+        this.prototype.feed = function (food) {
+          this.belly.push(food);
+        };
+      });
+
+      var wolf = new(Creature)({
+        diet: 'carnivore',
+        vertebrate: true,
+        belly: ['squirrel']
+      });
+
+      document.write(wolf.belly.join('<br>'));
+
+      setTimeout(function () {
+        wolf.feed('fish');
+        document.write(wolf.belly.join('<br>'));
+      }, 1000);
+    </script>
+  </body>
+</html>
