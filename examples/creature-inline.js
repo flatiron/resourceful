@@ -11,7 +11,7 @@ Creature.prototype.feed = function (food) {
 };
 
 var wolf = new(Creature)({
-  diet:      'carnivor',
+  diet:      'carnivore',
   vertebrate: true
 });
 

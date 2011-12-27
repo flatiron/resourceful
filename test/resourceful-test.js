@@ -160,7 +160,7 @@ vows.describe('resourceful').addVows({
         this.r.get('aBc', this.callback);
       },
       "and be found by non-sanitized_id": function (r) {
-        console.error(r);
+        assert.equal(r.toString(), '{"_id":"abc","resource":"Resource3"}');
       }
     }
   },
@@ -464,136 +464,12 @@ vows.describe('resourceful').addVows({
     "on the Resource factory": {
       "with default Resources": {
         topic: function () {
-          new(resourceful.engines.Memory)({uri: 'data-queries'}).load({
-            bob: { _id: 42, age: 35, hair: 'black'},
-            tim: { _id: 43, age: 16, hair: 'brown'},
-            mat: { _id: 44, age: 29, hair: 'black'}
-          });
+          new(resourceful.engines.Memory)({uri: 'data-queries'}).load([
+            { _id: 'bob', age: 35, hair: 'black', resource: 'Poop'},
+            { _id: 'tim', age: 16, hair: 'brown', resource: 'Poop'},
+            { _id: 'mat', age: 29, hair: 'black', resource: 'Poop'}
+          ]);
           return resourceful.define('poop').connect('memory://data-queries');
-        },
-        "a get() request": {
-          "when successful": {
-            topic: function (r) {
-              this.Factory = r;
-              r.get("bob", this.callback);
-            },
-            "should respond with a Resource instance": function (e, obj) {
-              assert.isObject(obj);
-              assert.instanceOf(obj, resourceful.Resource);
-              assert.equal(obj.constructor, this.Factory);
-            },
-            "should respond with the right object": function (e, obj) {
-              assert.equal(obj._id, 42);
-            }
-          },
-          "when unsuccessful": {
-            topic: function (r) {
-              r.get("david", this.callback);
-            },
-            "should respond with an error": function (e, obj) {
-              assert.equal(e.status, 404);
-              assert.isUndefined(obj);
-            }
-          }
-        },
-        "a find() request": {
-          "when successful": {
-            topic: function (r) {
-              r.find({ hair: "black" }, this.callback);
-            },
-            "should respond with an array of length 2": function (e, obj) {
-              assert.equal(obj.length, 2);
-            },
-            "should respond with an array of Resource instances": function (e, obj) {
-              assert.isArray(obj);
-              assert.instanceOf(obj[0], resourceful.Resource);
-              assert.instanceOf(obj[1], resourceful.Resource);
-            }
-          },
-          "when unsuccessful": {
-            topic: function (r) { r.find({ hair: "blue" }, this.callback); },
-            "should respond with an empty array": function (e, obj) {
-              assert.isArray(obj);
-              assert.equal(obj.length, 0);
-            }
-          }
-        },
-        "an all() request": {
-          topic: function (r) {
-            r.all(this.callback);
-          },
-          "should respond with an array of all records": function (e, obj) {
-            assert.isArray(obj);
-            assert.equal(obj.length, 3);
-          }
-        },
-        "a create() request": {
-          topic: function (r) {
-            this.Factory = r;
-            r.create({ _id: '99', age: 30, hair: 'red'}, this.callback);
-          },
-          "should return the newly created object": function (e, obj) {
-            assert.isNull(e);
-            assert.strictEqual(obj.constructor,this.Factory);
-            assert.instanceOf(obj,this.Factory);
-            assert.equal(obj.id,99);
-          },
-          "should create the record in the db": function (e, res) {
-            assert.isObject(this.Factory.connection.store['99']);
-            assert.equal(this.Factory.connection.store['99'].age, 30);
-          }
-        }
-      },
-      "with user Resources": {
-        topic: function () {
-          resourceful.resources.Article = resourceful.define('article');
-          var connection = new(resourceful.engines.Memory)('articles').load({
-            42: { _id: 42, title: 'on flasks', resource: 'Article'},
-            43: { _id: 43, title: 'on eras',   resource: 'Article'},
-            44: { _id: 44, title: 'on people', resource: 'Article'}
-          });
-          resourceful.resources.Article.connection = connection;
-          return resourceful.resources.Article;
-        },
-        "a get() request": {
-          topic: function (r) {
-            r.get(42, this.callback);
-          },
-          "should respond with an Article instance": function (e, obj) {
-            assert.isObject(obj);
-            assert.instanceOf(obj, resourceful.resources.Article);
-            assert.equal(obj.constructor, resourceful.resources.Article);
-            assert.equal(obj.resource, 'Article');
-          },
-          "should respond with the right object": function (e, obj) {
-            assert.equal(obj._id, 42);
-          }
-        }
-      },
-      "with heterogenous data": {
-        topic: function () {
-          resourceful.resources.Article = resourceful.define('article');
-          var connection = new(resourceful.engines.Memory)('heterogenous').load({
-            42:  { _id: 42, title: 'on flasks', resource: 'Article'},
-            bob: { _id: 42, age: 35, hair: 'black'},
-            tim: { _id: 43, age: 16, hair: 'brown'},
-            44:  { _id: 44, title: 'on people', resource: 'Article'}
-          });
-
-          resourceful.resources.Article.connection = connection;
-          return resourceful.resources.Article;
-        },
-        "an all() request": {
-          topic: function (r) {
-            this.Factory = r;
-            r.all(this.callback);
-          },
-          "should respond with a mix of Resource and Article instances": function (e, obj) {
-            assert.equal(obj[0].constructor, resourceful.resources.Article);
-            assert.equal(obj[1].constructor, resourceful.resources.Article);
-            assert.equal(obj[2].constructor, this.Factory);
-            assert.equal(obj[3].constructor, this.Factory);
-          }
         }
       }
     },
