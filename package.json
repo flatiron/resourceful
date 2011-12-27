@@ -23,6 +23,7 @@
   },
   "main": "./lib/resourceful",
   "scripts": {
+    "browserify": "browserify lib/browser.js -o build/resourceful.js",
     "test": "vows --spec -i"
   }
 }
