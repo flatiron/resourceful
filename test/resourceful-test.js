@@ -1,10 +1,5 @@
-var path = require('path'),
-    assert = require('assert'),
-    events = require('events'),
-    http = require('http'),
-    fs = require('fs'),
+var assert = require('assert'),
     vows = require('vows'),
-    cradle = require('cradle'),
     resourceful = require('../lib/resourceful');
 
 vows.describe('resourceful').addVows({
@@ -22,10 +17,12 @@ vows.describe('resourceful').addVows({
         assert.isFunction(Factory.get);
         assert.isFunction(Factory.all);
         assert.isFunction(Factory.find);
+        assert.isFunction(Factory.save);
+        assert.isFunction(Factory.update);
       },
       "which can be called": {
         topic: function (Factory) {
-          return new(Factory);
+          return new(Factory)();
         },
         "to return Resource instances which have prototype methods": function (resource) {
           assert.isFunction(resource.save);
@@ -53,7 +50,7 @@ vows.describe('resourceful').addVows({
         topic: function (Article) {
           this.constructor = Article;
           Article.prototype.data = 41;
-          return new(Article);
+          return new(Article)();
         },
         "returning Article instances": function (article) {
           assert.isObject(article);
@@ -64,6 +61,7 @@ vows.describe('resourceful').addVows({
           assert.isFunction(article.save);
           assert.isFunction(article.update);
           assert.isFunction(article.destroy);
+          assert.isFunction(article.reload);
         },
         "and doesn't have a value for `id` and `key`": function (article) {
           assert.isUndefined(article.id);
@@ -85,6 +83,7 @@ vows.describe('resourceful').addVows({
       assert.isFunction(r.bool);
       assert.isFunction(r.array);
       assert.isFunction(r.number);
+      assert.isFunction(r.object);
     },
     "resource should be set to 'Resource'": function (r) {
       assert.match(r.resource, /^Resource\d+/);
@@ -145,7 +144,7 @@ vows.describe('resourceful').addVows({
     },
     "only keeps the last copy": function (r) {
       assert.equal(Object.keys(r.properties).length, 2); // 'dup' & 'id'
-    },
+    }
   },
   "A Resource with sanitized _id": {
     topic: function () {
@@ -174,48 +173,48 @@ vows.describe('resourceful').addVows({
       "type": function (p) {
         p.type('integer');
         assert.equal(p.property.type, "integer");
-        assert.throws(function () { p.type('unknwon') }, TypeError);
+        assert.throws(function () { p.type('unknwon'); }, TypeError);
       },
       "required": function (p) {
         p.required(true);
         assert.equal(p.property.required, true);
-        assert.throws(function () { p.required(1) }, TypeError);
+        assert.throws(function () { p.required(1); }, TypeError);
       },
       "unique": function (p) {
         p.unique(true);
         assert.equal(p.property.unique, true);
-        assert.throws(function () { p.unique(1) }, TypeError);
+        assert.throws(function () { p.unique(1); }, TypeError);
       },
       "title": function (p) {
         p.title("the title");
         assert.equal(p.property.title, "the title");
-        assert.throws(function () { p.title(false) }, TypeError);
+        assert.throws(function () { p.title(false); }, TypeError);
       },
       "description": function (p) {
         p.description("the description");
         assert.equal(p.property.description, "the description");
-        assert.throws(function () { p.title(false) }, TypeError);
+        assert.throws(function () { p.title(false); }, TypeError);
       },
       "format": function (p) {
         p.format("email");
         assert.equal(p.property.format, "email");
-        assert.throws(function () { p.format("unknown") }, Error);
+        assert.throws(function () { p.format("unknown"); }, Error);
       },
       "storageName": function (p) {
         p.storageName("_kind");
         assert.equal(p.property.storageName, "_kind");
-        assert.throws(function () { p.storageName(21) }, TypeError);
+        assert.throws(function () { p.storageName(21); }, TypeError);
       },
       "conform": function (p) {
-        p.conform(function (kind) { kind !== "banana" });
+        p.conform(function (kind) { return kind !== "banana"; });
         assert.isFunction(p.property.conform);
-        assert.throws(function () { p.conform("banana") }, TypeError);
+        assert.throws(function () { p.conform("banana"); }, TypeError);
       },
       "lazy": function (p) {
         p.lazy(true);
         assert.equal(p.property.lazy, true);
-        assert.throws(function () { p.lazy(1) }, TypeError);
-      },
+        assert.throws(function () { p.lazy(1); }, TypeError);
+      }
     },
     "with a 'string' type": {
       topic: function () {
@@ -271,7 +270,7 @@ vows.describe('resourceful').addVows({
           "and pass check": function (instance) {
             assert.equal(instance.kind, 'hello-world');
           }
-        },
+        }
       }
     },
     "with a 'number' type": {
@@ -309,7 +308,7 @@ vows.describe('resourceful').addVows({
               assert.equal(size, 900);
             }
           }
-        },
+        }
       },
       "return an object which doesn't implement String 'definers'": function (p) {
         assert.isUndefined(p.pattern);
@@ -333,6 +332,16 @@ vows.describe('resourceful').addVows({
       "should default to type:'string'": function (r) {
         assert.equal(r.properties.title.type, "string");
         assert.equal(r.properties.description.type, "string");
+      }
+    },
+    "with `object()`": {
+      topic: function () {
+        var r = resourceful.define();
+        r.object('title');
+        return r;
+      },
+      "should be type:'object'": function (r) {
+        assert.equal(r.properties.title.type, "object");
       }
     },
     "with `string()`": {
@@ -456,90 +465,6 @@ vows.describe('resourceful').addVows({
         assert.equal(r.properties.title.type, "string");
         assert.equal(r.properties.title.maxLength, 16);
         assert.equal(r.properties.title.minLength, 0);
-      }
-    }
-  }
-}).addVows({ // CRUD
-  "Data queries": {
-    "on the Resource factory": {
-      "with default Resources": {
-        topic: function () {
-          new(resourceful.engines.Memory)({uri: 'data-queries'}).load([
-            { _id: 'bob', age: 35, hair: 'black', resource: 'Poop'},
-            { _id: 'tim', age: 16, hair: 'brown', resource: 'Poop'},
-            { _id: 'mat', age: 29, hair: 'black', resource: 'Poop'}
-          ]);
-          return resourceful.define('poop').connect('memory://data-queries');
-        }
-      }
-    },
-    "on a Resource instance": {
-      "with a default resource": {
-        topic: function () {
-          var conn = this.connection = new(resourceful.engines.Memory)();
-          this.Resource = resourceful.define(function () {
-            this.connection = conn;
-          });
-          return new(this.Resource)({ _id: '42', name: "bob" });
-        },
-        "the `isNewRecord` flag should be true": function (r) {
-          assert.strictEqual(r.isNewRecord, true);
-        },
-        "a save() query": {
-          topic: function (r) {
-            this.r = r;
-            r.save(this.callback);
-          },
-          "should save the document in the store": function (res) {
-            assert.include(this.Resource._connection.store, '42');
-            assert.equal(this.Resource._connection.store[42].name, "bob");
-          },
-          "should set the `resource` attribute accordingly": function (res) {
-            assert.equal(this.Resource._connection.store[42].resource,
-                         this.Resource._resource);
-          },
-          "should set the `isNewRecord` flag to false": function () {
-            assert.strictEqual(this.r.isNewRecord, false);
-          },
-          "and an update query": {
-            topic: function (_, r) {
-              r.update({ name: "bobby" }, this.callback);
-            },
-            "should update the document": function (res) {
-              assert.equal(this.Resource._connection.store[42].name, "bobby");
-            }
-          }
-        }
-      },
-      "with a user resource": {
-        topic: function () {
-          var conn = this.connection = new(resourceful.engines.Memory)();
-          this.User = resourceful.define('user', function () {
-            this.connection = conn;
-          });
-          return new(this.User)({ _id: '55', name: "fab" });
-        },
-        "a save() query": {
-          topic: function (r) {
-            this.r = r;
-            r.save(this.callback);
-          },
-          "should save the document in the store": function (res) {
-            assert.include(this.User._connection.store, '55');
-            assert.equal(this.User._connection.store[55].name, "fab");
-          },
-          "should set the `resource` attribute accordingly": function (res) {
-            assert.equal(this.User._connection.store[55].resource, "User");
-          },
-          "and an update query": {
-            topic: function (_, r) {
-              r.update({ name: "bobby" }, this.callback);
-            },
-            "should update the document": function (res) {
-              assert.equal(this.User._connection.store[55].name, "bobby");
-            }
-          }
-        }
       }
     }
   }
