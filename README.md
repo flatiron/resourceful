@@ -139,7 +139,7 @@ This style is also valid for defining properties:
 If you want to access and modify an already defined property, you can do it this way:
 
 ``` js
-    Creature.properties['legs'].maximum(6);
+    Creature.schema.properties['legs'].maximum(6);
 ```
 
 ### Saving and fetching resources
