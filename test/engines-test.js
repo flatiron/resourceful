@@ -91,6 +91,10 @@ engines.forEach(function (e) {
             assert.equal(obj.age, 35);
             assert.equal(obj.hair, 'black');
             assert.equal(obj.resource, 'Author');
+          },
+          "should not be a new record": function (err, obj) {
+            assert.isNull(err);
+            assert.isFalse(obj.isNewRecord);
           }
         },
         "when unsuccessful": {
@@ -122,6 +126,10 @@ engines.forEach(function (e) {
           assert.equal(obj.hair, 'red');
           assert.equal(obj.resource, 'Author');
         },
+        "should not be a new record": function (err, obj) {
+          assert.isNull(err);
+          assert.isFalse(obj.isNewRecord);
+        },
         "should create the record in the db": {
           topic: function () {
             resources[e].Author.get('han', this.callback);
@@ -138,6 +146,10 @@ engines.forEach(function (e) {
             assert.equal(obj.age, 30);
             assert.equal(obj.hair, 'red');
             assert.equal(obj.resource, 'Author');
+          },
+          "should not be a new record": function (err, obj) {
+            assert.isNull(err);
+            assert.isFalse(obj.isNewRecord);
           }
         }
       }
@@ -179,6 +191,11 @@ engines.forEach(function (e) {
             assert.equal(obj[0].age, 35);
             assert.equal(obj[0].hair, 'black');
             assert.equal(obj[0].resource, 'Author');
+          },
+          "should not be a new record": function (err, obj) {
+            assert.isNull(err);
+            assert.isFalse(obj[0].isNewRecord);
+            assert.isFalse(obj[1].isNewRecord);
           }
         },
         "when unsuccessful": {
@@ -205,6 +222,10 @@ engines.forEach(function (e) {
         assert.equal(obj.hair, 'black');
         assert.equal(obj.resource, 'Author');
       },
+      "should not be a new record": function (err, obj) {
+        assert.isNull(err);
+        assert.isFalse(obj.isNewRecord);
+      },
       "a Resource.update() request when successful": {
         topic: function () {
           resources[e].Author.update('bob', { age: 31 }, this.callback);
@@ -222,6 +243,10 @@ engines.forEach(function (e) {
           assert.equal(obj.hair, 'black');
           assert.equal(obj.resource, 'Author');
         },
+        "should not be a new record": function (err, obj) {
+          assert.isNull(err);
+          assert.isFalse(obj.isNewRecord);
+        },
         "should update the object in db": {
           topic: function () {
             resources[e].Author.get('bob', this.callback);
@@ -238,6 +263,10 @@ engines.forEach(function (e) {
             assert.equal(obj.age, 31);
             assert.equal(obj.hair, 'black');
             assert.equal(obj.resource, 'Author');
+          },
+          "should not be a new record": function (err, obj) {
+            assert.isNull(err);
+            assert.isFalse(obj.isNewRecord);
           }
         }
       }
@@ -253,6 +282,10 @@ engines.forEach(function (e) {
         assert.equal(obj.age, 31);
         assert.equal(obj.hair, 'black');
         assert.equal(obj.resource, 'Author');
+      },
+      "should not be a new record": function (err, obj) {
+        assert.isNull(err);
+        assert.isFalse(obj.isNewRecord);
       },
       "a Resource.save() request when successful": {
         topic: function (obj) {
@@ -272,6 +305,10 @@ engines.forEach(function (e) {
           assert.equal(obj.hair, 'black');
           assert.equal(obj.resource, 'Author');
         },
+        "should not be a new record": function (err, obj) {
+          assert.isNull(err);
+          assert.isFalse(obj.isNewRecord);
+        },
         "should update the object in db": {
           topic: function () {
             resources[e].Author.get('bob', this.callback);
@@ -288,6 +325,10 @@ engines.forEach(function (e) {
             assert.equal(obj.age, 35);
             assert.equal(obj.hair, 'black');
             assert.equal(obj.resource, 'Author');
+          },
+          "should not be a new record": function (err, obj) {
+            assert.isNull(err);
+            assert.isFalse(obj.isNewRecord);
           }
         }
       }
@@ -303,6 +344,10 @@ engines.forEach(function (e) {
         assert.equal(obj.age, 35);
         assert.equal(obj.hair, 'black');
         assert.equal(obj.resource, 'Author');
+      },
+      "should not be a new record": function (err, obj) {
+        assert.isNull(err);
+        assert.isFalse(obj.isNewRecord);
       },
       "a Resource.prototype.save() request": {
         topic: function (obj) {
@@ -323,6 +368,10 @@ engines.forEach(function (e) {
           assert.equal(obj.hair, 'red');
           assert.equal(obj.resource, 'Author');
         },
+        "should not be a new record": function (err, obj) {
+          assert.isNull(err);
+          assert.isFalse(obj.isNewRecord);
+        },
         "should save the object in db": {
           topic: function () {
             resources[e].Author.get('bob', this.callback);
@@ -339,6 +388,10 @@ engines.forEach(function (e) {
             assert.equal(obj.age, 31);
             assert.equal(obj.hair, 'red');
             assert.equal(obj.resource, 'Author');
+          },
+          "should not be a new record": function (err, obj) {
+            assert.isNull(err);
+            assert.isFalse(obj.isNewRecord);
           }
         }
       }
@@ -354,6 +407,10 @@ engines.forEach(function (e) {
         assert.equal(obj.age, 31);
         assert.equal(obj.hair, 'red');
         assert.equal(obj.resource, 'Author');
+      },
+      "should not be a new record": function (err, obj) {
+        assert.isNull(err);
+        assert.isFalse(obj.isNewRecord);
       },
       "a Resource.prototype.update() request": {
         topic: function (obj) {
@@ -372,6 +429,10 @@ engines.forEach(function (e) {
           assert.equal(obj.hair, 'black');
           assert.equal(obj.resource, 'Author');
         },
+        "should not be a new record": function (err, obj) {
+          assert.isNull(err);
+          assert.isFalse(obj.isNewRecord);
+        },
         "should update the object in db": {
           topic: function () {
             resources[e].Author.get('bob', this.callback);
@@ -388,6 +449,10 @@ engines.forEach(function (e) {
             assert.equal(obj.age, 35);
             assert.equal(obj.hair, 'black');
             assert.equal(obj.resource, 'Author');
+          },
+          "should not be a new record": function (err, obj) {
+            assert.isNull(err);
+            assert.isFalse(obj.isNewRecord);
           }
         }
       }
@@ -435,6 +500,10 @@ engines.forEach(function (e) {
           assert.equal(obj.age, 35);
           assert.equal(obj.hair, 'black');
           assert.equal(obj.resource, 'Author');
+        },
+        "should not be a new record": function (err, obj) {
+          assert.isNull(err);
+          assert.isFalse(obj.isNewRecord);
         }
       }
     }
