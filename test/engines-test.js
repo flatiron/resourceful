@@ -155,6 +155,24 @@ engines.forEach(function (e) {
       }
     }
   }).addBatch({
+    "Instantiating a new instance": {
+      topic: function () {
+        return resources[e].Author.new({_id: 'kim', age: 32, hair: 'gold'});
+      },
+      "should be a new record": function (obj) {
+        assert.isTrue(obj.isNewRecord);
+      },
+      "should not be in the db": {
+        topic: function () {
+          resources[e].Author.get('kim', this.callback);
+        },
+        "should respond with an error": function (err, obj) {
+          assert.equal(err.status, 404);
+          assert.isUndefined(obj);
+        }
+      }
+    }
+  }).addBatch({
     'In database "test"': {
       topic: function () {
         return null;
@@ -504,24 +522,6 @@ engines.forEach(function (e) {
         "should not be a new record": function (err, obj) {
           assert.isNull(err);
           assert.isFalse(obj.isNewRecord);
-        }
-      }
-    }
-  }).addBatch({
-    "Creating a new instance": {
-      topic: function () {
-        return new(resources[e].Author)({_id: 'kim', age: 32, hair: 'gold'});
-      },
-      "should be a new record": function (obj) {
-        assert.isTrue(obj.isNewRecord);
-      },
-      "should not be in the db": {
-        topic: function () {
-          resources[e].Author.get('kim', this.callback);
-        },
-        "should respond with an error": function (err, obj) {
-          assert.equal(err.status, 404);
-          assert.isUndefined(obj);
         }
       }
     }
