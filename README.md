@@ -19,6 +19,11 @@ A storage agnostic resource-oriented ODM for building prototypical models with v
     this.string('diet');
     this.bool('vertebrate');
     this.array('belly');
+
+    //
+    // Specify timestamp properties
+    //
+    this.timestamps();
   });
   
   //
@@ -52,11 +57,13 @@ The returned `Creature` object is a *resource constructor*, in other words, a *f
   Creature.string('diet');
   Creature.bool('vertebrate');
   Creature.array('belly');
+  Creature.object('children');
 
   // Are equivalent to
   Creature.property('diet'); // Defaults to String
   Creature.property('vertebrate', Boolean);
   Creature.property('belly', Array);
+  Creature.property('children', Object);
 ```
 
 And add a method to the prototype:
