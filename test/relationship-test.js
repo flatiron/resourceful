@@ -35,7 +35,7 @@ function authorAndArticles(name) {
       }
     }
   };
-};
+}
 
 function category(parentName, childName){
   return {
@@ -65,7 +65,7 @@ function category(parentName, childName){
 }
 
 function categoryParentTest(name) {
-  var parent_id = 'category-' + name
+  var parent_id = 'category-' + name;
   return {
     topic: function(){
       // FIXME category pluralized should be categories (maybe use https://github.com/MSNexploder/inflect?)
@@ -128,7 +128,7 @@ function authorTest(name) {
       }));
     }
   };
-};
+}
 
 function articleTest(name) {
   var author_id = 'author-' + name;
@@ -167,7 +167,7 @@ function articleTest(name) {
       }
     }
   };
-};
+}
 
 vows.describe('resourceful/memory/relationship').addBatch({
   'Initializing': {
