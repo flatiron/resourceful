@@ -2,8 +2,8 @@ var cradle = require('cradle');
 
 var engine = exports;
 
-engine.name = 'couchdb'
-engine.options = { database: 'test' }
+engine.name = 'couchdb';
+engine.options = { database: 'test' };
 
 engine.load = function (resourceful, data, callback) {
   var db = new(cradle.Connection)(engine.options).database(engine.options.database);
@@ -14,4 +14,4 @@ engine.load = function (resourceful, data, callback) {
       });
     });
   });
-}
+};

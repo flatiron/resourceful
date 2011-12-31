@@ -1,8 +1,4 @@
-var path = require('path'),
-    assert = require('assert'),
-    events = require('events'),
-    http = require('http'),
-    fs = require('fs'),
+var assert = require('assert'),
     vows = require('vows'),
     resourceful = require('../lib/resourceful');
 

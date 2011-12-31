@@ -1,13 +1,10 @@
-var path = require('path'),
-    assert = require('assert'),
+var assert = require('assert'),
     events = require('events'),
-    http = require('http'),
-    fs = require('fs'),
     cradle = require('cradle'),
     vows = require('vows'),
     resourceful = require('../../lib/resourceful');
 
-var numberOfArticles = 5, Article;
+var Article;
 
 resourceful.env = 'test';
 
