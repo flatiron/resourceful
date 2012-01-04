@@ -143,13 +143,31 @@ This style is also valid for defining properties:
           .assert(function (val) { return val % 2 === 0 });
 ```
 
-If you want to access and modify an already defined property, you can do it this way:
+If we want to access and modify an already defined property, we can do it this way:
 
 ``` js
     Creature.schema.properties['legs'].maximum(6);
 ```
 
 ### Saving and fetching resources
+
+By default, resourceful uses an in-memory engine. If we would like our resources to be persistent, we must use another engine, for example CouchDB.
+
+#### Using the CouchDB engine
+
+First, one must create a CouchDB database for resourceful to use. One way to do this is to use Futon, located by default at [http://localhost:5984/_utils/](http://localhost:5984/_utils/). In this example, we name the database **resourceful_test**.
+
+Next we need to let resourceful know that we want it to use our CouchDB database.
+
+``` js
+  var resourceful = require('resourceful');
+
+  resourceful.use('couchdb', {database: 'resourceful_test'});
+```
+
+#### Saving and fetching resources (engine agnostic)
+
+Assuming we have already defined a ''Wolf'' resource with name, age, and fur properties, we can fetch and save wolf resources like this:
 
 ``` js
   Wolf.create({ name: 'Wolverine', age: 68 }, function (err, wolf) {
@@ -173,6 +191,8 @@ If you want to access and modify an already defined property, you can do it this
     });
   });
 ```
+
+
 
 ### Resource constructor methods
 
