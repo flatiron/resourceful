@@ -167,14 +167,14 @@ By default, resourceful uses an in-memory engine. If we would like our resources
 
 #### Using the CouchDB engine
 
-First, one must create a CouchDB database for resourceful to use. One way to do this is to use Futon, located by default at [http://localhost:5984/_utils/](http://localhost:5984/_utils/). In this example, we name the database **resourceful_test**.
+First, one must create a CouchDB database for resourceful to use. One way to do this is to use Futon, located by default at [http://localhost:5984/_utils/](http://localhost:5984/_utils/). In this example, we name the database **myResourcefulDB**.
 
-Next we need to let resourceful know that we want it to use our CouchDB database.
+Next, let resourceful know to use use this particular CouchDB database.
 
 ``` js
   var resourceful = require('resourceful');
 
-  resourceful.use('couchdb', {database: 'resourceful_test'});
+  resourceful.use('couchdb', {database: 'myResourcefulDB'});
 ```
 
 #### Saving and fetching resources (engine agnostic)
