@@ -237,19 +237,21 @@ Engines are used for exposing different storage backends to resourceful. Resourc
 
 Engines can be specified when defining a resource with `this.use`:
 
-    var Creature = resource.define('creature', function () {
-      this.use('couchdb', {
-        uri: 'http://example.jesusabdullah.net'
-      });
+```js
+var Creature = resource.define('creature', function () {
+  this.use('couchdb', {
+    uri: 'http://example.jesusabdullah.net'
+  });
 
-      // alternately:
-      // this.use('memory');
+  // alternately:
+  // this.use('memory');
 
-      // or, supposing `Engine` is defined as a resourceful engine:
-      // this.use(Engine, {
-        'uri': 'file:///tmp/datastore'
-      });
-    });
+  // or, supposing `Engine` is defined as a resourceful engine:
+  // this.use(Engine, {
+    'uri': 'file:///tmp/datastore'
+  });
+});
+```
 
 #### History
 
@@ -420,7 +422,8 @@ Because the engines api was written with couchdb in mind, 'doc' should include a
 This method is *optional* and is used to more or less replace the "create" and "post" methods along with "put" and "save".
 
 **Example:**
-```
+
+```js
 // Example with the memory transport
 var memory = new Memory();
 
