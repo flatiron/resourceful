@@ -334,6 +334,28 @@ vows.describe('resourceful').addVows({
         assert.isUndefined(p.minLength);
       }
     }
+  },
+  "Engine can be initialised":{
+    "by name":{
+      topic:function(){
+        resourceful.use( 'memory' );
+        return resourceful.engine;
+      },
+      "yep":function( engine ){
+        assert.isFunction( engine );
+        assert.equal( engine.protocol, "memory" );
+      }
+    },
+    "by reference":{
+      topic:function(){
+        resourceful.use( resourceful.engines.Memory );
+        return resourceful.engine;
+      },
+      "yep":function( engine ){
+        assert.isFunction( engine );
+        assert.equal( engine.protocol, "memory" );
+      }
+    }
   }
 }).addVows({
   "Defining a Resource schema": {
