@@ -24,7 +24,7 @@ How often have you found yourself writing Model code in your application? Pretty
 # Installation
 
 ``` bash 
-  $ [sudo] npm install resourceful
+$ [sudo] npm install resourceful
 ```
 
 # Usage
@@ -32,120 +32,120 @@ How often have you found yourself writing Model code in your application? Pretty
 ## Simple case
 
 ``` js
-  var resourceful = require('resourceful');
-  
-  var Creature = resourceful.define('creature', function () {
-    //
-    // Specify a storage engine
-    //
-    this.use('couchdb');
-    
-    //
-    // Specify some properties with validation
-    //
-    this.string('diet');
-    this.bool('vertebrate');
-    this.array('belly');
+var resourceful = require('resourceful');
 
-    //
-    // Specify timestamp properties
-    //
-    this.timestamps();
-  });
+var Creature = resourceful.define('creature', function () {
+  //
+  // Specify a storage engine
+  //
+  this.use('couchdb');
   
   //
-  // Now that the `Creature` prototype is defined
-  // we can add custom logic to be available on all instances
+  // Specify some properties with validation
   //
-  Creature.prototype.feed = function (food) {
-    this.belly.push(food);
-  };
+  this.string('diet');
+  this.bool('vertebrate');
+  this.array('belly');
+
+  //
+  // Specify timestamp properties
+  //
+  this.timestamps();
+});
+
+//
+// Now that the `Creature` prototype is defined
+// we can add custom logic to be available on all instances
+//
+Creature.prototype.feed = function (food) {
+  this.belly.push(food);
+};
 ```
 
 ## Defining resources
 Here's the simplest of resources:
 
 ``` js
-  var Creature = resourceful.define('creature');
+var Creature = resourceful.define('creature');
 ```
 
 The returned `Creature` object is a *resource constructor*, in other words, a *function*. Now let's add some properties to this constructor:
 
 ``` js
-  Creature.string('diet');
-  Creature.bool('vertebrate');
-  Creature.array('belly');
-  Creature.object('children');
+Creature.string('diet');
+Creature.bool('vertebrate');
+Creature.array('belly');
+Creature.object('children');
 
-  // Are equivalent to
-  Creature.property('diet'); // Defaults to String
-  Creature.property('vertebrate', Boolean);
-  Creature.property('belly', Array);
-  Creature.property('children', Object);
+// Are equivalent to
+Creature.property('diet'); // Defaults to String
+Creature.property('vertebrate', Boolean);
+Creature.property('belly', Array);
+Creature.property('children', Object);
 ```
 
 And add a method to the prototype:
 
 ``` js
-  Creature.prototype.feed = function (food) {
-    this.belly.push(food);
-  };
+Creature.prototype.feed = function (food) {
+  this.belly.push(food);
+};
 ```
 
 Now lets instantiate a Creature, and feed it:
 
 ``` js
-  var wolf = new(Creature)({
-    diet:      'carnivore',
-    vertebrate: true
-  });
-  
-  wolf.feed('squirrel');
-  console.dir(wolf.belly);
+var wolf = new(Creature)({
+  diet:      'carnivore',
+  vertebrate: true
+});
+
+wolf.feed('squirrel');
+console.dir(wolf.belly);
 ```
 
 You can also define resources this way:
 
 ``` js
-  var Creature = resourceful.define('creature', function () {
-    this.string('diet');
-    this.bool('vertebrate');
-    this.array('belly');
+var Creature = resourceful.define('creature', function () {
+  this.string('diet');
+  this.bool('vertebrate');
+  this.array('belly');
 
-    this.prototype.feed = function (food) {
-      this.belly.push(food);
-    };
-  });
+  this.prototype.feed = function (food) {
+    this.belly.push(food);
+  };
+});
 ```
 
 ## Defining properties with Resource.property
 Lets define a *legs* property, which is the number of legs the creature has:
 
 ``` js
-  Creature.number('legs');
+Creature.number('legs');
 ```
 
 Note that this form is equivalent:
 
 ``` js
-  Creature.property('legs', Number);
-  /* or */
-  Creature.property('legs', 'number');
+Creature.property('legs', Number);
+/* or */
+Creature.property('legs', 'number');
 ```
 
 If we wanted to constrain the possible values the property could take, we could pass in an object as the last parameter:
 
 ``` js
-  Creature.number('legs', {
-    required: true,
+Creature.number('legs', {
+  required: true,
 
-    minimum: 0,
-    maximum: 8,
+  minimum: 0,
+  maximum: 8,
 
-    assert: function (val) {
-      return val % 2 === 0;
-    }
-  });
+  assert: function (val) {
+    return val % 2 === 0;
+  }
+});
 ```
 
 Now resourceful won't let `Creature` instances be saved unless the *legs* property has a value between `0` and `8`, and is *even*,
@@ -153,17 +153,17 @@ Now resourceful won't let `Creature` instances be saved unless the *legs* proper
 This style is also valid for defining properties:
 
 ``` js
-  Creature.number('legs')
-          .required()
-          .minimum(0)
-          .maximum(8)
-          .assert(function (val) { return val % 2 === 0 });
+Creature.number('legs')
+        .required()
+        .minimum(0)
+        .maximum(8)
+        .assert(function (val) { return val % 2 === 0 });
 ```
 
 If we want to access and modify an already defined property, we can do it this way:
 
 ``` js
-    Creature.schema.properties['legs'].maximum(6);
+Creature.schema.properties['legs'].maximum(6);
 ```
 
 <a name="engines"></a>
@@ -209,35 +209,35 @@ First, one must create a CouchDB database for resourceful to use. One way to do 
 Next, let resourceful know to use use this particular CouchDB database.
 
 ``` js
-  var resourceful = require('resourceful');
+var resourceful = require('resourceful');
 
-  resourceful.use('couchdb', {database: 'myResourcefulDB'});
+resourceful.use('couchdb', {database: 'myResourcefulDB'});
 ```
 
 ## Saving and fetching resources (engine agnostic)
 Assuming we have already defined a ''Wolf'' resource with name, age, and fur properties, we can fetch and save wolf resources like this:
 
 ``` js
-  Wolf.create({ name: 'Wolverine', age: 68 }, function (err, wolf) {
-    if (err) { throw new(Error)(err) }
+Wolf.create({ name: 'Wolverine', age: 68 }, function (err, wolf) {
+  if (err) { throw new(Error)(err) }
 
-    console.log(wolf); // { _id: 42, resource: 'wolf', name: 'Wolverine', age: 68 }
+  console.log(wolf); // { _id: 42, resource: 'wolf', name: 'Wolverine', age: 68 }
 
-    wolf.age++;
-    wolf.save(function (err) {
-      if (!err) {
-        console.log('happy birthday ' + wolf.name + '!');
-      }
-    });
+  wolf.age++;
+  wolf.save(function (err) {
+    if (!err) {
+      console.log('happy birthday ' + wolf.name + '!');
+    }
   });
+});
 
-  Wolf.get(42, function (err, wolf) {
-    if (err) { throw new(Error)(err) }
+Wolf.get(42, function (err, wolf) {
+  if (err) { throw new(Error)(err) }
 
-    wolf.update({ fur: 'curly' }, function (e, wolf) {
-      console.log(wolf.fur); // "curly"
-    });
+  wolf.update({ fur: 'curly' }, function (e, wolf) {
+    console.log(wolf.fur); // "curly"
   });
+});
 ```
 
 <a name="cache"></a>
@@ -318,6 +318,7 @@ Unlike some of the other prototype methods, `request` does not have to follow an
 
 ```js
 this.request(function () {
+
   var update = key in this.store;
   this.store[key] = val;
   callback(null, resourceful.mixin({ status: update ? 200 : 201 }, val));
@@ -328,6 +329,7 @@ In the case of the memory datastore, this simply involves a process.nextTick hel
 
 ```js
 Memory.prototype.request = function (fn) {
+
   var self = this;
 
   process.nextTick(function () {
@@ -340,11 +342,14 @@ In the couchdb engine, requests look more like:
 
 ```
 this.request('post', doc, function (e, res) {
-    if (e) return callback(e);
 
-    res.status = 201;
-    callback(null, resourceful.mixin({}, doc, res));
-  });
+  if (e) {
+    return callback(e);
+  }
+
+  res.status = 201;
+  callback(null, resourceful.mixin({}, doc, res));
+});
 ```
 
 An engine should expose the request interface that feels most natural given the transport. However, there are some conventions to follow:
@@ -359,6 +364,7 @@ Because the engines api was written with couchdb in mind, 'doc' should include a
 
 ```js
 engine.save('key', value, function (err, doc) {
+
   if (err) {
     throw err;
   }
@@ -379,6 +385,7 @@ Because the engines api was written with couchdb in mind, 'doc' should include a
 
 ```js
 engine.put('key', value, function (err, doc) {
+
   if (err) {
     throw err;
   }
@@ -400,6 +407,7 @@ This pattern should be followed across all engines for implementations of these 
 
 ```js
 engine.create('key', value, function (err, doc) {
+
   if (err) {
     throw err;
   }
@@ -440,6 +448,7 @@ Because the engines api was written with couchdb in mind, 'doc' should include a
 
 ```js
 engine.put('key', { 'foo': 'bar' }, function (err, doc) {
+
   if (err) {
     throw err;
   }
@@ -461,6 +470,7 @@ This pattern should be followed across all engines:
 
 ```js
 engine.get('key', function (err, doc) {
+
   if (err) {
     if (err.status === 404) {
       console.log('Document was not there!');
@@ -480,11 +490,14 @@ Because the engines api was written with couchdb in mind, 'doc' should include a
 
 ```js
 engine.get('key', function (err, doc) {
+
   if (err) {
     throw err;
   }
 
-  //"status" should be the only property on `doc`.
+  //
+  // "status" should be the only property on `doc`.
+  //
   if (doc.status !== 204) {
     throw new Error('Status: '+doc.status);
   }
@@ -498,6 +511,7 @@ engine.get('key', function (err, doc) {
 
 ```js
 Memory.prototype.find = function (conditions, callback) {
+
   this.filter(function (obj) {
     return Object.keys(conditions).every(function (k) {
       return conditions[k] ===  obj[k];
@@ -510,11 +524,14 @@ This pattern should be followed across all engines:
 
 ```js
 engine.find({ 'foo': 'bar' }, function (err, docs) {
+
   if (err) {
     throw err;
   }
 
+  //
   // docs[0].foo === 'bar'
+  //
 
 });
 ```
@@ -538,11 +555,14 @@ The semantics of 'filter' vary slightly depending on the engine. The semantics o
 // Example used with a Memory engine
 //
 engine.filter(filterfxn, function (err, docs) {
+
   if (err) {
     throw err;
   }
 
+  //
   // returned docs filtered by "filter"
+  //
 
 });
 ```
@@ -554,11 +574,14 @@ The "memory" case simply applies a function against the store's documents. In co
 // Example used with a Couchdb engine
 //
 engine.filter("view", params, function (err, docs) {
+
   if (err) {
     throw err;
   }
 
+  //
   // returned docs filtered using the "view" mapreduce function on couch.
+  //
 
 });
 ```
@@ -567,8 +590,8 @@ engine.filter("view", params, function (err, docs) {
 `Engine.prototype.sync` is used to sync "design document" information with the database if necessary. This is specific to couchdb; for the 'memory' transport there is no conception of (or parallel to) a design document.
 
 ```js
-
 engine.sync(factory, function (err) {
+
   if (err) {
     throw err;
   }
@@ -579,6 +602,7 @@ In the case where there is no doc or "stored procedures" of any kind to upload t
 
 ```js
 Engine.prototype.sync = function (factory, callback) {
+
   process.nextTick(function () { callback(); });
 };
 ```
@@ -605,10 +629,10 @@ The couchdb engine explicity uses resourceful.Cache in two places, both in cases
 
 ```js
 Couchdb.prototype.update = function (id, doc, callback) {
-  return this.cache.has(id) ?
-    this.put(id, resourceful.mixin({}, this.cache.get(id).toJSON(), doc), callback)
-    :
-    this.request('merge', id, doc, callback);
+
+  return this.cache.has(id) 
+    ? this.put(id, resourceful.mixin({}, this.cache.get(id).toJSON(), doc), callback)
+    : this.request('merge', id, doc, callback);
 };
 ```
 
@@ -618,6 +642,7 @@ The couchdb engine checks the cache for the object it wants to destroy:
 
 ```js
 if (this.cache.has(id)) {
+
   args.splice(1, -1, this.cache.get(id)._rev);
   return this.request.apply(this, ['remove'].concat(args));
 }
