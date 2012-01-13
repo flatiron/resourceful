@@ -1,8 +1,35 @@
-# resourceful [![Build Status](https://secure.travis-ci.org/flatiron/resourceful.png)](http://travis-ci.org/flatiron/resourceful)
 
+<img src="https://github.com/flatiron/resourceful/raw/master/resourceful.png" />
+
+# Synopsis
 A storage agnostic resource-oriented ODM for building prototypical models with validation and sanitization.
 
-## Example
+# Motivation
+How often have you found yourself writing Model code in your application? Pretty often? Good! Unlike other "Object-Document Mappers" `resourceful` tries to only focus on two things:
+
+ - A simple API for defining custom Model prototypes with validation. No sugar is required to instantiate prototypes defined by resourceful.
+
+ - Define an extensibility model for databases to provide CRUD functionality to Models along with custom query, filtering or updating specific to that specific implementation (Mongo, CouchDB, Redis, etc).
+
+# Status
+
+[![Build Status](https://secure.travis-ci.org/flatiron/resourceful.png)](http://travis-ci.org/flatiron/resourceful)
+
+# Features
+* Data Validation
+* Simplified Data Model Management
+* [Storage Engine Extensible](#engines)
+* [Simplified Cache Control](#cache)
+
+# Installation
+
+``` bash 
+  $ [sudo] npm install resourceful
+```
+
+# Usage
+
+## Simple case
 
 ``` js
   var resourceful = require('resourceful');
@@ -35,28 +62,7 @@ A storage agnostic resource-oriented ODM for building prototypical models with v
   };
 ```
 
-## Installation
-
-### Installing npm (node package manager)
-``` bash
-  $ curl http://npmjs.org/install.sh | sh
-```
-
-### Installing resourceful
-``` bash 
-  $ [sudo] npm install resourceful
-```
-
-## Motivation
-How often have you found yourself writing Model code in your application? Pretty often? Good! Unlike other "Object-Document Mappers" `resourceful` tries to only focus on two things:
-
-1. A simple API for defining custom Model prototypes with validation. **No special sugar is required to instantiate prototypes defined by resourceful.**
-2. Define an extensibility model for databases to provide CRUD functionality to Models along with custom query, filtering or updating specific to that specific implementation (Mongo, CouchDB, Redis, etc).
-
-## API Documentation
-
-### Defining resources
-
+## Defining resources
 Here's the simplest of resources:
 
 ``` js
@@ -112,8 +118,7 @@ You can also define resources this way:
   });
 ```
 
-### Defining properties with Resource.property
-
+## Defining properties with Resource.property
 Lets define a *legs* property, which is the number of legs the creature has:
 
 ``` js
@@ -161,12 +166,44 @@ If we want to access and modify an already defined property, we can do it this w
     Creature.schema.properties['legs'].maximum(6);
 ```
 
-### Saving and fetching resources
-
+<a name="engines"></a>
+## Engines (saving and fetching resources)
 By default, resourceful uses an in-memory engine. If we would like our resources to be persistent, we must use another engine, for example CouchDB.
 
-#### Using the CouchDB engine
+Engines are used for exposing different storage backends to resourceful. Resourceful currently has two bundled engines:
 
+* couchdb
+* memory
+
+Engines can be specified when defining a resource with `this.use`:
+
+```js
+var Creature = resource.define('creature', function () {
+  
+  this.use('couchdb', {
+    uri: 'http://example.jesusabdullah.net'
+  });
+
+  /*
+  
+      //
+      // alternately
+      //
+      this.use('memory');
+
+      //
+      // or, supposing `Engine` is defined as a resourceful engine:
+      //
+      this.use(Engine, {
+        'uri': 'file:///tmp/datastore'
+      });
+
+  */
+
+});
+```
+
+## Using the CouchDB engine
 First, one must create a CouchDB database for resourceful to use. One way to do this is to use Futon, located by default at [http://localhost:5984/_utils/](http://localhost:5984/_utils/). In this example, we name the database **myResourcefulDB**.
 
 Next, let resourceful know to use use this particular CouchDB database.
@@ -177,8 +214,7 @@ Next, let resourceful know to use use this particular CouchDB database.
   resourceful.use('couchdb', {database: 'myResourcefulDB'});
 ```
 
-#### Saving and fetching resources (engine agnostic)
-
+## Saving and fetching resources (engine agnostic)
 Assuming we have already defined a ''Wolf'' resource with name, age, and fur properties, we can fetch and save wolf resources like this:
 
 ``` js
@@ -204,11 +240,23 @@ Assuming we have already defined a ''Wolf'' resource with name, age, and fur pro
   });
 ```
 
+<a name="cache"></a>
+## Engine caching
+Resourceful comes with a helper for managing an in-memory cache of your documents. This helps increase the speed of resourceful by avoiding extraneous interactions with the back-end.
 
+Unlike engines, caches have a completely synchronous API. This is acceptable since the calls are short and usually occur inside an asynchronously-executing procedure.
 
-### Resource constructor methods
+## History
+Resourceful's first engine was the couchdb engine, which was built using cradle. As such, the design of resourceful's engines is somewhat inferred from the design of couchdb itself. In particular, engine prototypes are often named and designed after http verbs, status reporting follows http status code conventions, and engines can be designed around stored views.
 
-These methods are available on all user-defined resource constructors, as well as on the default `resourceful.Resource` constructor. In other "classy" languages these can be thought of as Class methods.
+That said: The memory engine, as it needs to do much less, can be considered to have the most minimal api possible for an engine, with a few exceptions.
+
+Both pieces of code are more-or-less self-documenting.
+
+# API
+
+## Resource Constructor
+These methods are available on all user-defined resource constructors, as well as on the default `resourceful.Resource` constructor.
 
 * `Resource.get(id, [callback])`: Fetch a resource by *id*.
 * `Resource.update(id, properties, [callback])`: Update a resource with properties.
@@ -219,49 +267,15 @@ These methods are available on all user-defined resource constructors, as well a
 * `Resource.create(properties, [callback])`: Creates a new instance of the Resource with the specified `properties`
 * `Resource.new(properties)`: Instantiates a new instance of the Resource with the `properties`
 
-### Resource prototype methods
-
-These are the *prototype* methods, available on resource instances created with the `new` operator. In other "classy" languages these can be thought of as Instance methods
+## Resource Instance Methods
 
 * `Resource.prototype.save([callback])`
 * `Resource.prototype.update(properties, [callback])`
 * `Resource.prototype.destroy([callback])`
 * `Resource.prototype.reload([callback])`
 
-### Engines
-
-Engines are used for exposing different storage backends to resourceful. Resourceful currently has two bundled engines:
-
-* couchdb
-* memory
-
-Engines can be specified when defining a resource with `this.use`:
-
-```js
-var Creature = resource.define('creature', function () {
-  this.use('couchdb', {
-    uri: 'http://example.jesusabdullah.net'
-  });
-
-  // alternately:
-  // this.use('memory');
-
-  // or, supposing `Engine` is defined as a resourceful engine:
-  // this.use(Engine, {
-    'uri': 'file:///tmp/datastore'
-  });
-});
-```
-
-#### History
-
-Resourceful's first engine was the couchdb engine, which was built using cradle. As such, the design of resourceful's engines is somewhat inferred from the design of couchdb itself. In particular, engine prototypes are often named and designed after http verbs, status reporting follows http status code conventions, and engines can be designed around stored views.
-
-That said: The memory engine, as it needs to do much less, can be considered to have the most minimal api possible for an engine, with a few exceptions.
-
-Both pieces of code are more-or-less self-documenting.
-
-#### The constructor
+## Engine Constructor
+In general, it is safe to attach instance methods to your new engine. For example, `memory.js` keeps a counter (called `this.counter`) for creating new documents without a specified name.
 
 ```js
 var engine = new Engine({
@@ -269,43 +283,38 @@ var engine = new Engine({
 });
 ```
 
-In general, it is safe to attach instance methods to your new engine. For example, `memory.js` keeps a counter (called `this.counter`) for creating new documents without a specified name.
-
 At a minimum, the constructor should:
 
-##### Interpret the 'uri' argument
-
+### Interpret the 'uri' argument
 The 'uri' argument should be treated as a unique ID to your particular data store. For example, this is a couchdb uri for the couchdb store.
 
 In most cases the uri argument will correspond to a database url, but that's not always true. In the case of "memory", it's simply a legal javascript object property name.
 
-##### Initialize a store
-
+### Initialize a store
 A constructed engine should, in some way or another, initialize a connection to its data store. For couchdb, this means opening a new connection object with cradle and attaching it as `this.connection`. However, this isn't a good fit for all cases; the memory store, for example, simply creates a new property to a "stores" object if `stores["storeName"]` doesn't exist.
 
-#### Prototype methods:
+## Engine Instance Members
 
-Resourceful allows flexibility in some prototype methods, but not in others. Authors are encouraged to add prototype methods that feel natural to expose; for instance, the couchdb engine exposes `this.prototype.head` for sending http HEAD requests.
+### protocol
+Resourceful will parse out the "couchdb" from the protocol and attempt to use an included resource with that string as its `resource.protocol`.
 
-##### Engine.prototype.protocol
+For third-party engines this may not seem critical but it's good practice to include anyway, for the purposes of inspection if nothing else.
 
 ```js
 Engine.prototype.protocol = 'file';
 ```
 
-Protocol is used by resourceful to add syntactic sugar such that you may do:
+The protocol method sets the protocol member is used by resourceful to add syntactic sugar such that you may do:
 
 ```js
-Resource.connect('couchdb://example.jesusabdullah.net');
+Resource.connect('couchdb://example.nodejitsu.com');
 ```
 
-Resourceful will parse out the "couchdb" from the protocol and attempt to use an included resource with that string as its `resource.protocol`.
+## Engine Instance Methods
+Resourceful allows flexibility in some prototype methods, but not in others. Authors are encouraged to add prototype methods that feel natural to expose; for instance, the couchdb engine exposes `this.prototype.head` for sending http HEAD requests.
 
-For third-party engines this may not seem critical but it's good practice to include anyway, for the purposes of inspection if nothing else.
-
-##### Engine.prototype.request
-
-**Example:**
+### request()
+Unlike some of the other prototype methods, `request` does not have to follow any particular contract, as it's used by your engine internally to encapsulate an asynchronous request to your particular datastore.
 
 ```js
 this.request(function () {
@@ -315,7 +324,7 @@ this.request(function () {
 });
 ```
 
-Unlike some of the other prototype methods, `request` does not have to follow any particular contract, as it's used by your engine internally to encapsulate an asynchronous request to your particular datastore. In the case of the memory datastore, this simply involves a process.nextTick helper:
+In the case of the memory datastore, this simply involves a process.nextTick helper:
 
 ```js
 Memory.prototype.request = function (fn) {
@@ -327,7 +336,7 @@ Memory.prototype.request = function (fn) {
 };
 ```
 
-However, in the couchdb engine, requests look more like:
+In the couchdb engine, requests look more like:
 
 ```
 this.request('post', doc, function (e, res) {
@@ -343,9 +352,10 @@ An engine should expose the request interface that feels most natural given the 
 1. `this.request` should be asynchronous.
 2. The callback should set 'this' to be the same context as outside the callback
 
-##### Engine.prototype.save
+### save()
+Because the engines api was written with couchdb in mind, 'doc' should include an appropriate http status under `doc.status`. 
 
-This pattern should be followed across all engines:
+`save` can be implemented using a combination of 'head', 'put' and 'post', as in the case of the couchdb engine. However, in the memory engine case `put` is an alias to `save` and `update` is implemented separately. See below: **head**, **put** and **update**. The following pattern should be followed across all engines:
 
 ```js
 engine.save('key', value, function (err, doc) {
@@ -362,13 +372,10 @@ engine.save('key', value, function (err, doc) {
 });
 ```
 
-Because the engines api was written with couchdb in mind, 'doc' should include an appropriate http status under `doc.status`.
+### put()
+`put` is typically used to represent operations that update or modify the database without creating new resources. However, it is acceptable to alias the 'save' method and allow for the creation of new resources.
 
-`save` can be implemented using a combination of 'head', 'put' and 'post', as in the case of the couchdb engine. However, in the memory engine case `put` is an alias to `save` and `update` is implemented separately. See below: **head**, **put** and **update**.
-
-##### Engine.prototype.put
-
-This pattern should be followed across all engines:
+Because the engines api was written with couchdb in mind, 'doc' should include an appropriate http status under `doc.status`. The expected status is '201'. See below: **post**. This pattern should be followed across all engines:
 
 ```js
 engine.put('key', value, function (err, doc) {
@@ -387,14 +394,9 @@ engine.put('key', value, function (err, doc) {
 });
 ```
 
-`put` is typically used to represent operations that update or modify the database without creating new resources. However, it is acceptable to alias the 'save' method and allow for the creation of new resources.
-
-Because the engines api was written with couchdb in mind, 'doc' should include an appropriate http status under `doc.status`. The expected status is '201'. See below: **post**.
-
-##### Engine.prototype.post
-##### Engine.prototype.create
-
-This pattern should be followed across all engines for implementations of these methods. However, they are *optional*. The memory engine defines `Engine.prototype.load` instead. See: **load** below.
+### post()
+### create()
+This pattern should be followed across all engines for implementations of these methods. However, they are *optional*. The memory engine defines `Engine.prototype.load` instead. For instance:
 
 ```js
 engine.create('key', value, function (err, doc) {
@@ -417,26 +419,24 @@ engine.create('key', value, function (err, doc) {
 
 Because the engines api was written with couchdb in mind, 'doc' should include an appropriate http status under `doc.status`. The expected status is '201'.
 
-### Engine.prototype.load
-
+### load()
 This method is *optional* and is used to more or less replace the "create" and "post" methods along with "put" and "save".
 
-**Example:**
-
 ```js
+//
 // Example with the memory transport
+//
 var memory = new Memory();
 
 memory.load([ { 'foo': 'bar' }, { 'bar': 'baz' }]);
 ```
 
-In this example, each object passed to memory.load is loaded as a new document.
+In the above example, each object passed to memory.load is loaded as a new document. This approach is useful in cases where you already have a javascript representation of your store (as in the case of memory) and don't need to interact with a remote api as in the case of couchdb.
 
-This approach is useful in cases where you already have a javascript representation of your store (as in the case of memory) and don't need to interact with a remote api as in the case of couchdb.
+### update()
+`update` is used to modify existing resources by copying enumerable properties from the update object to the existing object (often called a "mixin" and implemented in javascript in `resourceful.mixin` and `utile.mixin`). Besides the mixin process (meaning your stored object won't lose existing properties), `update` is synonymous with `put`, and in fact uses `put` internally in the case of both the couchdb and memory engines.
 
-##### Engine.prototype.update
-
-This pattern should be followed across all engines:
+Because the engines api was written with couchdb in mind, 'doc' should include an appropriate http status under `doc.status`. The expected status is '201', as with `put`. This pattern should be followed across all engines:
 
 ```js
 engine.put('key', { 'foo': 'bar' }, function (err, doc) {
@@ -456,13 +456,7 @@ engine.put('key', { 'foo': 'bar' }, function (err, doc) {
 });
 ```
 
-`update` is used to modify existing resources by copying enumerable properties from the update object to the existing object (often called a "mixin" and implemented in javascript in `resourceful.mixin` and `utile.mixin`). Besides the mixin process (meaning your stored object won't lose existing properties), `update` is synonymous with `put`, and in fact uses `put` internally in the case of both the couchdb and memory engines.
-
-Because the engines api was written with couchdb in mind, 'doc' should include an appropriate http status under `doc.status`. The expected status is '201', as with `put`.
-
-
-##### Engine.prototype.get
-
+### get()
 This pattern should be followed across all engines:
 
 ```js
@@ -479,13 +473,10 @@ engine.get('key', function (err, doc) {
 });
 ```
 
-`update` is used to modify existing resources by copying enumerable properties from the update object to the existing object (often called a "mixin" and implemented in javascript in `resourceful.mixin` and `utile.mixin`). Besides the mixin process (meaning your stored object won't lose existing properties), `update` is synonymous with `put`, and in fact uses `put` internally in the case of both the couchdb and memory engines.
+### destroy()
+`destroy` is used to delete existing resources. 
 
-Because the engines api was written with couchdb in mind, 'doc' should include an appropriate http status under `doc.status`. The expected status is '201', as with `put`.
-
-##### Engine.prototype.destroy
-
-This pattern should be followed across all engines:
+Because the engines api was written with couchdb in mind, 'doc' should include an appropriate http status under `doc.status`. The expected status is '204', which stands for 'successfully deleted'. This pattern should be followed across all engines:
 
 ```js
 engine.get('key', function (err, doc) {
@@ -502,11 +493,18 @@ engine.get('key', function (err, doc) {
 });
 ```
 
-`destroy` is used to delete existing resources.
+### find()
+`find` is a shorthand for finding resources which in some cases can be implemented as a special case of `filter`, as with memory here:
 
-Because the engines api was written with couchdb in mind, 'doc' should include an appropriate http status under `doc.status`. The expected status is '204', which stands for 'successfully deleted'.
-
-##### Engine.prototype.find
+```js
+Memory.prototype.find = function (conditions, callback) {
+  this.filter(function (obj) {
+    return Object.keys(conditions).every(function (k) {
+      return conditions[k] ===  obj[k];
+    });
+  }, callback);
+};
+```
 
 This pattern should be followed across all engines:
 
@@ -521,29 +519,24 @@ engine.find({ 'foo': 'bar' }, function (err, docs) {
 });
 ```
 
-`find` is a shorthand for finding resources which in some cases can be implemented as a special case of `filter`, as with memory here:
-
-```js
-Memory.prototype.find = function (conditions, callback) {
-  this.filter(function (obj) {
-    return Object.keys(conditions).every(function (k) {
-      return conditions[k] ===  obj[k];
-    });
-  }, callback);
-};
-```
-
 The couchdb version, however, uses special logic as couchdb uses temporary and stored views.
 
-**IMPORTANT:** `CouchDB.prototype.find` uses a *temporary view*. This is useful while testing but is slow and *bad practice* on a production couch. Please use `CouchDB.prototype.filter` instead.
+```
 
-##### Engine.prototype.filter
+  IMPORTANT NOTE
+  --------------
 
-The semantics of 'filter' vary slightly depending on the engine.
+  `CouchDB.prototype.find` uses a temporary view. This is useful while testing but is slow and bad practice on a production couch. Please use `CouchDB.prototype.filter` instead.
 
-**Memory example:**
+```
+
+### filter()
+The semantics of 'filter' vary slightly depending on the engine. The semantics of `filter()`, like those of `request()`, should reflect the particular idioms of the underlying transport.
 
 ```js
+//
+// Example used with a Memory engine
+//
 engine.filter(filterfxn, function (err, docs) {
   if (err) {
     throw err;
@@ -556,9 +549,10 @@ engine.filter(filterfxn, function (err, docs) {
 
 The "memory" case simply applies a function against the store's documents. In contrast, the couchdb engine exposes an api for using stored mapreduce functions on the couch:
 
-**Couchdb example:**
-
 ```js
+//
+// Example used with a Couchdb engine
+//
 engine.filter("view", params, function (err, docs) {
   if (err) {
     throw err;
@@ -569,9 +563,8 @@ engine.filter("view", params, function (err, docs) {
 });
 ```
 
-The semantics of `filter`, like those of `request`, should reflect the particular idioms of the underlying transport.
-
-##### Engine.prototype.sync
+### sync()
+`Engine.prototype.sync` is used to sync "design document" information with the database if necessary. This is specific to couchdb; for the 'memory' transport there is no conception of (or parallel to) a design document.
 
 ```js
 
@@ -582,9 +575,7 @@ engine.sync(factory, function (err) {
 });
 ```
 
-`Engine.prototype.sync` is used to sync "design document" information with the database if necessary. This is specific to couchdb; for the 'memory' transport there is no conception of (or parallel to) a design document.
-
-In the case where there is no ddoc or "stored procedures" of any kind to upload to the database, this step can be simplified to:
+In the case where there is no doc or "stored procedures" of any kind to upload to the database, this step can be simplified to:
 
 ```js
 Engine.prototype.sync = function (factory, callback) {
@@ -592,13 +583,8 @@ Engine.prototype.sync = function (factory, callback) {
 };
 ```
 
-### Engine caching in resourceful
-
-Resourceful comes with a helper for managing an in-memory cache of your documents. This helps increase the speed of resourceful by avoiding extraneous interactions with the back-end.
-
-Unlike engines, caches have a completely synchronous API. This is acceptable since the calls are short and usually occur inside an asynchronously-executing procedure.
-
-#### Constructor:
+## Cache Constructor
+This creates a new in-memory cache for your engine. The cache is automatically populated by resourceful. This means that you don't need to actually use the cache directly for many operations. In fact, the memory engine doesn't explicitly use resourceful.Cache at all.
 
 ```js
 var resourceful = require('resourceful');
@@ -606,11 +592,8 @@ var resourceful = require('resourceful');
 var cache = new Cache();
 ```
 
-This creates a new in-memory cache for your engine.
-
-#### Prototype methods:
-
-`resourceful.Cache` Has the following prototypes for interacting with the in-memory cache:
+## Cache Instance Methods
+`resourceful.Cache` has the following prototypes for interacting with the in-memory cache:
 
 * `Cache.prototype.get(id)`: Attempt to 'get' a cached document.
 * `Cache.prototype.put(id, doc)`: Attempt to 'put' a document into the cache.
@@ -618,13 +601,7 @@ This creates a new in-memory cache for your engine.
 * `Cache.prototype.clear(id)`: Attempts to remove a document from the cache. Document 'overwriting' may be achieved with call to `.clear` followed by a call to `.put`.
 * `Cache.prototype.has(id)`: Checks to see if a given document is in the cache or not.
 
-#### Use with Engines:
-
-The cache is automatically populated by resourceful. This means that you don't need to actually use the cache directly for many operations. In fact, the memory engine doesn't explicitly use resourceful.Cache at all.
-
-The couchdb engine, on the other hand, explicity uses resourceful.Cache in two places, both in cases where fetching the document is prohibitive and can be avoided:
-
-1. **update**: The couchdb engine checks the cache for the object with which to merge new data before uploading:
+The couchdb engine explicity uses resourceful.Cache in two places, both in cases where fetching the document is prohibitive and can be avoided. The couchdb engine checks the cache for the object with which to merge new data before uploading:
 
 ```js
 Couchdb.prototype.update = function (id, doc, callback) {
@@ -637,7 +614,7 @@ Couchdb.prototype.update = function (id, doc, callback) {
 
 `object.toJSON` is a misnomer; Instead of returning json, `.toJSON()` returns a cloned object. This method is named as such because it's [detected and used by JSON.stringify](https://developer.mozilla.org/en/JSON#toJSON\(\)_method).
 
-2. **destroy**: The couchdb engine checks the cache for the object it wants to destroy:
+The couchdb engine checks the cache for the object it wants to destroy:
 
 ```js
 if (this.cache.has(id)) {
@@ -646,19 +623,24 @@ if (this.cache.has(id)) {
 }
 ```
 
-In this snippet (just a small part of the entire function), the couchdb engine uses the cache to get revision data without doing a GET.
+In the above snippet (just a small part of the entire function), the couchdb engine uses the cache to get revision data without doing a GET.
 
-## Tests
+# Tests
 All tests are written with [vows][0] and should be run with [npm][1]:
 
-``` bash
+```bash
   $ npm test
 ```
 
-#### Author: [Alexis Sellier](http://cloudhead.io), [Charlie Robbins](http://nodejitsu.com)
-#### Contributors: [Fedor Indutny](http://github.com/indutny), [Bradley Meck](http://github.com/bmeck)
-#### License: Apache 2.0
-
 [0]: http://vowsjs.org
 [1]: http://npmjs.org
+
+# License
+Copyright 2012 Nodejitsu, Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
