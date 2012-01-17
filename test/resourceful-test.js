@@ -103,7 +103,7 @@ vows.describe('resourceful').addVows({
   "A Resource with a couple of properties": {
     topic: function () {
       var r = resourceful.define('book');
-      r.property('title');
+      r.property('title').restricted();
       r.property('kind');
       return r;
     },
@@ -121,6 +121,13 @@ vows.describe('resourceful').addVows({
       },
       "should respond to toJSON()": function (r) {
         assert.isObject(r.toJSON());
+      },
+      "should respond to restricted() with filtered properties": function (r) {
+        var restricted = r.restricted();
+        assert.isObject(restricted);
+
+        assert.ok(restricted.title);
+        assert.ok(!restricted.kind);
       },
       "should return the attributes, when `Object.keys` is called": function (r) {
         var keys = Object.keys(r);
