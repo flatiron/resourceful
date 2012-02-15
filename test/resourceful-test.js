@@ -270,6 +270,15 @@ vows.describe('resourceful').addVows({
             assert.equal(instance.kind, 'tests');
           }
         },
+        "sanitize('capitalize').sanitize('replace')": {
+          topic: function (p) {
+            p.sanitize('capitalize').sanitize('replace', /[^a-z]+/g, '-');
+            return new this.Resource({kind: 'hello world'});
+          },
+          "and pass check": function (instance) {
+            assert.equal(instance.kind, 'HELLO-WORLD');
+          }
+        },
         "sanitize('replace')": {
           topic: function (p) {
             p.sanitize('replace', /[^a-z]+/g, '-');
