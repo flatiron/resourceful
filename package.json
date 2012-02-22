@@ -1,7 +1,7 @@
 {
   "name": "resourceful",
   "description": "A storage agnostic resource-oriented ODM for building prototypical models with validation and sanitization.",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "url": "http://github.com/flatiron/resourceful",
   "keywords": ["ODM", "database", "couchdb", "model", "resource"],
   "author": "Charlie Robbins <charlie@nodejitsu.com>",
@@ -22,6 +22,7 @@
     "vows": "~0.6.0"
   },
   "main": "./lib/resourceful",
+  "engines": { "node": ">= 0.6.0" },
   "scripts": {
     "browserify": "browserify lib/browser.js -o build/resourceful.js",
     "test": "vows --spec -i"
