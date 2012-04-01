@@ -142,7 +142,7 @@ Creature.number('legs', {
   minimum: 0,
   maximum: 8,
 
-  assert: function (val) {
+  conform: function (val) {
     return val % 2 === 0;
   }
 });
@@ -157,7 +157,7 @@ Creature.number('legs')
         .required()
         .minimum(0)
         .maximum(8)
-        .assert(function (val) { return val % 2 === 0 });
+        .conform(function (val) { return val % 2 === 0 });
 ```
 
 If we want to access and modify an already defined property, we can do it this way:
