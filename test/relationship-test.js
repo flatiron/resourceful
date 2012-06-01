@@ -37,6 +37,42 @@ function authorAndArticles(name) {
   };
 }
 
+function authorAndArticlesWithoutId(name) {
+  return {
+    topic: function () {
+      this.Author.create({
+        name: name
+      }, this.callback);
+    },
+    'should exist': function (err, author) {
+      assert.equal(author._id, '1');
+      assert.isNull(err);
+    },
+    'with': {
+      'article #3': {
+        topic: function (author) {
+          var self = this;
+          author.createArticle({
+            title: name + '\'s article #3'
+          }, function(err, i) {
+            self.callback(err, author);
+          });
+        },
+        'should exist': function (err, author) {
+          author.articles(function(err, articles) {
+            assert.isArray(articles);
+            assert.equal(articles[0].title, name + '\'s article #3');
+          });
+          this.Article.byAuthor('1', function(err, articles) {
+            assert.isArray(articles);
+            assert.equal(articles[0].title, name + '\'s article #3');
+          });
+        }
+      }
+    }
+  };
+}
+
 function category(parentName, childName){
   return {
     topic: function () {
@@ -196,6 +232,7 @@ vows.describe('resourceful/memory/relationship').addBatch({
           'with': {
             'Author #1': authorAndArticles('paul'),
             'Author #2': authorAndArticles('bob'),
+            'Author #3': authorAndArticlesWithoutId('lenny'),
             'Category #1 & #2': category('alice', 'bob')
           }
         }
