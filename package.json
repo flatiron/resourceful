@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "cradle": "0.6.x",
+    "i": "0.3.x",
     "revalidator": "0.1.x"
   },
   "devDependencies": {
