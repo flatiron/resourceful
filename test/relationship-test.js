@@ -105,7 +105,7 @@ function categoryParentTest(name) {
   return {
     topic: function(){
       // FIXME category pluralized should be categories (maybe use https://github.com/MSNexploder/inflect?)
-      this.Category.categorys(parent_id, this.callback);
+      this.Category.categories(parent_id, this.callback);
     },
     'should return the children': function(err, children){
       assert.isNull(err);
