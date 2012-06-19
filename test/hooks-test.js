@@ -75,12 +75,23 @@ vows.describe('resourceful/hooks').addBatch({
     "with 'before' hooks on `create`": {
       topic: function (A) {
         var that = this;
+        that.hooked = [];
         this.hooked_create = 0;
         A.before('create', function (obj, next) {
-          that.hooked_create += 1; next(null);
+          that.hooked.push('a');
+          that.hooked_create += 1;
+          next(null);
         });
         A.before('create', function (obj, next) {
-          that.hooked_create *= 2; next(null);
+          that.hooked_create += 1;
+          that.hooked.push('b');
+          next(null);
+        });
+        A.before('create', function (obj, next) {
+          that.hooked.push('c');
+          obj.title = "not foobar";
+          that.hooked_create += 1;
+          next(null);
         });
         return A;
       },
@@ -88,9 +99,20 @@ vows.describe('resourceful/hooks').addBatch({
         topic: function (A) {
           A.create({ _id: '69', counter: 0, title: 'foobar' }, this.callback);
         },
-        "should trigger both hooks in the right order": function (e, res) {
+        "should trigger all hooks": function (e, res) {
           assert.isNull(e);
-          assert.equal(this.hooked_create, 2);
+          assert.equal(this.hooked_create, 3);
+        },
+        "should trigger all hooks in the right order": function (e, res) {
+          assert.isNull(e);
+          assert.equal(this.hooked[0], 'a');
+          assert.equal(this.hooked[1], 'b');
+          assert.equal(this.hooked[2], 'c');
+
+        },
+        "should have modified attributes": function (e, res) {
+          assert.isNull(e);
+          assert.equal(res.title, "not foobar");
         }
       }
     },
