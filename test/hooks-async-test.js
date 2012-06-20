@@ -2,7 +2,7 @@ var assert = require('assert'),
     vows = require('vows'),
     resourceful = require('../lib/resourceful');
 
-vows.describe('resourceful/hooks').addBatch({
+vows.describe('resourceful/hooks/async').addBatch({
   "save-able Resource": {
     topic: function () {
       return resourceful.define('resource', function () {
