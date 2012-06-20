@@ -3,7 +3,7 @@ var resourceful = require('../../lib/resourceful'),
     assert      = require('assert'),
     cradle      = require('cradle');
 
-resourceful.use('couchdb', {database: 'testo'});
+resourceful.use('couchdb', {database: 'test'});
 var Author = resourceful.define('author', function () {
   this.property('name');
 });
@@ -15,12 +15,12 @@ var Book = resourceful.define('book', function () {
 vows.describe('relationships in couchdb').addBatch({
   'when using relationships': {
     topic: function() {
-      
-      var db = new(cradle.Connection)().database('testo')
+
+      var db = new(cradle.Connection)().database('test')
       var todo = 2,
           that = this;
       db.create(function() {
-      
+
       Author.create({
         name:'William Shakespeare'
       }, function(e, shakespeare) {

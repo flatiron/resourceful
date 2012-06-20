@@ -3,13 +3,13 @@ var assert = require('assert'),
     resourceful = require('../lib/resourceful');
 
 var users = {
-  valid: { 
-    _id: 'valid-user', 
+  valid: {
+    _id: 'valid-user',
     email: 'valid@email.com',
     name: 'valid string'
   },
   invalid: {
-    _id: 'invalid-user', 
+    _id: 'invalid-user',
     email: 'invalid-email@123',
     name: 123
   }
@@ -29,7 +29,7 @@ vows.describe('resourceful/validation').addBatch({
         // Specify a storage engine
         //
         this.use('memory');
-        
+
         //
         // Specify some properties with validation
         //
@@ -55,7 +55,7 @@ vows.describe('resourceful/validation').addBatch({
           assert.isFalse(err.validate.valid);
           assert.isArray(err.validate.errors);
           assert.lengthOf(err.validate.errors, 2);
-          
+
           assert.equal(err.validate.errors[0].property, 'email');
           assert.equal(err.validate.errors[1].property, 'name');
         }
@@ -90,5 +90,5 @@ vows.describe('resourceful/validation').addBatch({
       }
     }
   }
-  
+
 }).export(module);
