@@ -18,7 +18,7 @@ function authorAndArticles(name) {
       'article #1': {
         topic: function (author) {
           author.createArticle({
-            _id: author._id + '-article-1',
+            _id: author._id + '/article-1',
             title: name + '\'s article #1'
           }, this.callback);
         },
@@ -27,7 +27,7 @@ function authorAndArticles(name) {
       'article #2': {
         topic: function (author) {
           author.createArticle({
-            _id: author._id + '-article-2',
+            _id: author._id + '/article-2',
             title: name + '\'s article #2'
           }, this.callback);
         },
