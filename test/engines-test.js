@@ -538,5 +538,23 @@ engines.forEach(function (e) {
         assert.equal(obj.resource, 'Author');
       }
     }
-  }).export(module)
+  }).addBatch(multipleGet(e)).export(module);
 });
+
+function multipleGet(e) {
+  if (e.name == 'memory') return {};
+  return {
+    "Getting multiple objects from ids when one object isn't found": {
+      topic: function () {
+        resources[e].Author.get(['bob', 'pun', 'tim'], this.callback);
+      },
+      "should be successful": function (err, obj) {
+        assert.isNull(err);
+        assert.equal(obj.length, 3);
+        assert.equal(obj[0]._id, 'bob');
+        assert.equal(obj[1], null);
+        assert.equal(obj[2]._id, 'tim');
+      }
+    }
+  };
+};
