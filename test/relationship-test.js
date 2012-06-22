@@ -18,7 +18,7 @@ function authorAndArticles(name) {
       'article #1': {
         topic: function (author) {
           author.createArticle({
-            _id: author._id + '/article-1',
+            _id: 'article-1',
             title: name + '\'s article #1'
           }, this.callback);
         },
@@ -27,7 +27,7 @@ function authorAndArticles(name) {
       'article #2': {
         topic: function (author) {
           author.createArticle({
-            _id: author._id + '/article-2',
+            _id: 'article-2',
             title: name + '\'s article #2'
           }, this.callback);
         },
@@ -77,7 +77,7 @@ function category(parentName, childName){
   return {
     topic: function () {
       this.Category.create({
-        _id: 'category-' + parentName,
+        _id: parentName,
         name: parentName
       }, this.callback)
     },
@@ -88,7 +88,7 @@ function category(parentName, childName){
     'with parent Category': {
       topic: function(parent){
         parent.createCategory({
-          _id: 'category-' + childName,
+          _id: childName,
           name: childName
         }, this.callback)
       },
@@ -101,7 +101,7 @@ function category(parentName, childName){
 }
 
 function categoryParentTest(name) {
-  var parent_id = 'category-' + name;
+  var parent_id = name;
   return {
     topic: function(){
       // FIXME category pluralized should be categories (maybe use https://github.com/MSNexploder/inflect?)
@@ -126,16 +126,15 @@ function categoryParentTest(name) {
   }
 }
 
-function categoryChildTest(name) {
-  var child_id = 'category-' + name;
-
+function categoryChildTest(parentName, childName) {
+  var child_id = parentName + '/' + childName;
   return {
     topic: function(){
       this.Category.get(child_id, this.callback);
     },
     'should return the child': function(err, child){
       assert.isNull(err);
-      assert.equal(child.name, name);
+      assert.equal(child.name, childName);
     },
     'and child.category()': {
       topic: function(child){
@@ -143,7 +142,7 @@ function categoryChildTest(name) {
       },
       'should return the parent': function(err, parent){
         assert.isNull(err);
-        assert.notEqual(parent.name, name);
+        assert.notEqual(parent.name, childName);
       }
     }
   }
@@ -233,7 +232,7 @@ vows.describe('resourceful/memory/relationship').addBatch({
             'Author #1': authorAndArticles('paul'),
             'Author #2': authorAndArticles('bob'),
             'Author #3': authorAndArticlesWithoutId('lenny'),
-            'Category #1 & #2': category('alice', 'bob')
+            'Category #1 & #2': category('hip-hop', 'a-tribe-called-quest')
           }
         }
       }
@@ -251,7 +250,7 @@ vows.describe('resourceful/memory/relationship').addBatch({
     'bob.articles': authorTest('bob'),
     'Article.byAuthor(\'paul\')': articleTest('paul'),
     'Article.byAuthor(\'bob\')': articleTest('bob'),
-    'Category.categories()': categoryParentTest('alice'),
-    'Category.category()': categoryChildTest('bob')
+    'Category.categories()': categoryParentTest('hip-hop'),
+    'Category.category()': categoryChildTest('hip-hop', 'a-tribe-called-quest')
   }
 }).export(module);
