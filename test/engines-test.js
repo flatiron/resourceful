@@ -51,6 +51,17 @@ engines.forEach(function (e) {
         'will be successful': function (author) {
           assert.equal(Object.keys(author.properties).length, 3);
         }
+      },
+      'Defining resource "creature"': {
+        topic: function () {
+          return resources[e].Creature = resourceful.define('creature', function () {
+            this.use(e.name, e.options);
+            this.string('name');
+          });
+        },
+        'will be successful': function (creature) {
+          assert.equal(Object.keys(creature.properties).length, 2);
+        }
       }
     }
   }).addBatch({
@@ -155,6 +166,48 @@ engines.forEach(function (e) {
       }
     }
   }).addBatch({
+      'In database "test"': {
+        topic: function () {
+          return null;
+        },
+        "a diffirent Resource.create() request with the same id": {
+          topic: function () {
+            resources[e].Creature.create({ _id: 'han' }, this.callback);
+          },
+          "should return the newly created object": function (err, obj) {
+            assert.isNull(err);
+            assert.strictEqual(obj.constructor, resources[e].Creature);
+            assert.instanceOf(obj, resources[e].Creature);
+            assert.equal(obj._id, 'han');
+            assert.equal(obj.resource, 'Creature');
+          },
+          "should not be a new record": function (err, obj) {
+            assert.isNull(err);
+            assert.isFalse(obj.isNewRecord);
+          },
+          "should create the record in the db": {
+            topic: function () {
+              resources[e].Creature.get('han', this.callback);
+            },
+            "should respond with a Resource instance": function (err, obj) {
+              assert.isNull(err);
+              assert.isObject(obj);
+              assert.instanceOf(obj, resourceful.Resource);
+              assert.equal(obj.constructor, resources[e].Creature);
+            },
+            "should respond with the right object": function (err, obj) {
+              assert.isNull(err);
+              assert.equal(obj._id, 'han');
+              assert.equal(obj.resource, 'Creature');
+            },
+            "should not be a new record": function (err, obj) {
+              assert.isNull(err);
+              assert.isFalse(obj.isNewRecord);
+            }
+          }
+        }
+      }
+    }).addBatch({
     "Instantiating a new instance": {
       topic: function () {
         return resources[e].Author.new({_id: 'kim', age: 32, hair: 'gold'});
