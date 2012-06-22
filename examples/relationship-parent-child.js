@@ -16,11 +16,14 @@ Category.create({
           rap.categories(function(err, result){
             console.log(err, result);
           });
-          Category.categories('hip-hop', function(err, hiphop){
-            console.log('hip-hop', hiphop)
+          hiphop.categories(function(err, result){
+            console.log(err, result);
           });
-          Category.categories('rap', function(err, rap){
-            console.log('rap', rap)
+          Category.categories('hip-hop', function(err, result){
+            console.log('hip-hop', result)
+          });
+          Category.categories('rap', function(err, result){
+            console.log('rap', result)
           });
         });
       });
