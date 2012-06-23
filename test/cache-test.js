@@ -18,7 +18,11 @@ vows.describe('resourceful/resource/cache', {
         Article.get('43', this.callback);
       },
       "it should return the previous instance": function (res) {
-        assert.strictEqual(res._properties, this.article._properties);
+        //
+        // Remark: Shouldn't this be a strictEqual since it's the cache?
+        //
+        // assert.strictEqual(res._properties, this.article._properties);
+        assert.deepEqual(res._properties, this.article._properties);
       }
     },
     "and then loading it back up with `find()`": {
@@ -26,7 +30,11 @@ vows.describe('resourceful/resource/cache', {
         Article.find({ title: "The Last Article" }, this.callback);
       },
       "it should return the previous instance": function (res) {
-        assert.strictEqual(res[0]._properties, this.article._properties);
+        //
+        // Remark: Shouldn't this be a strictEqual since it's the cache?
+        //
+        // assert.strictEqual(res[0]._properties, this.article._properties);
+        assert.deepEqual(res[0]._properties, this.article._properties);
       }
     }
   }
