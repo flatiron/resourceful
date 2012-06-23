@@ -14,16 +14,16 @@ engines.forEach(function (e) {
   .addBatch({
     'In database "test"': {
       topic: function () {
-        e.load(resourceful, [
-          { _id: 'bob', age: 35, hair: 'black', resource: 'Author'},
-          { _id: 'tim', age: 16, hair: 'brown', resource: 'Author'},
-          { _id: 'mat', age: 29, hair: 'black', resource: 'Author'},
-          { _id: 'bob/1', title: 'Nodejs sucks!', year: 2003, fiction: true, resource: 'Book'},
-          { _id: 'tim/1', title: 'Nodejitsu rocks!', year: 2008, fiction: false, resource: 'Book'},
-          { _id: 'bob/2', title: 'Loling at you', year: 2011, fiction: true, resource: 'Book'},
-          { _id: 'dummy/1', hair: 'black', resource: 'Dummy'},
-          { _id: 'dummy/2', hair: 'blue', resource: 'Dummy'}
-        ], this.callback);
+          e.load(resourceful, [
+            { _id: 'author/bob', age: 35, hair: 'black', resource: 'Author'},
+            { _id: 'author/tim', age: 16, hair: 'brown', resource: 'Author'},
+            { _id: 'author/mat', age: 29, hair: 'black', resource: 'Author'},
+            { _id: 'author/bob/1', title: 'Nodejs sucks!', year: 2003, fiction: true, resource: 'Book'},
+            { _id: 'author/tim/1', title: 'Nodejitsu rocks!', year: 2008, fiction: false, resource: 'Book'},
+            { _id: 'author/bob/2', title: 'Loling at you', year: 2011, fiction: true, resource: 'Book'},
+            { _id: 'dummy/1', hair: 'black', resource: 'Dummy'},
+            { _id: 'dummy/2', hair: 'blue', resource: 'Dummy'}
+          ], this.callback);
       },
       'Defining resource "book"': {
         topic: function () {
