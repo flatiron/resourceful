@@ -1,6 +1,10 @@
 var resourceful = require('../lib/resourceful');
 resourceful.use('memory');
 
+//
+// TODO: This seems to not be working on couchdb. Test coverage should be added for this.
+//
+
 var Category = resourceful.define('category');
 Category.parent('category');
 

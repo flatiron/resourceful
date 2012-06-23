@@ -1,5 +1,5 @@
 var resourceful = require('../lib/resourceful');
-resourceful.use('memory' );
+resourceful.use('memory');
 
 //
 // First, create two resources: Author and Article
