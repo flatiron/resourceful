@@ -11,8 +11,11 @@ function authorAndArticles(name) {
         name: name
       }, this.callback);
     },
-    'should exist': function (err, author) {
+    'should not error': function (err, author) {
       assert.isNull(err);
+    },
+    'should return correct author': function (err, author) {
+      assert.equal(author._id, 'author-' + name);
     },
     'with': {
       'article #1': {
@@ -22,7 +25,12 @@ function authorAndArticles(name) {
             title: name + '\'s article #1'
           }, this.callback);
         },
-        'should exist': function () {}
+        'should not error': function (err, article) {
+          assert.isNull(err);
+        },
+        'should return correct article': function (err, article) {
+          assert.equal(article._id, 'article-1');
+        }
       },
       'article #2': {
         topic: function (author) {
@@ -31,7 +39,12 @@ function authorAndArticles(name) {
             title: name + '\'s article #2'
           }, this.callback);
         },
-        'should exist': function () {}
+        'should not error': function (err, article) {
+          assert.isNull(err);
+        },
+        'should return correct article': function (err, article) {
+          assert.equal(article._id, 'article-2');
+        }
       }
     }
   };
