@@ -31,9 +31,20 @@ macros.defineResources = function (e, resources) {
            topic: function () {
              return resources[e].Author = resourceful.define('author', function () {
                this.use(e.name, e.options);
-
                this.number('age');
                this.string('hair').sanitize('lower');
+             });
+           },
+           'will be successful': function (author) {
+             assert.equal(Object.keys(author.properties).length, 4);
+           }
+         },
+         '"article"': {
+           topic: function () {
+             return resources[e].Article = resourceful.define('article', function () {
+               this.use(e.name, e.options);
+               this.string('title');
+               this.parent('Author');
              });
            },
            'will be successful': function (author) {
@@ -49,9 +60,25 @@ macros.defineResources = function (e, resources) {
            },
            'will be successful': function (creature) {
              assert.equal(Object.keys(creature.properties).length, 2);
+           },
+           '"category"': {
+             topic: function () {
+               return resources[e].Category = resourceful.define('category', function () {
+                 this.use(e.name, e.options);
+                 this.string('name');
+                 this.parent('category');
+               });
+               return null;
+             },
+             'will be successful': function (category) {
+               assert.isObject(category.properties);
+             }
            }
          }
        }
      }
    }
 };
+
+
+
