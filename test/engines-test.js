@@ -2,69 +2,27 @@ var path = require('path')
   , assert = require('assert')
   , fs = require('fs')
   , vows = require('vows')
+  , macros = require('./macros')
+  , fixtures = require('./fixtures')
   , resourceful = require('../lib/resourceful');
 
+//
+// Load resourceful engines for testing from /engines/ folder
+//
 var engines = fs.readdirSync(path.join(__dirname, 'engines')).map(function (e) { return require('./engines/' + e.slice(0,-3)); });
 
+//
+// For every engine, we'll need to create a new resources,
+// that each connect to the respective engine
+//
 var resources = {};
-
 engines.forEach(function (e) {
+  //
+  // Create a new object to hold resources which will be defined in macros
+  //
   resources[e] = {};
   vows.describe('resourceful/engines/' + e.name)
-  .addBatch({
-    'In database "test"': {
-      topic: function () {
-          e.load(resourceful, [
-            { _id: 'author/bob', age: 35, hair: 'black', resource: 'Author'},
-            { _id: 'author/tim', age: 16, hair: 'brown', resource: 'Author'},
-            { _id: 'author/mat', age: 29, hair: 'black', resource: 'Author'},
-            { _id: 'author/bob/1', title: 'Nodejs sucks!', year: 2003, fiction: true, resource: 'Book'},
-            { _id: 'author/tim/1', title: 'Nodejitsu rocks!', year: 2008, fiction: false, resource: 'Book'},
-            { _id: 'author/bob/2', title: 'Loling at you', year: 2011, fiction: true, resource: 'Book'},
-            { _id: 'dummy/1', hair: 'black', resource: 'Dummy'},
-            { _id: 'dummy/2', hair: 'blue', resource: 'Dummy'}
-          ], this.callback);
-      },
-      'Defining resource "book"': {
-        topic: function () {
-          return resources[e].Book = resourceful.define('book', function () {
-            this.use(e.name, e.options);
-
-            this.string('title');
-            this.number('year');
-            this.bool('fiction');
-          });
-        },
-        'will be successful': function (book) {
-          assert.equal(Object.keys(book.properties).length, 4);
-        }
-      },
-      'Defining resource "author"': {
-        topic: function () {
-          return resources[e].Author = resourceful.define('author', function () {
-            this.use(e.name, e.options);
-
-            this.number('age');
-            this.string('hair').sanitize('lower');
-          });
-        },
-        'will be successful': function (author) {
-          assert.equal(Object.keys(author.properties).length, 3);
-        }
-      },
-      'Defining resource "creature"': {
-        topic: function () {
-          return resources[e].Creature = resourceful.define('creature', function () {
-            this.use(e.name, e.options);
-            this.string('name');
-          });
-        },
-        'will be successful': function (creature) {
-          assert.equal(Object.keys(creature.properties).length, 2);
-        }
-      }
-    }
-  }).addBatch({
+  .addBatch(macros.defineResources(e, resources)).addBatch({
     'In database "test"': {
       topic: function () {
         return null;
