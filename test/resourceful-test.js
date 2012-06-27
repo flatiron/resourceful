@@ -286,6 +286,15 @@ vows.describe('resourceful').addVows({
           "and pass check": function (instance) {
             assert.equal(instance.kind, 'hello-world');
           }
+        },
+        "sanitize('lower').sanitize('prefix')": {
+          topic: function (p) {
+            p.sanitize('reset').sanitize('lower').sanitize('prefix', 'a-prefix/');
+            return new this.Resource({kind: 'HELLO-world'});
+          },
+          "and pass check": function (instance) {
+            assert.equal(instance.kind, 'a-prefix/hello-world');
+          }
         }
       }
     },
