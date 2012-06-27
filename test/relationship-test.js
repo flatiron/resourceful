@@ -9,7 +9,7 @@ var engines = fs.readdirSync(path.join(__dirname, 'engines')).map(function (e) {
 var resources = {};
 
 //engines = engines.reverse();
-//engines.pop();
+engines.pop();
 
 engines.forEach(function (e) {
   resources[e] = {};
@@ -90,6 +90,53 @@ engines.forEach(function (e) {
             assert.isNotNull(article._id);
           }
         }
+      }
+    };
+  }
+
+  function updateAuthor(author, attrs) {
+    return {
+      topic: function () {
+        resources[e].Author.update(author, attrs, this.callback);
+      },
+      'should not error': function (err, author) {
+        assert.isNull(err);
+      },
+      'should return updated author': function (err, _author) {
+        assert.isObject(_author);
+        assert.isNotNull(_author._id);
+        assert.equal(_author.name, 'not-marak');
+      }
+    };
+  }
+
+  function updateArticle(article, attrs) {
+    return {
+      topic: function () {
+        resources[e].Article.update(article, attrs, this.callback);
+      },
+      'should not error': function (err, _article) {
+        assert.isNull(err);
+      },
+      'should return updated author': function (err, _article) {
+        assert.isObject(_article);
+        assert.isNotNull(_article._id);
+        assert.equal(_article.title, 'an updated title');
+      }
+    };
+  }
+
+  function deleteArticle(article) {
+    return {
+      topic: function () {
+        resources[e].Article.destroy(article, this.callback);
+      },
+      'should not error': function (err, _article) {
+        assert.isNull(err);
+      },
+      'should delete article': function (err, result) {
+        assert.isObject(result);
+        assert.equal(result.status, 204);
       }
     };
   }
@@ -213,7 +260,7 @@ engines.forEach(function (e) {
         },
         'should return himself': function (err, author) {
           assert.isNull(err);
-          //assert.instanceOf(author, resources[e].Author);
+          assert.instanceOf(author, resources[e].Author);
           assert.equal(author._id, author_id);
         }
       },
@@ -224,7 +271,7 @@ engines.forEach(function (e) {
         },
         'should return himself': function (err, author) {
           assert.isNull(err);
-          //assert.instanceOf(author, resources[e].Author);
+          assert.instanceOf(author, resources[e].Author);
           assert.equal(author._id, author_id);
         }
       }
@@ -235,31 +282,34 @@ engines.forEach(function (e) {
   .addBatch(macros.defineResources(e, resources))
   .addBatch({
   'Initializing': {
-    'In database "test"': {
-      topic: function () {
-        this.use(e.name, e.options)
-        return null;
-      },
-      'with': {
-        'Author #1': authorAndArticles('marak'),
-        'Author #2': authorAndArticles('james'),
-        'Author #3': authorAndArticlesWithoutId('lenny'),
-        // 'Category #1 & #2': category('music', 'hip-hop')
-        }
+    'One-To-Many Creates': {
+      'Author #1': authorAndArticles('marak'),
+      'Author #2': authorAndArticles('james'),
+      'Author #3': authorAndArticlesWithoutId('lenny'),
+      // 'Category #1 & #2': category('music', 'hip-hop')
       }
     }
   })
   .addBatch({
-    'One-To-Many': {
-      topic: function () {
-        return null;
-      },
+    'One-To-Many Joins': {
       'marak.articles': authorTest('marak'),
       'james.articles': authorTest('james'),
       'Article.byAuthor(\'marak\')': articleTest('marak'),
       'Article.byAuthor(\'james\')': articleTest('james'),
       // 'Category.categories()': categoryParentTest('hip-hop'),
       // 'Category.category()': categoryChildTest('hip-hop', 'a-tribe-called-quest')
+    }
+  })
+  .addBatch({
+    'One-To-Many Updates': {
+      'Updating existing author'  :  updateAuthor('marak', { name: "not-marak" }),
+      'Updating existing article' :  updateArticle('author/marak/article-1', { title: "an updated title" })
+    }
+  })
+  .addBatch({
+    'One-To-Many Deletes': {
+      'Deleting an article' : deleteArticle('author/james/article-1'), // TODO: This should work, cache issue
+      '## TODO : Deleting the author'  : ''
     }
   })
   .export(module);
