@@ -124,48 +124,48 @@ engines.forEach(function (e) {
       }
     }
   }).addBatch({
-      'In database "test"': {
+    'In database "test"': {
+      topic: function () {
+        return null;
+      },
+      "a diffirent Resource.create() request with the same id": {
         topic: function () {
-          return null;
+          resources[e].Creature.create({ _id: 'han' }, this.callback);
         },
-        "a diffirent Resource.create() request with the same id": {
+        "should return the newly created object": function (err, obj) {
+          assert.isNull(err);
+          assert.strictEqual(obj.constructor, resources[e].Creature);
+          assert.instanceOf(obj, resources[e].Creature);
+          assert.equal(obj._id, 'han');
+          assert.equal(obj.resource, 'Creature');
+        },
+        "should not be a new record": function (err, obj) {
+          assert.isNull(err);
+          assert.isFalse(obj.isNewRecord);
+        },
+        "should create the record in the db": {
           topic: function () {
-            resources[e].Creature.create({ _id: 'han' }, this.callback);
+            resources[e].Creature.get('han', this.callback);
           },
-          "should return the newly created object": function (err, obj) {
+          "should respond with a Resource instance": function (err, obj) {
             assert.isNull(err);
-            assert.strictEqual(obj.constructor, resources[e].Creature);
-            assert.instanceOf(obj, resources[e].Creature);
+            assert.isObject(obj);
+            assert.instanceOf(obj, resourceful.Resource);
+            assert.equal(obj.constructor, resources[e].Creature);
+          },
+          "should respond with the right object": function (err, obj) {
+            assert.isNull(err);
             assert.equal(obj._id, 'han');
             assert.equal(obj.resource, 'Creature');
           },
           "should not be a new record": function (err, obj) {
             assert.isNull(err);
             assert.isFalse(obj.isNewRecord);
-          },
-          "should create the record in the db": {
-            topic: function () {
-              resources[e].Creature.get('han', this.callback);
-            },
-            "should respond with a Resource instance": function (err, obj) {
-              assert.isNull(err);
-              assert.isObject(obj);
-              assert.instanceOf(obj, resourceful.Resource);
-              assert.equal(obj.constructor, resources[e].Creature);
-            },
-            "should respond with the right object": function (err, obj) {
-              assert.isNull(err);
-              assert.equal(obj._id, 'han');
-              assert.equal(obj.resource, 'Creature');
-            },
-            "should not be a new record": function (err, obj) {
-              assert.isNull(err);
-              assert.isFalse(obj.isNewRecord);
-            }
           }
         }
       }
-    }).addBatch({
+    }
+  }).addBatch({
     "Instantiating a new instance": {
       topic: function () {
         return resources[e].Author.new({_id: 'kim', age: 32, hair: 'gold'});
