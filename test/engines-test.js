@@ -169,24 +169,6 @@ engines.forEach(function (e) {
       }
     }
   }).addBatch({
-    "Instantiating a new instance": {
-      topic: function () {
-        return resources[e].Author.new({_id: 'kim', age: 32, hair: 'gold'});
-      },
-      "should be a new record": function (obj) {
-        assert.isTrue(obj.isNewRecord);
-      },
-      "should not be in the db": {
-        topic: function () {
-          resources[e].Author.get('kim', this.callback);
-        },
-        "should respond with an error": function (err, obj) {
-          assert.equal(err.status, 404);
-          assert.isUndefined(obj);
-        }
-      }
-    }
-  }).addBatch({
     'In database "test"': {
       topic: function () {
         return null;
@@ -205,6 +187,77 @@ engines.forEach(function (e) {
           "should respond with an error": function (err, obj) {
             assert.equal(err.status, 404);
             assert.isUndefined(obj);
+          }
+        }
+      }
+    }
+  }).addBatch({
+    "Instantiating a new instance": {
+      topic: function () {
+        return resources[e].Author.new({_id: 'han', age: 30, hair: 'red'});
+      },
+      "should be a new record": function (obj) {
+        assert.isTrue(obj.isNewRecord);
+      },
+      "should not be in the db": {
+        topic: function () {
+          resources[e].Author.get('han', this.callback);
+        },
+        "should respond with an error": function (err, obj) {
+          assert.equal(err.status, 404);
+          assert.isUndefined(obj);
+        }
+      }
+    }
+  }).addBatch({
+    "Instantiating a new instance": {
+      topic: function () {
+        return resources[e].Author.new({_id: 'han', age: 30, hair: 'red'});
+      },
+      "should be a new record": function (obj) {
+        assert.isTrue(obj.isNewRecord);
+      },
+      "a Resource.prototype.save() request": {
+        topic: function (obj) {
+          obj.save(this.callback);
+        },
+        "should respond with a Resource instance": function (err, obj) {
+          assert.isNull(err);
+          assert.isObject(obj);
+          assert.instanceOf(obj, resourceful.Resource);
+          assert.equal(obj.constructor, resources[e].Author);
+        },
+        "should respond with the right object": function (err, obj) {
+          assert.isNull(err);
+          assert.equal(obj._id, 'han');
+          assert.equal(obj.age, 30);
+          assert.equal(obj.hair, 'red');
+          assert.equal(obj.resource, 'Author');
+        },
+        "should not be a new record": function (err, obj) {
+          assert.isNull(err);
+          assert.isFalse(obj.isNewRecord);
+        },
+        "should create the object in db": {
+          topic: function () {
+            resources[e].Author.get('han', this.callback);
+          },
+          "should respond with a Resource instance": function (err, obj) {
+            assert.isNull(err);
+            assert.isObject(obj);
+            assert.instanceOf(obj, resourceful.Resource);
+            assert.equal(obj.constructor, resources[e].Author);
+          },
+          "should respond with the right object": function (err, obj) {
+            assert.isNull(err);
+            assert.equal(obj._id, 'han');
+            assert.equal(obj.age, 30);
+            assert.equal(obj.hair, 'red');
+            assert.equal(obj.resource, 'Author');
+          },
+          "should not be a new record": function (err, obj) {
+            assert.isNull(err);
+            assert.isFalse(obj.isNewRecord);
           }
         }
       }
@@ -505,7 +558,7 @@ engines.forEach(function (e) {
   }).addBatch({
     'In database "test"': {
       topic: function () {
-        resources[e].Author.create({ _id: 'han', age: 30, hair: 'red'}, this.callback);
+        resources[e].Author.get('han', this.callback);
       },
       "a Resource.prototype.destroy() request": {
         topic: function (obj) {
