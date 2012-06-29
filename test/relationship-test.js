@@ -99,13 +99,13 @@ engines.forEach(function (e) {
       topic: function () {
         resources[e].Author.update(author, attrs, this.callback);
       },
-      'should not error': function (err, author) {
+      'should not error': function (err, _author) {
         assert.isNull(err);
       },
       'should return updated author': function (err, _author) {
         assert.isObject(_author);
         assert.isNotNull(_author._id);
-        assert.equal(_author.name, 'not-marak');
+        assert.equal(_author.name, attrs.name);
       }
     };
   }
@@ -121,7 +121,7 @@ engines.forEach(function (e) {
       'should return updated author': function (err, _article) {
         assert.isObject(_article);
         assert.isNotNull(_article._id);
-        assert.equal(_article.title, 'an updated title');
+        assert.equal(_article.title, attrs.title);
       }
     };
   }
