@@ -16,6 +16,10 @@ var engines = fs.readdirSync(path.join(__dirname, 'engines')).map(function (e) {
 // that each connect to the respective engine
 //
 var resources = {};
+
+// Test only couchdb
+engines.pop();
+
 engines.forEach(function (e) {
   //
   // Create a new object to hold resources which will be defined in macros
