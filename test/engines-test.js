@@ -194,6 +194,15 @@ engines.forEach(function (e) {
         },
         "should be successful": function (err, obj) {
           assert.isNull(err);
+        },
+        "and Resource.get() the destroyed object": {
+          topic: function () {
+            resources[e].Author.get('han', this.callback);
+          },
+          "should respond with an error": function (err, obj) {
+            assert.equal(err.status, 404);
+            assert.isUndefined(obj);
+          }
         }
       }
     }
