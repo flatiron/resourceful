@@ -1,5 +1,5 @@
 var macros = exports,
-    fixture = require('../fixtures'),
+    fixture = require('../fixtures/relationship'),
     assert = require('assert');
 
 var resourceful = require('../../lib/resourceful');
@@ -11,22 +11,10 @@ macros.defineResources = function (e, resources) {
    return {
      'In database "test"': {
        topic: function () {
-         e.load(resourceful, fixture.testData, this.callback)
+         e.load(resourceful, [], this.callback);
+         // e.load(resourceful, fixture.testData, this.callback)
        },
        "with defined resources" : {
-         '"book"': {
-           topic: function () {
-             return resources[e].Book = resourceful.define('book', function () {
-               this.use(e.name, e.options);
-               this.string('title');
-               this.number('year');
-               this.bool('fiction');
-             });
-           },
-           'will be successful': function (book) {
-             assert.equal(Object.keys(book.properties).length, 4);
-           }
-         },
          '"author"': {
            topic: function () {
              return resources[e].Author = resourceful.define('author', function () {
@@ -39,21 +27,32 @@ macros.defineResources = function (e, resources) {
              assert.equal(Object.keys(author.properties).length, 3);
            }
          },
-         '"creature"': {
+         '"article"': {
            topic: function () {
-             return resources[e].Creature = resourceful.define('creature', function () {
+             return resources[e].Article = resourceful.define('article', function () {
                this.use(e.name, e.options);
-               this.string('name');
+               this.string('title');
+               this.parent('Author');
              });
            },
-           'will be successful': function (creature) {
-             assert.equal(Object.keys(creature.properties).length, 2);
+           'will be successful': function (article) {
+             assert.equal(Object.keys(article.properties).length, 3);
+           }
+         },
+         '"category"': {
+           topic: function () {
+             return resources[e].Category = resourceful.define('category', function () {
+               this.use(e.name, e.options);
+               this.string('name');
+               this.parent('category');
+             });
+             return null;
            },
+           'will be successful': function (category) {
+             assert.isObject(category.properties);
+           }
          }
        }
      }
    }
 };
-
-
-

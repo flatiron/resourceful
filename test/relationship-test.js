@@ -1,6 +1,6 @@
 var vows = require('vows'),
     path = require('path'),
-    macros = require('./macros'),
+    macros = require('./macros/relationship'),
     fs   = require('fs'),
     assert = require('assert');
 
