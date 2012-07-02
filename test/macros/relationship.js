@@ -8,51 +8,107 @@ var resourceful = require('../../lib/resourceful');
 // Define common macros that will be used for all tests
 //
 macros.defineResources = function (e, resources) {
-   return {
-     'In database "test"': {
-       topic: function () {
-         e.load(resourceful, [], this.callback);
-         // e.load(resourceful, fixture.testData, this.callback)
-       },
-       "with defined resources" : {
-         '"author"': {
-           topic: function () {
-             return resources[e].Author = resourceful.define('author', function () {
-               this.use(e.name, e.options);
-               this.number('age');
-               this.string('hair').sanitize('lower');
-             });
-           },
-           'will be successful': function (author) {
-             assert.equal(Object.keys(author.properties).length, 3);
-           }
-         },
-         '"article"': {
-           topic: function () {
-             return resources[e].Article = resourceful.define('article', function () {
-               this.use(e.name, e.options);
-               this.string('title');
-               this.parent('Author');
-             });
-           },
-           'will be successful': function (article) {
-             assert.equal(Object.keys(article.properties).length, 3);
-           }
-         },
-         '"category"': {
-           topic: function () {
-             return resources[e].Category = resourceful.define('category', function () {
-               this.use(e.name, e.options);
-               this.string('name');
-               this.parent('category');
-             });
-             return null;
-           },
-           'will be successful': function (category) {
-             assert.isObject(category.properties);
-           }
-         }
-       }
-     }
-   }
+  return {
+    'In database "test"': {
+      topic: function () {
+        e.load(resourceful, fixture.testData, this.callback)
+      },
+      "with defined resources" : {
+        '"forum"': {
+          topic: function () {
+            return resources[e].Forum = resourceful.define('forum', function() {
+              this.use(e.name, e.options);
+              this.string('name', { minLength: 1 });
+              this.parent('Forum');
+            });
+          },
+          'will be successful': function (resource) {
+            assert.equal(resource.schema.name, 'Forum');
+          }
+        },
+        '"user"': {
+          topic: function () {
+            return resources[e].User = resourceful.define('user', function() {
+              this.use(e.name, e.options);
+              this.string('name', { minLength: 1 });
+            });
+          },
+          'will be successful': function (resource) {
+            assert.equal(resource.schema.name, 'User');
+          }
+        },
+        '"repository"': {
+          topic: function () {
+            return resources[e].Repository = resourceful.define('repository', function() {
+              this.use(e.name, e.options);
+              this.string('name', { minLength: 1 });
+              this.parent('User');
+            });
+          },
+          'will be successful': function (resource) {
+            assert.equal(resource.schema.name, 'Repository');
+          }
+        },
+        '"team"': {
+          topic: function () {
+            return resources[e].Team = resourceful.define('team', function() {
+              this.use(e.name, e.options);
+              this.string('name', { minLength: 1 });
+            });
+          },
+          'will be successful': function (resource) {
+            assert.equal(resource.schema.name, 'Team');
+          }
+        },
+        '"member"': {
+          topic: function () {
+            return resources[e].Member = resourceful.define('member', function() {
+              this.use(e.name, e.options);
+              this.string('user');
+              this.parent('Team');
+            });
+          },
+          'will be successful': function (resource) {
+            assert.equal(resource.schema.name, 'Member');
+          }
+        },
+        '"membership"': {
+          topic: function () {
+            return resources[e].Membership = resourceful.define('membership', function() {
+              this.use(e.name, e.options);
+              this.string('team');
+              this.parent('User');
+            });
+          },
+          'will be successful': function (resource) {
+            assert.equal(resource.schema.name, 'Membership');
+          }
+        },
+        '"follower"': {
+          topic: function () {
+            return resources[e].Follower = resourceful.define('follower', function() {
+              this.use(e.name, e.options);
+              this.string('user');
+              this.parent('User');
+            });
+          },
+          'will be successful': function (resource) {
+            assert.equal(resource.schema.name, 'Follower');
+          }
+        },
+        '"following"': {
+          topic: function () {
+            return resources[e].Following = resourceful.define('following', function() {
+              this.use(e.name, e.options);
+              this.string('user');
+              this.parent('User');
+            });
+          },
+          'will be successful': function (resource) {
+            assert.equal(resource.schema.name, 'Following');
+          }
+        }
+      }
+    }
+  }
 };
