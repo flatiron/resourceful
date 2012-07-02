@@ -18,13 +18,14 @@ var engines = fs.readdirSync(path.join(__dirname, 'engines')).map(function (e) {
 var resources = {};
 
 // Test only couchdb
-engines.pop();
+engines = [ require('./engines/couchdb') ];
 
 engines.forEach(function (e) {
   //
   // Create a new object to hold resources which will be defined in macros
   //
   resources[e] = {};
+
   vows.describe('resourceful/engines/' + e.name)
   .addBatch(macros.defineResources(e, resources)).addBatch({
     'In database "test"': {

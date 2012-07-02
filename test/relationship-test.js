@@ -2,16 +2,27 @@ var vows = require('vows'),
     path = require('path'),
     macros = require('./macros/relationship'),
     fs   = require('fs'),
-    assert = require('assert');
+    assert = require('assert'),
+    resourceful = require('../lib/resourceful');
 
-var resourceful = require('../lib/resourceful');
+//
+// Load resourceful engines for testing from /engines/ folder
+//
 var engines = fs.readdirSync(path.join(__dirname, 'engines')).map(function (e) { return require('./engines/' + e.slice(0,-3)); });
+
+//
+// For every engin, we'll need to create new resources
+// that each connect to the respective engine
+//
 var resources = {};
 
-//engines = engines.reverse();
-engines.pop();
+// Test only couchdb
+engines = [ require('./engines/couchdb') ];
 
 engines.forEach(function (e) {
+  //
+  // Create a new object to hold resources which will be defined in macros
+  //
   resources[e] = {};
 
   vows.describe('resourceful/' + e.name + '/relationship')
