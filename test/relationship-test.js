@@ -32,17 +32,17 @@ engines.forEach(function (e) {
       topic: function () {
         return null
       },
-      "an user named 'pavan'": {
+      "getting an user named 'pavan'": {
         topic: function () {
           resources[e].User.get('pavan', this.callback);
         },
-        "should exist": function (err, obj) {
+        "should be successful": function (err, obj) {
           assert.isNull(err);
           assert.equal(obj._id, 'pavan');
           assert.equal(obj.name, 'pavan');
           assert.equal(obj.resource, 'User');
         },
-        "should have children": {
+        "and it should have children": {
           "repositories": {
             topic: function (obj) {
               return obj;
@@ -52,7 +52,7 @@ engines.forEach(function (e) {
               assert.equal(obj.repository_ids[0], 'bullet');
               assert.equal(obj.repository_ids[1], 'octonode');
             },
-            "when 'Parent.children()' is used": {
+            "and when 'Parent.children()' is used": {
               topic: function (obj) {
                 resources[e].User.repositories('pavan', this.callback);
               },
@@ -75,7 +75,7 @@ engines.forEach(function (e) {
                 assert.equal(obj[1].user_id, 'pavan');
               }
             },
-            "when 'Parent.prototype.children()' is used": {
+            "and when 'Parent.prototype.children()' is used": {
               topic: function (obj) {
                 obj.repositories(this.callback);
               },
@@ -107,19 +107,19 @@ engines.forEach(function (e) {
       topic: function () {
         return null;
       },
-      "an user named 'christian'": {
+      "getting an user named 'christian'": {
         topic: function () {
           resources[e].User.get('christian', this.callback);
         },
-        "should exist": function (err, obj) {
+        "should be successful": function (err, obj) {
           assert.isNull(err);
           assert.equal(obj._id, 'christian');
           assert.equal(obj.name, 'christian');
           assert.equal(obj.resource, 'User');
           assert.lengthOf(obj.repository_ids, 2);
         },
-        "with 'Parent.prototype.createChild()' being used": {
-          "when successful": {
+        "and when 'Parent.prototype.createChild()' is used": {
+          "successfully": {
             topic: function (obj) {
               obj.createRepository({ _id: 'issues', name: 'issues'}, this.callback);
             },
@@ -161,7 +161,7 @@ engines.forEach(function (e) {
               }
             }
           },
-          "when unsuccessful using same _id": {
+          "unsuccessfully using same _id": {
             topic: function (obj) {
               obj.createRepository({ _id: 'repository-1', name: 'reposit' }, this.callback);
             },
@@ -178,19 +178,19 @@ engines.forEach(function (e) {
       topic: function () {
         return null;
       },
-      "an user named 'marak'": {
+      "getting an user named 'marak'": {
         topic: function () {
           resources[e].User.get('marak', this.callback);
         },
-        "should exist": function (err, obj) {
+        "should be successful": function (err, obj) {
           assert.isNull(err);
           assert.equal(obj._id, 'marak');
           assert.equal(obj.name, 'marak');
           assert.equal(obj.resource, 'User');
           assert.lengthOf(obj.repository_ids, 2);
         },
-        "with 'Parent.createChild()' being used": {
-          "when successful": {
+        "and when 'Parent.createChild()' is used": {
+          "successfully": {
             topic: function (obj) {
               resources[e].User.createRepository('marak', { _id: 'support', name: 'support'}, this.callback);
             },
@@ -232,7 +232,7 @@ engines.forEach(function (e) {
               }
             }
           },
-          "when unsuccessful using same _id": {
+          "unsuccessfully using same _id": {
             topic: function (obj) {
               obj.createRepository({ _id: 'repository-1', name: 'reposit' }, this.callback);
             },
@@ -244,6 +244,174 @@ engines.forEach(function (e) {
         }
       }
     }
+  }).addBatch({
+    "In database 'test'": {
+      topic: function () {
+        return null;
+      },
+      "getting a repository 'user/pavan/bullet'": {
+        topic: function () {
+          resources[e].Repository.get('user/pavan/bullet', this.callback);
+        },
+        "should be successful": function (err, obj) {
+          assert.isNull(err);
+          assert.equal(obj._id, 'user/pavan/bullet');
+          assert.equal(obj.name, 'bullet');
+          assert.equal(obj.resource, 'Repository');
+        },
+        "should have user_id 'pavan'": function (err, obj) {
+          assert.isNull(err);
+          assert.equal(obj.user_id, 'pavan');
+        },
+        "and when 'Child.prototype.parent()' is used": {
+          topic: function (obj) {
+            obj.user(this.callback);
+          },
+          "should return the parent": function (err, obj) {
+            assert.isNull(err);
+            assert.equal(obj._id, 'pavan');
+            assert.equal(obj.name, 'pavan');
+          },
+          "should be of proper resource type": function (err, obj) {
+            assert.isNull(err);
+            assert.equal(obj.resource, 'User');
+          },
+          "should have the children ids": function (err, obj) {
+            assert.isNull(err);
+            assert.include(obj.repository_ids, 'bullet');
+          }
+        }
+      }
+    }
+  }).addBatch({
+    "In database 'test'": {
+      topic: function () {
+        return null;
+      },
+      "getting an user named 'pavan'": {
+        topic: function () {
+          resources[e].User.get('pavan', this.callback);
+        },
+        "should be successful": function (err, obj) {
+          assert.isNull(err);
+          assert.equal(obj._id, 'pavan');
+          assert.equal(obj.name, 'pavan');
+          assert.equal(obj.resource, 'User');
+        },
+        "should have children repositories": function (err, obj) {
+          assert.isNull(err);
+          assert.lengthOf(obj.repsitory_ids, 2);
+        },
+        "and when 'Child.byParent()' is used": {
+          topic: function (obj) {
+            resources[e].Repository.byUser('pavan', this.callback);
+          },
+          "should return the children": function (err, obj) {
+            assert.isNull(err);
+            assert.equal(obj[0]._id, 'bullet');
+            assert.equal(obj[0].name, 'bullet');
+            assert.equal(obj[1]._id, 'octonode');
+            assert.equal(obj[1].name, 'octonode');
+          },
+          "should be of proper resource type": function (err, obj) {
+            assert.isNull(err);
+            assert.equal(obj[0].resource, 'Repository');
+            assert.equal(obj[1].resource, 'Repsitory');
+          },
+          "should have the parent id set correctly": function (err, obj) {
+            assert.isNull(err);
+            assert.equal(obj[0].user_id, 'pavan');
+            assert.equal(obj[1].user_id, 'pavan');
+          }
+        }
+      }
+    }
+  }).addBatch({
+    "In database 'test'": {
+      topic: function () {
+        return null;
+      },
+      "getting a repository 'user/christian/issues'": {
+        topic: function () {
+          resources[e].Repository.get('user/christian/issues', this.callback);
+        },
+        "should be successful": function (err, obj) {
+          assert.isNull(err);
+          assert.equal(obj._id, 'user/christian/issues');
+          assert.equal(obj.name, 'issues');
+          assert.equal(obj.resource, 'Repository');
+        },
+        "should have the correct user_id": function (err, obj) {
+          assert.isNull(err);
+          assert.equal(obj.user_id, 'christian');
+        },
+        "and getting the parent": {
+          topic: function (obj) {
+            obj.user(this.callback);
+          },
+          "should be successful": function (err, obj) {
+            assert.isNull(err);
+            assert.equal(obj._id, 'christian');
+            assert.equal(obj.name, 'christian');
+            assert.equal(obj.resource, 'User');
+            assert.include(obj.repsitory_ids, 'issues');
+          },
+          "and deleting the child": {
+            topic: function (parent, child) {
+              child.destroy(this.callback);
+            },
+            "should result in parent": {
+              topic: function (parent, child) {
+                parent.reload(this.callback);
+              },
+              "being modified": function (err, parent, child) {
+                assert.isNull(err);
+                assert.lengthOf(parent.repsitory_ids, 2);
+              }
+            }
+          }
+        }
+      }
+    }
+  }).addBatch({
+    "In database 'test'": {
+      topic: function () {
+        return null;
+      },
+      "getting an user named 'christian'": {
+        topic: function () {
+          resources[e].User.get('christian', this.callback);
+        },
+        "should be successful": function (err, obj) {
+          assert.isNull(err);
+          assert.equal(obj._id, 'christian');
+          assert.equal(obj.name, 'christian');
+          assert.equal(obj.resource, 'User');
+          assert.lengthOf(obj.repsitory_ids, 2);
+        },
+        "and destroying it": {
+          topic: function (obj) {
+            obj.destroy(this.callback);
+          },
+          "should be successful": function (err) {
+            assert.isNull(err);
+          },
+          "should result in his repositories": {
+            topic: function () {
+              resources[e].Repository.get('user/christian/repository-1', this.callback);
+            },
+            "getting destroyed": function (err, obj) {
+              assert.equal(err.status, '404');
+              assert.isUndefined(obj);
+            }
+          }
+        }
+      }
+    }
+  }).addBatch({
+    // TODO: Cascading destroy should result in
+    // * reducing marak's follower count
+    // * reducing nodejitsu's user count
+    // * deleting christian following documents
   }).export(module);
 });
-
