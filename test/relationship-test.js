@@ -354,7 +354,7 @@ engines.forEach(function (e) {
             assert.equal(obj._id, 'christian');
             assert.equal(obj.name, 'christian');
             assert.equal(obj.resource, 'User');
-            assert.include(obj.repsitory_ids, 'issues');
+            assert.include(obj.repository_ids, 'issues');
           },
           "and destroying the child": {
             topic: function (parent, child) {
