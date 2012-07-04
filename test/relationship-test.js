@@ -358,16 +358,15 @@ engines.forEach(function (e) {
           },
           "and destroying the child": {
             topic: function (parent, child) {
-              console.log(parent, child);
               child.destroy(this.callback);
             },
             "should result in parent": {
-              topic: function (parent, child) {
-                parent.reload(this.callback);
+              topic: function () {
+                resources[e].User.get('christian', this.callback);
               },
-              "being modified": function (err, parent, child) {
+              "being modified in the db": function (err, parent) {
                 assert.isNull(err);
-                assert.lengthOf(parent.repsitory_ids, 2);
+                assert.lengthOf(parent.repository_ids, 2);
               }
             }
           }
@@ -388,7 +387,7 @@ engines.forEach(function (e) {
           assert.equal(obj._id, 'christian');
           assert.equal(obj.name, 'christian');
           assert.equal(obj.resource, 'User');
-          assert.lengthOf(obj.repsitory_ids, 2);
+          assert.lengthOf(obj.repository_ids, 2);
         },
         "and destroying it": {
           topic: function (obj) {
