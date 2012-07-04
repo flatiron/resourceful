@@ -59,10 +59,10 @@ engines.forEach(function (e) {
               "should return them": function (err, obj) {
                 assert.isNull(err);
                 assert.lengthOf(obj, 2);
-                assert.equal(obj[0]._id, 'bullet');
+                assert.equal(obj[0]._id, 'user/pavan/bullet');
                 assert.equal(obj[0].name, 'bullet');
-                assert.equal(obj[1]._id, 'octonode');
-                assert.equal(obj[0].name, 'octonode');
+                assert.equal(obj[1]._id, 'user/pavan/octonode');
+                assert.equal(obj[1].name, 'octonode');
               },
               "should be of proper resource type": function (err, obj) {
                 assert.isNull(err);
@@ -82,10 +82,10 @@ engines.forEach(function (e) {
               "should return them": function (err, obj) {
                 assert.isNull(err);
                 assert.lengthOf(obj, 2);
-                assert.equal(obj[0]._id, 'bullet');
+                assert.equal(obj[0]._id, 'user/pavan/bullet');
                 assert.equal(obj[0].name, 'bullet');
-                assert.equal(obj[1]._id, 'octonode');
-                assert.equal(obj[0].name, 'octonode');
+                assert.equal(obj[1]._id, 'user/pavan/octonode');
+                assert.equal(obj[1].name, 'octonode');
               },
               "should be of proper resource type": function (err, obj) {
                 assert.isNull(err);
@@ -308,9 +308,9 @@ engines.forEach(function (e) {
           },
           "should return the children": function (err, obj) {
             assert.isNull(err);
-            assert.equal(obj[0]._id, 'bullet');
+            assert.equal(obj[0]._id, 'user/pavan/bullet');
             assert.equal(obj[0].name, 'bullet');
-            assert.equal(obj[1]._id, 'octonode');
+            assert.equal(obj[1]._id, 'user/pavan/octonode');
             assert.equal(obj[1].name, 'octonode');
           },
           "should be of proper resource type": function (err, obj) {
@@ -356,7 +356,7 @@ engines.forEach(function (e) {
             assert.equal(obj.resource, 'User');
             assert.include(obj.repsitory_ids, 'issues');
           },
-          "and deleting the child": {
+          "and destroying the child": {
             topic: function (parent, child) {
               child.destroy(this.callback);
             },
