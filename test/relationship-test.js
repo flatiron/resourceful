@@ -234,7 +234,7 @@ engines.forEach(function (e) {
           },
           "unsuccessfully using same _id": {
             topic: function (obj) {
-              obj.createRepository({ _id: 'repository-1', name: 'reposit' }, this.callback);
+              obj.createRepository({ _id: 'npmtop', name: 'reposit' }, this.callback);
             },
             "should respond with error": function (err, obj) {
               assert.equal(err.error, 'conflict');
@@ -300,7 +300,7 @@ engines.forEach(function (e) {
         },
         "should have children repositories": function (err, obj) {
           assert.isNull(err);
-          assert.lengthOf(obj.repsitory_ids, 2);
+          assert.lengthOf(obj.repository_ids, 2);
         },
         "and when 'Child.byParent()' is used": {
           topic: function (obj) {
@@ -316,7 +316,7 @@ engines.forEach(function (e) {
           "should be of proper resource type": function (err, obj) {
             assert.isNull(err);
             assert.equal(obj[0].resource, 'Repository');
-            assert.equal(obj[1].resource, 'Repsitory');
+            assert.equal(obj[1].resource, 'Repository');
           },
           "should have the parent id set correctly": function (err, obj) {
             assert.isNull(err);
