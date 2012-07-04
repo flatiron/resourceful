@@ -358,6 +358,7 @@ engines.forEach(function (e) {
           },
           "and destroying the child": {
             topic: function (parent, child) {
+              console.log(parent, child);
               child.destroy(this.callback);
             },
             "should result in parent": {
