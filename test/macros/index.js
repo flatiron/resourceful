@@ -23,8 +23,8 @@ macros.defineResources = function (e, resources) {
                this.bool('fiction');
              });
            },
-           'will be successful': function (book) {
-             assert.equal(Object.keys(book.properties).length, 4);
+           'will be successful': function (resource) {
+             assert.equal(resource.schema.name, 'Book');
            }
          },
          '"author"': {
@@ -35,8 +35,8 @@ macros.defineResources = function (e, resources) {
                this.string('hair').sanitize('lower');
              });
            },
-           'will be successful': function (author) {
-             assert.equal(Object.keys(author.properties).length, 3);
+           'will be successful': function (resource) {
+             assert.equal(resource.schema.name, 'Author');
            }
          },
          '"creature"': {
@@ -46,8 +46,8 @@ macros.defineResources = function (e, resources) {
                this.string('name');
              });
            },
-           'will be successful': function (creature) {
-             assert.equal(Object.keys(creature.properties).length, 2);
+           'will be successful': function (resource) {
+             assert.equal(resource.schema.name, 'Creature');
            },
          }
        }
