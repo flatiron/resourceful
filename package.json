@@ -35,7 +35,7 @@
   },
   "scripts": {
     "browserify": "browserify lib/browser.js -o build/resourceful.js",
-    "test": "vows --spec --isolate"
+    "test": "vows --spec"
   }
 }
 

@@ -360,6 +360,9 @@ engines.forEach(function (e) {
             topic: function (parent, child) {
               child.destroy(this.callback);
             },
+            "should be successful": function (err) {
+              assert.isTrue(err.ok);
+            },
             "should result in parent": {
               topic: function () {
                 resources[e].User.get('christian', this.callback);
@@ -394,7 +397,7 @@ engines.forEach(function (e) {
             obj.destroy(this.callback);
           },
           "should be successful": function (err) {
-            assert.isNull(err);
+            assert.isTrue(err.ok);
           },
           "should result in his repositories": {
             topic: function () {

@@ -77,7 +77,7 @@ macros.defineResources = function (e, resources) {
             return resources[e].Membership = resourceful.define('membership', function() {
               this.use(e.name, e.options);
               this.string('team');
-              this.parent('User');
+              // this.parent('User');
             });
           },
           'will be successful': function (resource) {
@@ -89,7 +89,7 @@ macros.defineResources = function (e, resources) {
             return resources[e].Follower = resourceful.define('follower', function() {
               this.use(e.name, e.options);
               this.string('user');
-              this.parent('User');
+              // this.parent('User');
             });
           },
           'will be successful': function (resource) {
@@ -101,7 +101,7 @@ macros.defineResources = function (e, resources) {
             return resources[e].Following = resourceful.define('following', function() {
               this.use(e.name, e.options);
               this.string('user');
-              this.parent('User');
+              // this.parent('User');
             });
           },
           'will be successful': function (resource) {
