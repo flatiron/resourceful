@@ -40,9 +40,9 @@ engines.forEach(function (e) {
           assert.isNull(err);
           assert.isArray(obj);
           assert.equal(obj.length, 3);
-          assert.equal(obj[0]._id, 'bob');
-          assert.equal(obj[1]._id, 'mat');
-          assert.equal(obj[2]._id, 'tim');
+          assert.equal(obj[0].key, 'bob');
+          assert.equal(obj[1].key, 'mat');
+          assert.equal(obj[2].key, 'tim');
         }
       }
     }
@@ -64,7 +64,7 @@ engines.forEach(function (e) {
           },
           "should respond with the right object": function (err, obj) {
             assert.isNull(err);
-            assert.equal(obj._id, 'bob');
+            assert.equal(obj.key, 'bob');
             assert.equal(obj.age, 35);
             assert.equal(obj.hair, 'black');
             assert.equal(obj.resource, 'Author');
@@ -92,13 +92,15 @@ engines.forEach(function (e) {
       },
       "a Resource.create() request": {
         topic: function () {
-          resources[e].Author.create({ _id: 'han', age: 30, hair: 'red'}, this.callback);
+          var o = {age: 30, hair: 'red'};
+          o[resources[e].Author.key] = 'han';
+          resources[e].Author.create(o, this.callback);
         },
         "should return the newly created object": function (err, obj) {
           assert.isNull(err);
           assert.strictEqual(obj.constructor, resources[e].Author);
           assert.instanceOf(obj, resources[e].Author);
-          assert.equal(obj._id, 'han');
+          assert.equal(obj.key, 'han');
           assert.equal(obj.age, 30);
           assert.equal(obj.hair, 'red');
           assert.equal(obj.resource, 'Author');
@@ -119,7 +121,7 @@ engines.forEach(function (e) {
           },
           "should respond with the right object": function (err, obj) {
             assert.isNull(err);
-            assert.equal(obj._id, 'han');
+            assert.equal(obj.key, 'han');
             assert.equal(obj.age, 30);
             assert.equal(obj.hair, 'red');
             assert.equal(obj.resource, 'Author');
@@ -138,13 +140,15 @@ engines.forEach(function (e) {
       },
       "a diffirent Resource.create() request with the same id": {
         topic: function () {
-          resources[e].Creature.create({ _id: 'han' }, this.callback);
+          var o = {};
+          o[resources[e].Creature.key] = 'han';
+          resources[e].Creature.create(o, this.callback);
         },
         "should return the newly created object": function (err, obj) {
           assert.isNull(err);
           assert.strictEqual(obj.constructor, resources[e].Creature);
           assert.instanceOf(obj, resources[e].Creature);
-          assert.equal(obj._id, 'han');
+          assert.equal(obj.key, 'han');
           assert.equal(obj.resource, 'Creature');
         },
         "should not be a new record": function (err, obj) {
@@ -163,7 +167,7 @@ engines.forEach(function (e) {
           },
           "should respond with the right object": function (err, obj) {
             assert.isNull(err);
-            assert.equal(obj._id, 'han');
+            assert.equal(obj.key, 'han');
             assert.equal(obj.resource, 'Creature');
           },
           "should not be a new record": function (err, obj) {
@@ -199,7 +203,9 @@ engines.forEach(function (e) {
   }).addBatch({
     "Instantiating a new instance": {
       topic: function () {
-        return resources[e].Author.new({_id: 'han', age: 30, hair: 'red'});
+        var o = {age: 30, hair: 'red'};
+        o[resources[e].Author.key] = 'han';
+        return resources[e].Author.new(o);
       },
       "should be a new record": function (obj) {
         assert.isTrue(obj.isNewRecord);
@@ -217,7 +223,9 @@ engines.forEach(function (e) {
   }).addBatch({
     "Instantiating a new instance": {
       topic: function () {
-        return resources[e].Author.new({_id: 'han', age: 30, hair: 'red'});
+        var o = {age: 30, hair: 'red'};
+        o[resources[e].Author.key] = 'han';
+        return resources[e].Author.new(o);
       },
       "should be a new record": function (obj) {
         assert.isTrue(obj.isNewRecord);
@@ -234,7 +242,7 @@ engines.forEach(function (e) {
         },
         "should respond with the right object": function (err, obj) {
           assert.isNull(err);
-          assert.equal(obj._id, 'han');
+          assert.equal(obj.key, 'han');
           assert.equal(obj.age, 30);
           assert.equal(obj.hair, 'red');
           assert.equal(obj.resource, 'Author');
@@ -255,7 +263,7 @@ engines.forEach(function (e) {
           },
           "should respond with the right object": function (err, obj) {
             assert.isNull(err);
-            assert.equal(obj._id, 'han');
+            assert.equal(obj.key, 'han');
             assert.equal(obj.age, 30);
             assert.equal(obj.hair, 'red');
             assert.equal(obj.resource, 'Author');
@@ -286,11 +294,11 @@ engines.forEach(function (e) {
             assert.isArray(obj);
             assert.instanceOf(obj[0], resourceful.Resource);
             assert.instanceOf(obj[1], resourceful.Resource);
-            assert.equal(obj[0]._id, 'bob');
+            assert.equal(obj[0].key, 'bob');
             assert.equal(obj[0].age, 35);
             assert.equal(obj[0].hair, 'black');
             assert.equal(obj[0].resource, 'Author');
-            assert.equal(obj[1]._id, 'mat');
+            assert.equal(obj[1].key, 'mat');
             assert.equal(obj[1].age, 29);
             assert.equal(obj[1].hair, 'black');
             assert.equal(obj[1].resource, 'Author');
@@ -320,7 +328,7 @@ engines.forEach(function (e) {
       },
       "it should have 'bob' object": function (err, obj) {
         assert.isNull(err);
-        assert.equal(obj._id, 'bob');
+        assert.equal(obj.key, 'bob');
         assert.equal(obj.age, 35);
         assert.equal(obj.hair, 'black');
         assert.equal(obj.resource, 'Author');
@@ -341,7 +349,7 @@ engines.forEach(function (e) {
         },
         "should respond with the right object": function (err, obj) {
           assert.isNull(err);
-          assert.equal(obj._id, 'bob');
+          assert.equal(obj.key, 'bob');
           assert.equal(obj.age, 31);
           assert.equal(obj.hair, 'black');
           assert.equal(obj.resource, 'Author');
@@ -362,7 +370,7 @@ engines.forEach(function (e) {
           },
           "should respond with the right object": function (err, obj) {
             assert.isNull(err);
-            assert.equal(obj._id, 'bob');
+            assert.equal(obj.key, 'bob');
             assert.equal(obj.age, 31);
             assert.equal(obj.hair, 'black');
             assert.equal(obj.resource, 'Author');
@@ -381,7 +389,7 @@ engines.forEach(function (e) {
       },
       "it should have 'bob' object": function (err, obj) {
         assert.isNull(err);
-        assert.equal(obj._id, 'bob');
+        assert.equal(obj.key, 'bob');
         assert.equal(obj.age, 31);
         assert.equal(obj.hair, 'black');
         assert.equal(obj.resource, 'Author');
@@ -403,7 +411,7 @@ engines.forEach(function (e) {
         },
         "should respond with the right object": function (err, obj) {
           assert.isNull(err);
-          assert.equal(obj._id, 'bob');
+          assert.equal(obj.key, 'bob');
           assert.equal(obj.age, 35);
           assert.equal(obj.hair, 'black');
           assert.equal(obj.resource, 'Author');
@@ -424,7 +432,7 @@ engines.forEach(function (e) {
           },
           "should respond with the right object": function (err, obj) {
             assert.isNull(err);
-            assert.equal(obj._id, 'bob');
+            assert.equal(obj.key, 'bob');
             assert.equal(obj.age, 35);
             assert.equal(obj.hair, 'black');
             assert.equal(obj.resource, 'Author');
@@ -443,7 +451,7 @@ engines.forEach(function (e) {
       },
       "it should have 'bob' object": function (err, obj) {
         assert.isNull(err);
-        assert.equal(obj._id, 'bob');
+        assert.equal(obj.key, 'bob');
         assert.equal(obj.age, 35);
         assert.equal(obj.hair, 'black');
         assert.equal(obj.resource, 'Author');
@@ -466,7 +474,7 @@ engines.forEach(function (e) {
         },
         "should respond with the right object": function (err, obj) {
           assert.isNull(err);
-          assert.equal(obj._id, 'bob');
+          assert.equal(obj.key, 'bob');
           assert.equal(obj.age, 31);
           assert.equal(obj.hair, 'red');
           assert.equal(obj.resource, 'Author');
@@ -487,7 +495,7 @@ engines.forEach(function (e) {
           },
           "should respond with the right object": function (err, obj) {
             assert.isNull(err);
-            assert.equal(obj._id, 'bob');
+            assert.equal(obj.key, 'bob');
             assert.equal(obj.age, 31);
             assert.equal(obj.hair, 'red');
             assert.equal(obj.resource, 'Author');
@@ -506,7 +514,7 @@ engines.forEach(function (e) {
       },
       "it should have 'bob' object": function (err, obj) {
         assert.isNull(err);
-        assert.equal(obj._id, 'bob');
+        assert.equal(obj.key, 'bob');
         assert.equal(obj.age, 31);
         assert.equal(obj.hair, 'red');
         assert.equal(obj.resource, 'Author');
@@ -527,7 +535,7 @@ engines.forEach(function (e) {
         },
         "should respond with the right object": function (err, obj) {
           assert.isNull(err);
-          assert.equal(obj._id, 'bob');
+          assert.equal(obj.key, 'bob');
           assert.equal(obj.age, 35);
           assert.equal(obj.hair, 'black');
           assert.equal(obj.resource, 'Author');
@@ -548,7 +556,7 @@ engines.forEach(function (e) {
           },
           "should respond with the right object": function (err, obj) {
             assert.isNull(err);
-            assert.equal(obj._id, 'bob');
+            assert.equal(obj.key, 'bob');
             assert.equal(obj.age, 35);
             assert.equal(obj.hair, 'black');
             assert.equal(obj.resource, 'Author');
@@ -599,7 +607,7 @@ engines.forEach(function (e) {
         },
         "should respond with the right object": function (err, obj) {
           assert.isNull(err);
-          assert.equal(obj._id, 'bob');
+          assert.equal(obj.key, 'bob');
           assert.equal(obj.age, 35);
           assert.equal(obj.hair, 'black');
           assert.equal(obj.resource, 'Author');
@@ -617,7 +625,7 @@ engines.forEach(function (e) {
       },
       "should be successful": function (err, obj) {
         assert.isNull(err);
-        assert.notEqual(obj._id, undefined);
+        assert.notEqual(obj.key, undefined);
         assert.equal(obj.age, 51);
         assert.equal(obj.hair, 'white');
         assert.equal(obj.resource, 'Author');
@@ -636,9 +644,9 @@ function multipleGet(e) {
       "should be successful": function (err, obj) {
         assert.isNull(err);
         assert.equal(obj.length, 3);
-        assert.equal(obj[0]._id, 'bob');
+        assert.equal(obj[0].key, 'bob');
         assert.equal(obj[1], null);
-        assert.equal(obj[2]._id, 'tim');
+        assert.equal(obj[2].key, 'tim');
       }
     }
   };

@@ -38,7 +38,7 @@ engines.forEach(function (e) {
         },
         "should be successful": function (err, obj) {
           assert.isNull(err);
-          assert.equal(obj._id, 'pavan');
+          assert.equal(obj.key, 'pavan');
           assert.equal(obj.name, 'pavan');
           assert.equal(obj.resource, 'User');
         },
@@ -59,9 +59,9 @@ engines.forEach(function (e) {
               "should return them": function (err, obj) {
                 assert.isNull(err);
                 assert.lengthOf(obj, 2);
-                assert.equal(obj[0]._id, 'user/pavan/bullet');
+                assert.equal(obj[0].key, 'user/pavan/bullet');
                 assert.equal(obj[0].name, 'bullet');
-                assert.equal(obj[1]._id, 'user/pavan/octonode');
+                assert.equal(obj[1].key, 'user/pavan/octonode');
                 assert.equal(obj[1].name, 'octonode');
               },
               "should be of proper resource type": function (err, obj) {
@@ -82,9 +82,9 @@ engines.forEach(function (e) {
               "should return them": function (err, obj) {
                 assert.isNull(err);
                 assert.lengthOf(obj, 2);
-                assert.equal(obj[0]._id, 'user/pavan/bullet');
+                assert.equal(obj[0].key, 'user/pavan/bullet');
                 assert.equal(obj[0].name, 'bullet');
-                assert.equal(obj[1]._id, 'user/pavan/octonode');
+                assert.equal(obj[1].key, 'user/pavan/octonode');
                 assert.equal(obj[1].name, 'octonode');
               },
               "should be of proper resource type": function (err, obj) {
@@ -113,7 +113,7 @@ engines.forEach(function (e) {
         },
         "should be successful": function (err, obj) {
           assert.isNull(err);
-          assert.equal(obj._id, 'christian');
+          assert.equal(obj.key, 'christian');
           assert.equal(obj.name, 'christian');
           assert.equal(obj.resource, 'User');
           assert.lengthOf(obj.repository_ids, 2);
@@ -121,11 +121,13 @@ engines.forEach(function (e) {
         "and when 'Parent.prototype.createChild()' is used": {
           "successfully": {
             topic: function (obj) {
-              obj.createRepository({ _id: 'issues', name: 'issues'}, this.callback);
+              var o = {name: 'issues'};
+              o[resources[e].Repository.key] = 'issues';
+              obj.createRepository(o, this.callback);
             },
             "should return the newly created object": function (err, obj) {
               assert.isNull(err);
-              assert.equal(obj._id, 'user/christian/issues');
+              assert.equal(obj.key, 'user/christian/issues');
               assert.equal(obj.name, 'issues');
               assert.equal(obj.resource, 'Repository');
             },
@@ -139,7 +141,7 @@ engines.forEach(function (e) {
               },
               "should be successful": function (err, obj) {
                 assert.isNull(err);
-                assert.equal(obj._id, 'christian');
+                assert.equal(obj.key, 'christian');
                 assert.equal(obj.name, 'christian');
                 assert.equal(obj.resource, 'User');
               },
@@ -155,7 +157,7 @@ engines.forEach(function (e) {
               },
               "should respond with the right object": function (err, obj) {
                 assert.isNull(err);
-                assert.equal(obj._id, 'user/christian/issues');
+                assert.equal(obj.key, 'user/christian/issues');
                 assert.equal(obj.name, 'issues');
                 assert.equal(obj.user_id, 'christian');
               }
@@ -163,7 +165,9 @@ engines.forEach(function (e) {
           },
           "unsuccessfully using same _id": {
             topic: function (obj) {
-              obj.createRepository({ _id: 'repository-1', name: 'reposit' }, this.callback);
+              var o = {name: 'repository-1'};
+              o[resources[e].Repository.key] = 'repository-1';
+              obj.createRepository(o, this.callback);
             },
             "should respond with error": function (err, obj) {
               assert.equal(err.error, 'conflict');
@@ -184,7 +188,7 @@ engines.forEach(function (e) {
         },
         "should be successful": function (err, obj) {
           assert.isNull(err);
-          assert.equal(obj._id, 'marak');
+          assert.equal(obj.key, 'marak');
           assert.equal(obj.name, 'marak');
           assert.equal(obj.resource, 'User');
           assert.lengthOf(obj.repository_ids, 2);
@@ -192,11 +196,13 @@ engines.forEach(function (e) {
         "and when 'Parent.createChild()' is used": {
           "successfully": {
             topic: function (obj) {
-              resources[e].User.createRepository('marak', { _id: 'support', name: 'support'}, this.callback);
+              var o = {name: 'support'};
+              o[resources[e].User.key] = 'support';
+              resources[e].User.createRepository('marak', o, this.callback);
             },
             "should return the newly created object": function (err, obj) {
               assert.isNull(err);
-              assert.equal(obj._id, 'user/marak/support');
+              assert.equal(obj.key, 'user/marak/support');
               assert.equal(obj.name, 'support');
               assert.equal(obj.resource, 'Repository');
             },
@@ -210,7 +216,7 @@ engines.forEach(function (e) {
               },
               "should be successful": function (err, obj) {
                 assert.isNull(err);
-                assert.equal(obj._id, 'marak');
+                assert.equal(obj.key, 'marak');
                 assert.equal(obj.name, 'marak');
                 assert.equal(obj.resource, 'User');
               },
@@ -226,7 +232,7 @@ engines.forEach(function (e) {
               },
               "should respond with the right object": function (err, obj) {
                 assert.isNull(err);
-                assert.equal(obj._id, 'user/marak/support');
+                assert.equal(obj.key, 'user/marak/support');
                 assert.equal(obj.name, 'support');
                 assert.equal(obj.user_id, 'marak');
               }
@@ -234,7 +240,9 @@ engines.forEach(function (e) {
           },
           "unsuccessfully using same _id": {
             topic: function (obj) {
-              obj.createRepository({ _id: 'npmtop', name: 'reposit' }, this.callback);
+              var o = {name: 'npmtop'};
+              o[resources[e].Repository.key] = 'npmtop';
+              obj.createRepository(o, this.callback);
             },
             "should respond with error": function (err, obj) {
               assert.equal(err.error, 'conflict');
@@ -255,7 +263,7 @@ engines.forEach(function (e) {
         },
         "should be successful": function (err, obj) {
           assert.isNull(err);
-          assert.equal(obj._id, 'user/pavan/bullet');
+          assert.equal(obj.key, 'user/pavan/bullet');
           assert.equal(obj.name, 'bullet');
           assert.equal(obj.resource, 'Repository');
         },
@@ -269,7 +277,7 @@ engines.forEach(function (e) {
           },
           "should return the parent": function (err, obj) {
             assert.isNull(err);
-            assert.equal(obj._id, 'pavan');
+            assert.equal(obj.key, 'pavan');
             assert.equal(obj.name, 'pavan');
           },
           "should be of proper resource type": function (err, obj) {
@@ -294,7 +302,7 @@ engines.forEach(function (e) {
         },
         "should be successful": function (err, obj) {
           assert.isNull(err);
-          assert.equal(obj._id, 'pavan');
+          assert.equal(obj.key, 'pavan');
           assert.equal(obj.name, 'pavan');
           assert.equal(obj.resource, 'User');
         },
@@ -308,9 +316,9 @@ engines.forEach(function (e) {
           },
           "should return the children": function (err, obj) {
             assert.isNull(err);
-            assert.equal(obj[0]._id, 'user/pavan/bullet');
+            assert.equal(obj[0].key, 'user/pavan/bullet');
             assert.equal(obj[0].name, 'bullet');
-            assert.equal(obj[1]._id, 'user/pavan/octonode');
+            assert.equal(obj[1].key, 'user/pavan/octonode');
             assert.equal(obj[1].name, 'octonode');
           },
           "should be of proper resource type": function (err, obj) {
@@ -337,7 +345,7 @@ engines.forEach(function (e) {
         },
         "should be successful": function (err, obj) {
           assert.isNull(err);
-          assert.equal(obj._id, 'user/christian/issues');
+          assert.equal(obj.key, 'user/christian/issues');
           assert.equal(obj.name, 'issues');
           assert.equal(obj.resource, 'Repository');
         },
@@ -351,7 +359,7 @@ engines.forEach(function (e) {
           },
           "should be successful": function (err, obj) {
             assert.isNull(err);
-            assert.equal(obj._id, 'christian');
+            assert.equal(obj.key, 'christian');
             assert.equal(obj.name, 'christian');
             assert.equal(obj.resource, 'User');
             assert.include(obj.repository_ids, 'issues');
@@ -360,8 +368,9 @@ engines.forEach(function (e) {
             topic: function (parent, child) {
               child.destroy(this.callback);
             },
-            "should be successful": function (err) {
-              assert.isTrue(err.ok);
+            "should be successful": function (err, obj) {
+              assert.isNull(err);
+              assert.isObject(obj);
             },
             "should result in parent": {
               topic: function () {
@@ -387,7 +396,7 @@ engines.forEach(function (e) {
         },
         "should be successful": function (err, obj) {
           assert.isNull(err);
-          assert.equal(obj._id, 'christian');
+          assert.equal(obj.key, 'christian');
           assert.equal(obj.name, 'christian');
           assert.equal(obj.resource, 'User');
           assert.lengthOf(obj.repository_ids, 2);
@@ -396,8 +405,9 @@ engines.forEach(function (e) {
           topic: function (obj) {
             obj.destroy(this.callback);
           },
-          "should be successful": function (err) {
-            assert.isTrue(err.ok);
+          "should be successful": function (err, obj) {
+            assert.isNull(err);
+            assert.isObject(obj);
           },
           "should result in his repositories": {
             topic: function () {
