@@ -155,16 +155,16 @@ vows.describe('resourceful').addVows({
     topic: function () {
       var r = this.r = resourceful.define();
       r.use('memory', 'memory://testx');
-      r.property('_id', 'string').sanitize('lower');
+      r.property('id', 'string').sanitize('lower');
 
-      new r({ _id: 'AbC'}).save(this.callback);
+      new r({ id: 'AbC'}).save(this.callback);
     },
     "should be saved": {
       topic: function() {
         this.r.get('aBc', this.callback);
       },
       "and be found by non-sanitized_id": function (r) {
-        assert.equal(r.toString(), '{"_id":"abc","resource":"Resource3"}');
+        assert.equal(r.toString(), '{"id":"abc","resource":"Resource3"}');
       }
     }
   },

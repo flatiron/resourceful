@@ -16,9 +16,6 @@ var engines = fs.readdirSync(path.join(__dirname, 'engines')).map(function (e) {
 //
 var resources = {};
 
-// Test only couchdb
-engines = [ require('./engines/couchdb') ];
-
 engines.forEach(function (e) {
   //
   // Create a new object to hold resources which will be defined in macros
@@ -162,17 +159,6 @@ engines.forEach(function (e) {
                 assert.equal(obj.user_id, 'christian');
               }
             }
-          },
-          "unsuccessfully using same _id": {
-            topic: function (obj) {
-              var o = {name: 'repository-1'};
-              o[resources[e].Repository.key] = 'repository-1';
-              obj.createRepository(o, this.callback);
-            },
-            "should respond with error": function (err, obj) {
-              assert.equal(err.error, 'conflict');
-              assert.isUndefined(obj);
-            }
           }
         }
       }
@@ -236,17 +222,6 @@ engines.forEach(function (e) {
                 assert.equal(obj.name, 'support');
                 assert.equal(obj.user_id, 'marak');
               }
-            }
-          },
-          "unsuccessfully using same _id": {
-            topic: function (obj) {
-              var o = {name: 'npmtop'};
-              o[resources[e].Repository.key] = 'npmtop';
-              obj.createRepository(o, this.callback);
-            },
-            "should respond with error": function (err, obj) {
-              assert.equal(err.error, 'conflict');
-              assert.isUndefined(obj);
             }
           }
         }

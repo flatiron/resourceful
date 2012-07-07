@@ -17,9 +17,6 @@ var engines = fs.readdirSync(path.join(__dirname, 'engines')).map(function (e) {
 //
 var resources = {};
 
-// Test only couchdb
-engines = [ require('./engines/couchdb') ];
-
 engines.forEach(function (e) {
   //
   // Create a new object to hold resources which will be defined in macros
