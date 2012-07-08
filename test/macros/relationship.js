@@ -16,6 +16,7 @@ macros.defineResources = function (e, resources) {
       "with defined resources" : {
         '"forum"': {
           topic: function () {
+            resourceful.unregister('Forum');
             return resources[e].Forum = resourceful.define('forum', function() {
               this.use(e.name, e.options);
               this.string('name', { minLength: 1 });
@@ -28,6 +29,7 @@ macros.defineResources = function (e, resources) {
         },
         '"user"': {
           topic: function () {
+            resourceful.unregister('User');
             return resources[e].User = resourceful.define('user', function() {
               this.use(e.name, e.options);
               this.string('name', { minLength: 1 });
@@ -39,6 +41,7 @@ macros.defineResources = function (e, resources) {
         },
         '"repository"': {
           topic: function () {
+            resourceful.unregister('Repository');
             return resources[e].Repository = resourceful.define('repository', function() {
               this.use(e.name, e.options);
               this.string('name', { minLength: 1 });
@@ -51,6 +54,7 @@ macros.defineResources = function (e, resources) {
         },
         '"pull_request"': {
           topic: function () {
+            resourceful.unregister('PullRequest');
             return resources[e].PullRequest = resourceful.define('pull_request', function () {
               this.use(e.name, e.options);
               this.string('title', { minLength: 1 });
@@ -63,6 +67,7 @@ macros.defineResources = function (e, resources) {
         },
         '"team"': {
           topic: function () {
+            resourceful.unregister('Team');
             return resources[e].Team = resourceful.define('team', function() {
               this.use(e.name, e.options);
               this.string('name', { minLength: 1 });
@@ -74,6 +79,7 @@ macros.defineResources = function (e, resources) {
         },
         '"member"': {
           topic: function () {
+            resourceful.unregister('Member');
             return resources[e].Member = resourceful.define('member', function() {
               this.use(e.name, e.options);
               this.string('user');
@@ -86,6 +92,7 @@ macros.defineResources = function (e, resources) {
         },
         '"membership"': {
           topic: function () {
+            resourceful.unregister('Membership');
             return resources[e].Membership = resourceful.define('membership', function() {
               this.use(e.name, e.options);
               this.string('team');
@@ -98,6 +105,7 @@ macros.defineResources = function (e, resources) {
         },
         '"follower"': {
           topic: function () {
+            resourceful.unregister('Follower');
             return resources[e].Follower = resourceful.define('follower', function() {
               this.use(e.name, e.options);
               this.string('name');
@@ -110,6 +118,7 @@ macros.defineResources = function (e, resources) {
         },
         '"following"': {
           topic: function () {
+            resourceful.unregister('Following');
             return resources[e].Following = resourceful.define('following', function() {
               this.use(e.name, e.options);
               this.string('name');
