@@ -49,6 +49,18 @@ macros.defineResources = function (e, resources) {
             assert.equal(resource.schema.name, 'Repository');
           }
         },
+        '"pull_request"': {
+          topic: function () {
+            return resources[e].PullRequest = resourceful.define('pull_request', function () {
+              this.use(e.name, e.options);
+              this.string('title', { minLength: 1 });
+              this.parent('Repository');
+            });
+          },
+          'will be successful': function (resource) {
+            assert.equal(resource.schema.name, 'PullRequest');
+          }
+        },
         '"team"': {
           topic: function () {
             return resources[e].Team = resourceful.define('team', function() {
@@ -77,7 +89,7 @@ macros.defineResources = function (e, resources) {
             return resources[e].Membership = resourceful.define('membership', function() {
               this.use(e.name, e.options);
               this.string('team');
-              // this.parent('User');
+              this.parent('User');
             });
           },
           'will be successful': function (resource) {
@@ -88,8 +100,8 @@ macros.defineResources = function (e, resources) {
           topic: function () {
             return resources[e].Follower = resourceful.define('follower', function() {
               this.use(e.name, e.options);
-              this.string('user');
-              // this.parent('User');
+              this.string('name');
+              this.parent('User');
             });
           },
           'will be successful': function (resource) {
@@ -100,8 +112,8 @@ macros.defineResources = function (e, resources) {
           topic: function () {
             return resources[e].Following = resourceful.define('following', function() {
               this.use(e.name, e.options);
-              this.string('user');
-              // this.parent('User');
+              this.string('name');
+              this.parent('User');
             });
           },
           'will be successful': function (resource) {

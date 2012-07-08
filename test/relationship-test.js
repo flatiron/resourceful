@@ -178,6 +178,7 @@ engines.forEach(function (e) {
           assert.equal(obj.name, 'marak');
           assert.equal(obj.resource, 'User');
           assert.lengthOf(obj.repository_ids, 2);
+          assert.lengthOf(obj.follower_ids, 2);
         },
         "and when 'Parent.createChild()' is used": {
           "successfully": {
@@ -392,14 +393,44 @@ engines.forEach(function (e) {
               assert.equal(err.status, '404');
               assert.isUndefined(obj);
             }
+          },
+          "should result in his followings": {
+            topic: function () {
+              resources[e].Following.get('user/christian/marak', this.callback);
+            },
+            "getting destroyed": function (err, obj) {
+              assert.equal(err.status, 404);
+              assert.isUndefined(obj);
+            }
+          },
+          "should result in his memberships": {
+            topic: function () {
+              resources[e].Membership.get('user/christian/nodejitsu', this.callback);
+            },
+            "getting destroyed": function (err, obj) {
+              assert.equal(err.status, 404);
+              assert.isUndefined(obj);
+            }
           }
         }
       }
     }
   }).addBatch({
-    // TODO: Cascading destroy should result in
-    // * reducing marak's follower count
-    // * reducing nodejitsu's user count
-    // * deleting christian following documents
+    // Cascading destroy should result in destroying
+    // pull_request/repository/user/christian/repository-1/1
+    "In database 'test'": {
+      topic: function () {
+        return null;
+      },
+      "issues of repositories of 'christian'": {
+        topic: function () {
+          resources[e].PullRequest.get('repository/user/christian/repository-1/1', this.callback);
+        },
+        "should be destroyed": function (err, obj) {
+          assert.equal(err.status, 404);
+          assert.isUndefined(obj);
+        }
+      }
+    }
   }).export(module);
 });

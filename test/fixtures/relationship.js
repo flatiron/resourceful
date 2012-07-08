@@ -56,6 +56,7 @@ fixtures.testData = [
     _id: 'repository/user/christian/repository-1',
     name: 'repository-1',
     resource: 'Repository',
+    pull_request_ids: ['1'],
     user_id: 'christian'
   },
   {
@@ -156,49 +157,49 @@ fixtures.testData = [
   },
   {
     _id: 'follower/user/marak/pavan',
-    user: 'pavan',
+    name: 'pavan',
     resource: 'Follower',
     user_id: 'marak'
   },
   {
     _id: 'follower/user/marak/christian',
-    user: 'christian',
+    name: 'christian',
     resource: 'Follower',
     user_id: 'marak'
   },
   {
     _id: 'follower/user/pavan/marak',
-    user: 'marak',
+    name: 'marak',
     resource: 'Follower',
     user_id: 'pavan'
   },
   {
     _id: 'follower/user/pavan/christian',
-    user: 'christian',
+    name: 'christian',
     resource: 'Follower',
     user_id: 'pavan'
   },
   {
     _id: 'following/user/marak/pavan',
-    user: 'pavan',
+    name: 'pavan',
     resource: 'Following',
     user_id: 'marak'
   },
   {
     _id: 'following/user/pavan/marak',
-    user: 'marak',
+    name: 'marak',
     resource: 'Following',
     user_id: 'pavan'
   },
   {
     _id: 'following/user/christian/marak',
-    user: 'marak',
+    name: 'marak',
     resource: 'Following',
     user_id: 'christian'
   },
   {
     _id: 'following/user/christian/pavan',
-    user: 'pavan',
+    name: 'pavan',
     resource: 'Following',
     user_id: 'christian'
   },
@@ -243,5 +244,11 @@ fixtures.testData = [
     resource: 'Forum',
     forum_id: 'forum/develop/nodejitsu',
     forum_ids: []
+  },
+  {
+    _id: 'pull_request/repository/user/christian/repository-1/1',
+    title: 'Resourceful rocks!',
+    resource: 'PullRequest',
+    repository_id: 'user/christian/repository-1'
   }
 ];
