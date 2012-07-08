@@ -183,14 +183,14 @@ engines.forEach(function (e) {
         "and when 'Parent.createChild()' is used": {
           "successfully": {
             topic: function (obj) {
-              var o = {name: 'support'};
-              o[resources[e].User.key] = 'support';
+              var o = {name: 'haibu'};
+              o[resources[e].User.key] = 'haibu';
               resources[e].User.createRepository('marak', o, this.callback);
             },
             "should return the newly created object": function (err, obj) {
               assert.isNull(err);
-              assert.equal(obj.key, 'user/marak/support');
-              assert.equal(obj.name, 'support');
+              assert.equal(obj.key, 'user/marak/haibu');
+              assert.equal(obj.name, 'haibu');
               assert.equal(obj.resource, 'Repository');
             },
             "should set the user_id correctly": function (err, obj) {
@@ -210,17 +210,17 @@ engines.forEach(function (e) {
               "should contain the new child object in the array": function (err, obj) {
                 assert.isNull(err);
                 assert.lengthOf(obj.repository_ids, 3);
-                assert.include(obj.repository_ids, 'support');
+                assert.include(obj.repository_ids, 'haibu');
               }
             },
             "should create the record in the db": {
               topic: function () {
-                resources[e].Repository.get('user/marak/support', this.callback);
+                resources[e].Repository.get('user/marak/haibu', this.callback);
               },
               "should respond with the right object": function (err, obj) {
                 assert.isNull(err);
-                assert.equal(obj.key, 'user/marak/support');
-                assert.equal(obj.name, 'support');
+                assert.equal(obj.key, 'user/marak/haibu');
+                assert.equal(obj.name, 'haibu');
                 assert.equal(obj.user_id, 'marak');
               }
             }
@@ -454,6 +454,60 @@ engines.forEach(function (e) {
             assert.isNull(err);
             assert.isNull(obj);
           }
+        },
+        "when Parent.prototype.children() is called": {
+          topic: function (p) {
+            p.forums(this.callback);
+          },
+          "should return nodejitsu and flatiron": function (err, obj) {
+            assert.isNull(err);
+            assert.equal(obj[0].name, 'nodejitsu');
+            assert.equal(obj[1].name, 'flatiron');
+            assert.equal(obj[0].resource, 'Forum');
+            assert.equal(obj[1].resource, 'Forum');
+          }
+        }
+      }
+    }
+  }).addBatch({
+    "In database 'test'": {
+      topic: function () {
+        return null;
+      },
+      "getting a forum named 'nodejitsu'": {
+        topic: function () {
+          resources[e].Forum.get('forum/develop/nodejitsu', this.callback);
+        },
+        "should be successful": function (err, obj) {
+          assert.isNull(err);
+          assert.equal(obj.name, 'nodejitsu');
+          assert.equal(obj.resource, 'Forum');
+        },
+        "when Child.prototype.Parent() is used": {
+          topic: function (c) {
+            c.forum(this.callback);
+          },
+          "should return parent forum": function (err, obj) {
+            assert.isNull(err);
+            assert.equal(obj.name, 'develop');
+            assert.equal(obj.resource, 'Forum');
+            assert.lengthOf(obj.forum_ids, 2);
+          }
+        },
+        "when Parent.prototype.createChild() is called": {
+          topic: function (p) {
+            var o = {name: 'haibu'};
+            o[resources[e].Forum.key] = 'haibu';
+            p.createForum(o, this.callback);
+          },
+          "should be successful": function (err, obj) {
+            assert.isNull(err);
+            assert.equal(obj.key, 'forum/forum/develop/nodejitsu/haibu');
+            assert.equal(obj.name, 'haibu');
+            assert.equal(obj.resource, 'Forum');
+            assert.equal(obj.forum_id, 'forum/develop/nodejitsu');
+            assert.lengthOf(obj.forum_ids, 0);
+          }
         }
       }
     }
@@ -471,16 +525,21 @@ engines.forEach(function (e) {
           assert.equal(obj.name, 'develop');
           assert.equal(obj.resource, 'Forum');
         },
-        "when Parent.prototype.children() is called": {
+        "and destroying it": {
           topic: function (p) {
-            p.forums(this.callback);
+            p.destroy(this.callback);
           },
-          "should return nodejitsu and flatiron": function (err, obj) {
+          "should be successful": function (err, obj) {
             assert.isNull(err);
-            assert.equal(obj[0].name, 'nodejitsu');
-            assert.equal(obj[1].name, 'flatiron');
-            assert.equal(obj[0].resource, 'Forum');
-            assert.equal(obj[1].resource, 'Forum');
+            assert.isObject(obj);
+          },
+          "should result in 'haibu' forum": {
+            topic: function () {
+              resources[e].Forum.get('forum/forum/develop/nodejitsu/haibu', this.callback);
+            },
+            "getting destroyed": function (err, obj) {
+              assert.equal(err.status, 404);
+            }
           }
         }
       }
