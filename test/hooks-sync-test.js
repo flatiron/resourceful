@@ -65,12 +65,18 @@ vows.describe('resourceful/hooks/sync').addBatch({
       },
       "when calling save() on an instance of Article": {
         topic: function (R) {
-          new(R)({ id: '678', counter: 0, title: 'a-name2' }).save(this.callback);
+          var self = this;
+          new(R)({ id: '678', counter: 0, title: 'a-name2' }).save(function(e, i) {
+            R.get('678', function(err, res) {
+              self.callback(e, i, res);
+            });
+          });
         },
-        "should trigger both hooks in the right order": function (e, res) {
+        "should trigger both hooks in the right order": function (e, res, i) {
           assert.isNull(e);
           assert.equal(this.run, 4);
           assert.equal(res.counter, 4);
+          assert.equal(i.counter, 0);
         }
       }
     }
@@ -149,12 +155,19 @@ vows.describe('resourceful/hooks/sync').addBatch({
       },
       "when calling create() on an instance of Article": {
         topic: function (R) {
-          R.create({ id: '67', counter: 0, title: 'hookbar' }, this.callback);
+          var self = this;
+          R.create({ id: '67', counter: 0, title: 'hookbar' }, function(e, i) {
+            R.get('67', function(err, res) {
+              self.callback(e, i, res);
+            });
+          });
         },
-        "should trigger both hooks in the right order": function (e, res) {
+        "should trigger both hooks in the right order": function (e, res, i) {
           assert.isNull(e);
           assert.equal(this.save, 4);
           assert.equal(this.create, 4);
+          assert.equal(i.counter, 4);
+          assert.equal(res.counter, 12);
         }
       }
     }
