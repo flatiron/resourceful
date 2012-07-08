@@ -422,13 +422,66 @@ engines.forEach(function (e) {
       topic: function () {
         return null;
       },
-      "issues of repositories of 'christian'": {
+      "pull requests of repositories of 'christian'": {
         topic: function () {
           resources[e].PullRequest.get('repository/user/christian/repository-1/1', this.callback);
         },
         "should be destroyed": function (err, obj) {
           assert.equal(err.status, 404);
           assert.isUndefined(obj);
+        }
+      }
+    }
+  }).addBatch({
+    "In database 'test'": {
+      topic: function () {
+        return null;
+      },
+      "getting a forum named 'develop'": {
+        topic: function () {
+          resources[e].Forum.get('develop', this.callback);
+        },
+        "should be successful": function (err, obj) {
+          assert.isNull(err);
+          assert.equal(obj.name, 'develop');
+          assert.equal(obj.resource, 'Forum');
+        },
+        "when Child.prototype.Parent() is used": {
+          topic: function (c) {
+            c.forum(this.callback);
+          },
+          "should return parent as 'null'": function (err, obj) {
+            assert.isNull(err);
+            assert.isNull(obj);
+          }
+        }
+      }
+    }
+  }).addBatch({
+    "In database 'test'": {
+      topic: function () {
+        return null;
+      },
+      "getting a forum named 'develop'": {
+        topic: function () {
+          resources[e].Forum.get('develop', this.callback);
+        },
+        "should be successful": function (err, obj) {
+          assert.isNull(err);
+          assert.equal(obj.name, 'develop');
+          assert.equal(obj.resource, 'Forum');
+        },
+        "when Parent.prototype.children() is called": {
+          topic: function (p) {
+            p.forums(this.callback);
+          },
+          "should return nodejitsu and flatiron": function (err, obj) {
+            assert.isNull(err);
+            assert.equal(obj[0].name, 'nodejitsu');
+            assert.equal(obj[1].name, 'flatiron');
+            assert.equal(obj[0].resource, 'Forum');
+            assert.equal(obj[1].resource, 'Forum');
+          }
         }
       }
     }
