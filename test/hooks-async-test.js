@@ -23,7 +23,7 @@ vows.describe('resourceful/hooks/async').addBatch({
       },
       "when calling save() on an instance of Article": {
         topic: function (A) {
-          new(A)({ _id: '128', counter: 0, title: 'foobar' }).save(this.callback);
+          new(A)({ id: '128', counter: 0, title: 'foobar' }).save(this.callback);
         },
         "should trigger both hooks in the right order": function (e, res) {
           assert.isNull(e);
@@ -57,7 +57,7 @@ vows.describe('resourceful/hooks/async').addBatch({
       },
       "when calling save() on an instance of Article": {
         topic: function (A) {
-          new(A)({ _id: '65', counter: 0, title: 'hookbar' }).save(this.callback);
+          new(A)({ id: '65', counter: 0, title: 'hookbar' }).save(this.callback);
         },
         "should trigger both hooks in the right order": function (e, res) {
           assert.isNull(e);
@@ -97,7 +97,7 @@ vows.describe('resourceful/hooks/async').addBatch({
       },
       "when calling create() on an instance of Article": {
         topic: function (A) {
-          A.create({ _id: '69', counter: 0, title: 'foobar' }, this.callback);
+          A.create({ id: '69', counter: 0, title: 'foobar' }, this.callback);
         },
         "should trigger all hooks": function (e, res) {
           assert.isNull(e);
@@ -152,7 +152,7 @@ vows.describe('resourceful/hooks/async').addBatch({
       },
       "when calling create() on an instance of Article": {
         topic: function (A) {
-          A.create({ _id: '67', counter: 0, title: 'hookbar' }, this.callback);
+          A.create({ id: '67', counter: 0, title: 'hookbar' }, this.callback);
         },
         "should trigger both hooks in the right order": function (e, res) {
           assert.isNull(e);
