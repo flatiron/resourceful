@@ -5,7 +5,7 @@ var Author = resourceful.define('author');
 Author.string('name');
 
 Author.create({
-  _id: 'Marak'
+  id: 'Marak'
 }, function(err, marak){
   marak.name = "foobar";
   marak.save(function(err, result){

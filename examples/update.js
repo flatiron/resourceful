@@ -5,7 +5,7 @@ var Author = resourceful.define('author');
 Author.string('name');
 
 Author.create({
-  _id: 'Marak',
+  id: 'Marak',
   name: 'foobar'
 }, function(err, marak){
   marak.update({ name: 'barfoo'}, function(err, result){
