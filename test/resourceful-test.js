@@ -108,26 +108,26 @@ vows.describe('resourceful').addVows({
       return r;
     },
     "adds them to `Resource.properties`": function (r) {
-      assert.equal(Object.keys(r.properties).length,3);
+      assert.equal(Object.keys(r.properties).length, 3);
       assert.include(r.properties, 'title');
       assert.include(r.properties, 'kind');
     },
     "When instantiated": {
       topic: function (R) {
-        return new(R)({ title: 'The Great Gatsby' });
+        return new(R)({ title: 'The Great Gatsby', kind: 'Classic Novels' });
       },
       "should respond to toString()": function (r) {
-        assert.equal(r.toString(), '{"title":"The Great Gatsby","resource":"Book"}');
+        assert.equal(r.toString(), '{"kind":"Classic Novels","resource":"Book"}');
       },
       "should respond to toJSON()": function (r) {
         assert.isObject(r.toJSON());
       },
-      "should respond to restricted() with filtered properties": function (r) {
-        var restricted = r.restricted();
+      "should respond to toJSON() without filtered properties": function (r) {
+        var restricted = r.toJSON();
         assert.isObject(restricted);
 
-        assert.ok(restricted.title);
-        assert.ok(!restricted.kind);
+        assert.ok(!restricted.title);
+        assert.ok(restricted.kind);
       },
       "should return the attributes, when `Object.keys` is called": function (r) {
         var keys = Object.keys(r);
@@ -139,7 +139,7 @@ vows.describe('resourceful').addVows({
       },
       "should set the unspecified values to `undefined`": function (r) {
         assert.include(r, 'kind');
-        assert.isUndefined(r.kind);
+        assert.isString(r.kind);
       }
     }
   },
