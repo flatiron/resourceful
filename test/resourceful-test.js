@@ -117,13 +117,13 @@ vows.describe('resourceful').addVows({
         return new(R)({ title: 'The Great Gatsby', kind: 'Classic Novels' });
       },
       "should respond to toString()": function (r) {
-        assert.equal(r.toString(), '{"kind":"Classic Novels","resource":"Book"}');
+        assert.equal(r.toString(), '{"title":"The Great Gatsby","kind":"Classic Novels","resource":"Book"}');
       },
       "should respond to toJSON()": function (r) {
         assert.isObject(r.toJSON());
       },
-      "should respond to toJSON() without filtered properties": function (r) {
-        var restricted = r.toJSON();
+      "should respond to safeJSON() without filtered properties": function (r) {
+        var restricted = r.safeJSON();
         assert.isObject(restricted);
 
         assert.ok(!restricted.title);
