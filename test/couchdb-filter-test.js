@@ -2,7 +2,7 @@ var assert = require('assert'),
     events = require('events'),
     cradle = require('cradle'),
     vows = require('vows'),
-    resourceful = require('../../lib/resourceful');
+    resourceful = require('../lib/resourceful');
 
 var Article;
 
@@ -11,18 +11,17 @@ resourceful.env = 'test';
 vows.describe('resourceful/resource/view').addVows({
   "A database containing articles and other resources": {
     topic: function () {
-      resourceful.use('couchdb', 'couchdb://127.0.0.1:5984/test');
+      resourceful.use('couchdb', 'couchdb://localhost:5984/test');
       var promise = new(events.EventEmitter);
       var db = new(cradle.Connection)().database('test');
       db.destroy(function () {
         db.create(function () {
           db.save([
-            { resource: 'Article', title: 'The Great Gatsby', published: true,  author: 'fitzgerald', tags: ['classic'] },
-            { resource: 'Article', title: 'Finding vim',      published: false, author: 'cloudhead', tags: ['hacking', 'vi'] },
-            { resource: 'Article', title: 'On Writing',       published: true,  author: 'cloudhead', tags: ['writing'] },
-            { resource: 'Article', title: 'vi Zen',           published: false, author: 'cloudhead', tags: ['vi', 'zen'] },
-            { resource: 'Article', title: 'Channeling force', published: true,  author: 'yoda',      tags: ['force', 'zen'] },
-            { resource: 'Body',    name: 'fitzgerald' }
+            { _id: 'article/1', resource: 'Article', title: 'The Great Gatsby', published: true,  author: 'fitzgerald', tags: ['classic'] },
+            { _id: 'article/2', resource: 'Article', title: 'Finding vim',      published: false, author: 'cloudhead',  tags: ['hacking', 'vi'] },
+            { _id: 'article/3', resource: 'Article', title: 'On Writing',       published: true,  author: 'cloudhead',  tags: ['writing'] },
+            { _id: 'article/4', resource: 'Article', title: 'vi Zen',           published: false, author: 'cloudhead',  tags: ['vi', 'zen'] },
+            { _id: 'article/5', resource: 'Article', title: 'Channeling force', published: true,  author: 'yoda',       tags: ['force', 'zen'] },
           ], function () {
             promise.emit('success');
           });

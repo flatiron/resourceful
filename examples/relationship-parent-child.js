@@ -1,22 +1,26 @@
 var resourceful = require('../lib/resourceful');
 resourceful.use('memory');
 
+//
+// TODO: This seems to not be working on couchdb. Test coverage should be added for this.
+//
+
 var Category = resourceful.define('category');
 Category.parent('category');
 
 Category.create({
-  _id: 'music',
+  id: 'music',
 }, function(err, music){
   music.createCategory({
-    _id: 'hip-hop',
+    id: 'hip-hop',
   }, function(err, hiphop){
     music.createCategory({
-      _id: 'rap',
+      id: 'rap',
     }, function(err, rap){
-      hiphop.createCategory({ _id: "a-tribe-called-quest", title: "Hello!" }, function(err, result){
-        hiphop.createCategory({ _id: "busta-rhymes", title: "Hello!" }, function(err, busta){
-          rap.createCategory({ _id: "wu-tang", title: "Hello!" }, function(err, wutang){
-            wutang.createCategory({ _id: "Enter the 36 Chambers", title: "Hello!" }, function(err, result){
+      hiphop.createCategory({ id: "a-tribe-called-quest", title: "Hello!" }, function(err, result){
+        hiphop.createCategory({ id: "busta-rhymes", title: "Hello!" }, function(err, busta){
+          rap.createCategory({ id: "wu-tang", title: "Hello!" }, function(err, wutang){
+            wutang.createCategory({ id: "Enter the 36 Chambers", title: "Hello!" }, function(err, result){
               music.categories(function(err, result){
                 console.log('music', err, result);
               });
@@ -32,8 +36,8 @@ Category.create({
               Category.categories('music', function(err, result){
                 console.log('music', result)
               });
-              Category.categories('music/rap', function(err, result){
-                console.log('music/rap', result)
+              Category.categories('category/music/rap', function(err, result){
+                console.log('category/music/rap', result)
               });
             });
           });

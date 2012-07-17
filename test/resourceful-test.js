@@ -64,8 +64,7 @@ vows.describe('resourceful').addVows({
           assert.isFunction(article.destroy);
           assert.isFunction(article.reload);
         },
-        "and doesn't have a value for `id` and `key`": function (article) {
-          assert.isUndefined(article.id);
+        "and doesn't have a value for `key`": function (article) {
           assert.isUndefined(article.key);
         }
       }
@@ -89,14 +88,13 @@ vows.describe('resourceful').addVows({
     "resource should be set to 'Resource'": function (r) {
       assert.match(r.resource, /^Resource\d+/);
     },
-    "the `properties` accessor returns an object with only the '_id' property": function (r) {
+    "the `properties` accessor returns an empty object": function (r) {
       assert.isObject(r.properties);
-      assert.equal(Object.keys(r.properties).length, 1);
-      assert.include(r.properties, '_id');
+      assert.equal(Object.keys(r.properties).length, 0);
     },
     // Should it be a pointer to the 'id' property instead?
-    "the `key` accessor is set to '_id' by default": function (r) {
-      assert.equal(r.key, '_id');
+    "the `key` accessor is set to 'id' by default": function (r) {
+      assert.equal(r.key, 'id');
     }
   }
 }).addVows({ // property
@@ -108,7 +106,7 @@ vows.describe('resourceful').addVows({
       return r;
     },
     "adds them to `Resource.properties`": function (r) {
-      assert.equal(Object.keys(r.properties).length, 3);
+      assert.equal(Object.keys(r.properties).length, 2);
       assert.include(r.properties, 'title');
       assert.include(r.properties, 'kind');
     },
@@ -131,11 +129,10 @@ vows.describe('resourceful').addVows({
       },
       "should return the attributes, when `Object.keys` is called": function (r) {
         var keys = Object.keys(r);
-        assert.include(keys, '_id');
         assert.include(keys, 'title');
         assert.include(keys, 'kind');
         assert.include(keys, 'resource');
-        assert.equal(keys.length, 4);
+        assert.equal(keys.length, 3);
       },
       "should set the unspecified values to `undefined`": function (r) {
         assert.include(r, 'kind');
@@ -151,23 +148,23 @@ vows.describe('resourceful').addVows({
       return r;
     },
     "only keeps the last copy": function (r) {
-      assert.equal(Object.keys(r.properties).length, 2); // 'dup' & 'id'
+      assert.equal(Object.keys(r.properties).length, 1); // 'dup' & 'id'
     }
   },
   "A Resource with sanitized _id": {
     topic: function () {
       var r = this.r = resourceful.define();
       r.use('memory', 'memory://testx');
-      r.property('_id', 'string').sanitize('lower');
+      r.property('id', 'string').sanitize('lower');
 
-      new r({ _id: 'AbC'}).save(this.callback);
+      new r({ id: 'AbC'}).save(this.callback);
     },
     "should be saved": {
       topic: function() {
         this.r.get('aBc', this.callback);
       },
       "and be found by non-sanitized_id": function (r) {
-        assert.equal(r.toString(), '{"_id":"abc","resource":"Resource3"}');
+        assert.equal(r.toString(), '{"id":"abc","resource":"Resource3"}');
       }
     }
   },

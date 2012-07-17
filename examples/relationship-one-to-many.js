@@ -1,5 +1,5 @@
 var resourceful = require('../lib/resourceful');
-resourceful.use('memory' );
+resourceful.use('memory');
 
 //
 // First, create two resources: Author and Article
@@ -19,12 +19,12 @@ Article.parent('author');
 // Create a new author "bob"
 //
 Author.create({
-  _id: 'bob'
+  id: 'bob'
 }, function(err, bob){
   //
   // Create a new article for bob
   //
-  bob.createArticle({ _id: "cool-story", title: "A cool story by bob." }, function(err, result){
+  bob.createArticle({ id: "cool-story", title: "A cool story by bob." }, function(err, result){
     console.log(bob.article_ids);
     //
     // Get all of bob's articles
@@ -32,7 +32,7 @@ Author.create({
     bob.articles(function(err, result){
       console.log(result);
     });
-    Article.get('bob/cool-story', function(err, result){
+    Article.get('author/bob/cool-story', function(err, result){
       console.log(result);
     })
   });

@@ -4,12 +4,12 @@ var assert = require('assert'),
 
 var users = {
   valid: {
-    _id: 'valid-user',
+    id: 'valid-user',
     email: 'valid@email.com',
     name: 'valid string'
   },
   invalid: {
-    _id: 'invalid-user',
+    id: 'invalid-user',
     email: 'invalid-email@123',
     name: 123
   }
