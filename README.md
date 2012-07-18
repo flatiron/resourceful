@@ -18,6 +18,7 @@ How often have you found yourself writing Model code in your application? Pretty
 # Features
 * Data Validation
 * Simplified Data Model Management
+* [Relationships](#relationships)
 * [Storage Engine Extensible](#engines)
 * [Simplified Cache Control](#cache)
 
@@ -221,7 +222,7 @@ Assuming we have already defined a ''Wolf'' resource with name, age, and fur pro
 Wolf.create({ name: 'Wolverine', age: 68 }, function (err, wolf) {
   if (err) { throw new(Error)(err) }
 
-  console.log(wolf); // { _id: 42, resource: 'wolf', name: 'Wolverine', age: 68 }
+  console.log(wolf); // { id: 42, resource: 'wolf', name: 'Wolverine', age: 68 }
 
   wolf.age++;
   wolf.save(function (err) {
@@ -240,6 +241,15 @@ Wolf.get(42, function (err, wolf) {
 });
 ```
 
+## Unique id problem
+As both couchdb and memory engines are document store style databases, we encounter the problem of allocating the same id to two different resources. For example, we might see the need to allocate the id `Smith` for a book and an author. This is called **Unique ID problem**.
+
+We prepend the lowercase of the resource name to the id's given to resourceful api.
+
+```
+Author with id 'smith' is stored with id 'author/smith'
+```
+
 <a name="cache"></a>
 ## Engine caching
 Resourceful comes with a helper for managing an in-memory cache of your documents. This helps increase the speed of resourceful by avoiding extraneous interactions with the back-end.
@@ -253,19 +263,171 @@ That said: The memory engine, as it needs to do much less, can be considered to 
 
 Both pieces of code are more-or-less self-documenting.
 
+<a name="relationships"></a>
+# Relationships
+
+Resourceful supports `parent` relationship between two resourceful. All the available api examples are given below.
+
+All the below examples use `couchdb` engine. These examples implements a one-to-many relationship between `user` and `repository`
+
+## Define resources
+
+#### user.js
+
+```js
+var resourceful = require('resourceful');
+
+module.exports = resourceful.define('user', function () {
+  this.string('name')
+});
+```
+
+#### repository.js
+
+```js
+var resourceful = require('resourceful');
+
+module.exports = resourceful.define('repository', function () {
+  this.parent('User');
+});
+```
+
+## Creating parent
+
+```js
+var User = require('./user');
+
+User.create({
+  id: 'marak',
+  name: 'Marak Squires'
+}, function (err, user) {
+  console.log(user);
+  /*
+  {
+    id: 'marak',
+    name: 'Marak Squires',
+    resource: 'User',
+    repository_ids: []
+  }
+   */
+});
+```
+
+The document is stored in couchdb as following:
+
+```js
+[
+  {
+    _id: 'user/marak',
+    name: 'Marak Squires',
+    resource: 'User',
+    repository_ids: []
+  }
+]
+```
+
+## Creating child
+
+Creating a child will prepend the parent's id to allow multiple child resources with the same id but in diffirent parent's context.
+
+```js
+var User = require('./user');
+
+User.createRepository('marak', {
+  id: 'colors',
+}, function (err, repo) {
+  console.log(repo);
+  /*
+  {
+    id: 'user/marak/colors',
+    resource: 'Repository',
+    user_id: 'marak'
+  }
+   */
+});
+```
+
+This will add 'colors' to marak's `repository_ids` making the documents stored in couchdb as
+
+```js
+[
+  {
+    _id: 'user/marak',
+    name: 'Marak Squires',
+    resource: 'User',
+    repository_ids: ['colors']
+  },
+  {
+    _id: 'repository/user/marak/colors'
+    resource: 'Repository',
+    user_id: 'marak'
+  }
+]
+```
+
+The child can be requested using the `Repository` resource, but you need to provide the parent context too.
+
+```js
+var Repository = require('./repository');
+
+Repository.get('user/marak/colors', function (err, repo) {
+  console.log(repo);
+  /*
+  {
+    id: 'user/marak/colors',
+    resource: 'Repository',
+    user_id: 'marak'
+  }
+   */
+});
+```
+
+## Fetching children
+
+All the children of a parent can be fetched using the following
+
+```js
+var User = require('./user');
+
+User.repositories('marak', function (err, repos) {
+  console.log(repos);
+  /*
+  [
+    {
+      id: 'user/marak/repository',
+      resource: 'Repository',
+      user_id: 'marak'
+    }
+  ]
+  */
+});
+```
+
+## Destroying a parent
+
+The destruction of a parent will result in cascading destruction of it's children. Cascading destruction here means that all the children of the parent's children will be destroyed and so on.
+
+```js
+var User = require('./user');
+
+User.destroy('marak', function () {});
+```
+
+Both the documents in couchdb will be destroyed by the above call.
+
 # API
 
-## Resource Constructor
+## Resource Constructor Methods
 These methods are available on all user-defined resource constructors, as well as on the default `resourceful.Resource` constructor.
 
-* `Resource.get(id, [callback])`: Fetch a resource by *id*.
+* `Resource.get(id, [callback])`: Fetch a resource by `id`.
 * `Resource.update(id, properties, [callback])`: Update a resource with properties.
-* `Resource.destroy(id, [callback])`: Destroy a resource by *id*.
+* `Resource.destroy(id, [callback])`: Destroy a resource by `id`.
 * `Resource.all([callback])`: Fetches all resources of this type.
-* `Resource.find(properties, [callback])`: Find all resources of this type which satisfy `obj` conditions
-* `Resource.save(inst, [callback])`: Saves the specified resource instance `inst` by overwriting all properties. 
-* `Resource.create(properties, [callback])`: Creates a new instance of the Resource with the specified `properties`
-* `Resource.new(properties)`: Instantiates a new instance of the Resource with the `properties`
+* `Resource.find(properties, [callback])`: Find all resources of this type which satisfy `obj` conditions.
+* `Resource.save(inst, [callback])`: Saves the specified resource instance `inst` by overwriting all properties.
+* `Resource.create(properties, [callback])`: Creates a new instance of the Resource with the specified `properties`.
+* `Resource.new(properties)`: Instantiates a new instance of the Resource with the `properties`.
 
 ## Resource Instance Methods
 
@@ -273,6 +435,19 @@ These methods are available on all user-defined resource constructors, as well a
 * `Resource.prototype.update(properties, [callback])`
 * `Resource.prototype.destroy([callback])`
 * `Resource.prototype.reload([callback])`
+
+## Relationship Constructor Methods
+These methods are available on all user-defined resource constructors which are in a relationship
+
+* `Parent.children(id, [callback])`: Fetches all the children for the specified `id`.
+* `Parent.createChild(id, properties, [callback])`: Create a child for `id` with the specified `properties`.
+* `Child.byParent(id, [callback])`: Fetches all the children for the parent given by `id`.
+
+## Relationship Instance Methods
+
+* `Parent.prototype.children([callback])`
+* `Parent.prototype.createChild(properties, [callback])`
+* `Child.prototype.parent([callback])`: Fetches the parent of the given child instance.
 
 ## Engine Constructor
 In general, it is safe to attach instance methods to your new engine. For example, `memory.js` keeps a counter (called `this.counter`) for creating new documents without a specified name.
