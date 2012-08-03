@@ -3,7 +3,7 @@ var cradle = require('cradle');
 var engine = exports;
 
 engine.name = 'couchdb';
-engine.options = { host: 'nodejitsudb175109436030.iriscouch.com', port: 5984, database: 'test' };
+engine.options = { database: 'test' };
 
 engine.load = function (resourceful, data, callback) {
   var db = new(cradle.Connection)(engine.options).database(engine.options.database);
