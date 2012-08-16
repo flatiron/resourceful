@@ -90,7 +90,7 @@ vows.describe('resourceful').addVows({
     },
     "the `properties` accessor returns an empty object": function (r) {
       assert.isObject(r.properties);
-      assert.equal(Object.keys(r.properties).length, 0);
+      assert.equal(Object.keys(r.properties).length, 1);
     },
     // Should it be a pointer to the 'id' property instead?
     "the `key` accessor is set to 'id' by default": function (r) {
@@ -106,7 +106,7 @@ vows.describe('resourceful').addVows({
       return r;
     },
     "adds them to `Resource.properties`": function (r) {
-      assert.equal(Object.keys(r.properties).length, 2);
+      assert.equal(Object.keys(r.properties).length, 3);
       assert.include(r.properties, 'title');
       assert.include(r.properties, 'kind');
     },
@@ -132,7 +132,7 @@ vows.describe('resourceful').addVows({
         assert.include(keys, 'title');
         assert.include(keys, 'kind');
         assert.include(keys, 'resource');
-        assert.equal(keys.length, 3);
+        assert.equal(keys.length, 4);
       },
       "should set the unspecified values to `undefined`": function (r) {
         assert.include(r, 'kind');
@@ -148,7 +148,7 @@ vows.describe('resourceful').addVows({
       return r;
     },
     "only keeps the last copy": function (r) {
-      assert.equal(Object.keys(r.properties).length, 1); // 'dup' & 'id'
+      assert.equal(Object.keys(r.properties).length, 2); // 'dup' & 'id'
     }
   },
   "A Resource with sanitized _id": {
