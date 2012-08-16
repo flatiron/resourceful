@@ -342,15 +342,75 @@ vows.describe('resourceful').addVows({
     }
   },
   "Engine can be initialised":{
-    "by name": function () {
-      resourceful.use('memory');
-      assert.isFunction(resourceful.engine);
-      assert.equal(resourceful.connection.protocol, 'memory');
+    "by name": {
+      "with options": {
+          topic: function() {
+            return function(r) {
+              assert.equal(r.connection.host, "test");
+              assert.equal(r.connection.port, 123);
+              assert.equal(r.name, "db");
+            }
+          },
+          "uri": function(f) {
+            var r = resourceful.define();
+            r.use("couchdb", { uri: "http://test:123/db" });
+            f(r.connection.connection);
+          },
+          "uri + port": function(f) {
+            var r = resourceful.define();
+            r.use("couchdb", { uri: "http://test/db", port: 123 });
+            f(r.connection.connection);
+          },
+          "uri + port + database": function(f) {
+            var r = resourceful.define();
+            r.use("couchdb", { uri: "http://test", database: "db", port: 123 });
+            f(r.connection.connection);
+          }
+      },
+      "or without": function() {
+        resourceful.use('couchdb');
+        assert.isFunction(resourceful.engine);
+        assert.equal(resourceful.connection.protocol, 'couchdb');
+
+        resourceful.use('memory');
+        assert.isFunction(resourceful.engine);
+        assert.equal(resourceful.connection.protocol, 'memory');
+      },
     },
-    "by reference": function () {
-      resourceful.use(resourceful.engines.Memory);
-      assert.isFunction(resourceful.engine);
-      assert.equal(resourceful.connection.protocol, 'memory');
+    "by reference": {
+      "with options": {
+          topic: function() {
+            return function(r) {
+              assert.equal(r.connection.host, "test");
+              assert.equal(r.connection.port, 123);
+              assert.equal(r.name, "db");
+            }
+          },
+          "uri": function(f) {
+            var r = resourceful.define();
+            r.use(resourceful.engines.Couchdb, { uri: "http://test:123/db" });
+            f(r.connection.connection);
+          },
+          "uri + port": function(f) {
+            var r = resourceful.define();
+            r.use(resourceful.engines.Couchdb, { uri: "http://test/db", port: 123 });
+            f(r.connection.connection);
+          },
+          "uri + port + database": function(f) {
+            var r = resourceful.define();
+            r.use(resourceful.engines.Couchdb, { uri: "http://test", database: "db", port: 123 });
+            f(r.connection.connection);
+          }
+      },
+      "or without": function () {
+        resourceful.use(resourceful.engines.Couchdb);
+        assert.isFunction(resourceful.engine);
+        assert.equal(resourceful.connection.protocol, 'couchdb');
+
+        resourceful.use(resourceful.engines.Memory);
+        assert.isFunction(resourceful.engine);
+        assert.equal(resourceful.connection.protocol, 'memory');
+      }
     }
   }
 }).addVows({
