@@ -65,7 +65,7 @@ vows.describe('resourceful').addVows({
           assert.isFunction(article.reload);
         },
         "and doesn't have a value for `key`": function (article) {
-          assert.isUndefined(article.key);
+          assert.isNull(article.key);
         }
       }
     }
@@ -115,7 +115,7 @@ vows.describe('resourceful').addVows({
         return new(R)({ title: 'The Great Gatsby', kind: 'Classic Novels' });
       },
       "should respond to toString()": function (r) {
-        assert.equal(r.toString(), '{"title":"The Great Gatsby","kind":"Classic Novels","resource":"Book"}');
+        assert.equal(r.toString(), '{"id":null,"title":"The Great Gatsby","kind":"Classic Novels","resource":"Book"}');
       },
       "should respond to toJSON()": function (r) {
         assert.isObject(r.toJSON());
