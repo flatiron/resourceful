@@ -1,19 +1,11 @@
-
 <img src="https://github.com/flatiron/resourceful/raw/master/resourceful.png" />
 
 # Synopsis
 A storage agnostic resource-oriented ODM for building prototypical models with validation and sanitization.
 
-# Motivation
-How often have you found yourself writing Model code in your application? Pretty often? Good! Unlike other "Object-Document Mappers" `resourceful` tries to only focus on two things:
-
- - A simple API for defining custom Model prototypes with validation. No sugar is required to instantiate prototypes defined by resourceful.
-
- - Define an extensibility model for databases to provide CRUD functionality to Models along with custom query, filtering or updating specific to that specific implementation (Mongo, CouchDB, Redis, etc).
-
 # Status
 
-[![Build Status](https://secure.travis-ci.org/flatiron/resourceful.png)](http://travis-ci.org/flatiron/resourceful)
+[![Build Status](https://secure.travis-ci.org/flatiron/resourceful.png?branch=master)](http://travis-ci.org/flatiron/resourceful)
 
 # Features
 * Data Validation
