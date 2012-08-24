@@ -72,7 +72,7 @@ Resourceful supports a simple `Resource.parent` API, which is actually quite rob
 
 ### Documentation
 
- * [Relational Resources](https://github.com/flatiron/resourceful/wiki/Engines-Class)
+ * [Relational Resources](https://github.com/flatiron/resourceful/wiki/Relational-Resources)
 
 
 # API
