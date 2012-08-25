@@ -1,4 +1,3 @@
-
 <img src="https://github.com/flatiron/resourceful/raw/master/resourceful.png" />
 
 # Synopsis
@@ -61,9 +60,9 @@ Creature.prototype.feed = function (food) {
 
 ### Documentation
 
- * [Engine Usage](https://github.com/flatiron/resourceful/wiki/Engines-Class)
- * [Engine Class](https://github.com/flatiron/resourceful/wiki/Engines-Class)
- * [Engine Caching](https://github.com/flatiron/resourceful/wiki/Engines-Caching)
+ * [Engines Usage](https://github.com/flatiron/resourceful/wiki/Engines-Usage)
+ * [Engine Constructor](https://github.com/flatiron/resourceful/wiki/Engine-Constructor)
+ * [Engine Caching](https://github.com/flatiron/resourceful/wiki/Engine-Caching)
 
 <a name="relationships"></a>
 # Relational Resources
