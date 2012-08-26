@@ -73,16 +73,6 @@ Creature.prototype.feed = function (food) {
  * [Engine Constructor](https://github.com/flatiron/resourceful/wiki/Engine-Constructor)
  * [Engine Caching](https://github.com/flatiron/resourceful/wiki/Engine-Caching)
 
-<a name="relationships"></a>
-# Relational Resources
-
-Resourceful supports a simple `Resource.parent` API, which is actually quite robust. Through this API, resourceful supports one-one, one-many, and many-many relationships.
-
-### Documentation
-
- * [Relational Resources](https://github.com/flatiron/resourceful/wiki/Relational-Resources)
-
-
 # API
 
 ## Resource Constructor Methods
@@ -117,6 +107,14 @@ These methods are available on all user-defined resource constructors which are 
 * `Parent.prototype.createChild(properties, [callback])`
 * `Child.prototype.parent([callback])`: Fetches the parent of the given child instance.
 
+<a name="relationships"></a>
+# Relational Resources
+
+Resourceful supports a simple `Resource.parent` API, supports one-one, one-many, and many-many relationships.
+
+### Documentation
+
+ * [Relational Resources](https://github.com/flatiron/resourceful/wiki/Relational-Resources)
 
 # Tests
 All tests are written with [vows][0] and should be run with [npm][1]:
