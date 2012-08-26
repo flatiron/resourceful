@@ -1,7 +1,16 @@
 <img src="https://github.com/flatiron/resourceful/raw/master/resourceful.png" />
 
 # Synopsis
-Isomorphic Resource engine for JavaScript. Resources are business logic wrapped in prototypical models with schema and validation. Supports several data-providers such as: Memory, CouchDB, MongoDB, REST, socket.io, and File-System.
+
+ - Isomorphic Resource engine for JavaScript
+ - Resources are business logic wrapped in prototypical models with schema and validation
+ - Resources support several data-providers
+   - Memory
+   - File-System
+   - CouchDB
+   - MongoDB
+   - REST
+   - socket.io
 
 # Status
 
