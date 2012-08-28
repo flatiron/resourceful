@@ -329,13 +329,16 @@ engines.forEach(function (e) {
       "a Resource.update() request when successful": {
         topic: function () {
           resources[e].Author.update('bob', { age: 31 }, this.callback);
-        },
-        "should respond with a Resource instance": function (err, obj) {
-          assert.isNull(err);
-          assert.isObject(obj);
-          assert.instanceOf(obj, resourceful.Resource);
-          assert.equal(obj.constructor, resources[e].Author);
-        },
+        },				
+				"should not crash when not passed a callback": function (err, obj) {
+					resources[e].Author.update('mat', { age: 35, hair: 'brown' });
+				},
+			"should respond with a Resource instance": function (err, obj) {
+				assert.isNull(err);
+				assert.isObject(obj);
+				assert.instanceOf(obj, resourceful.Resource);
+				assert.equal(obj.constructor, resources[e].Author);
+			},
         "should respond with the right object": function (err, obj) {
           assert.isNull(err);
           assert.equal(obj.id, 'bob');
@@ -512,10 +515,13 @@ engines.forEach(function (e) {
         assert.isNull(err);
         assert.isFalse(obj.isNewRecord);
       },
-      "a Resource.prototype.update() request": {
+      "a Resource.prototype.update() request": {				
         topic: function (obj) {
           obj.update({ age: 35, hair: 'black' }, this.callback);
         },
+				"should not crash when not passed a callback": function (err, obj) {
+					obj.update({ age: 35, hair: 'black' });
+				},
         "should respond with a Resource instance": function (err, obj) {
           assert.isNull(err);
           assert.isObject(obj);
