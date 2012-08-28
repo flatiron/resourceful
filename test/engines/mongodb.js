@@ -26,10 +26,10 @@ engine.load = function (resourceful, data, callback) {
       if (err) return callback(err);
       if (result !== true) return callback(new Error('Failed to authenticate.'));
 
-      db.collection(engine.options.collection, function (err, collection) {
+      db.dropCollection(engine.options.collection, function (err) {
         if (err) return callback(err);
 
-        collection.remove(function (err) {
+        db.createCollection(engine.options.collection, function (err, collection) {
           if (err) return callback(err);
 
           collection.insert(data, {safe: true}, function (err) {
