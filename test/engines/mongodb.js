@@ -19,8 +19,9 @@ engine.load = function (resourceful, data, callback) {
 
   db.open(function (err) {
     if (err) return callback(err);
+
     db.dropCollection(engine.options.collection, function (err) {
-      if (err) return callback(err);
+      //ignore error, probably failed because it didn't exist which is fine
 
       db.createCollection(engine.options.collection, function (err, collection) {
         if (err) return callback(err);
