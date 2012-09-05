@@ -7,12 +7,10 @@ var engine = exports;
 
 engine.name = 'mongodb';
 engine.options = {
-  host: 'alex.mongohq.com',
-  port: 10047,
-  database: 'nodejitsudb15119137141',
-  user: 'nodejitsu',
-  pass: '48be573a3772606f1e03dd765ea2a2ee',
-  collection: 'test'
+  database: 'test',
+  host: '127.0.0.1',
+  port: 27017,
+  collection: 'resourceful'
 };
 
 engine.load = function (resourceful, data, callback) {
@@ -21,22 +19,16 @@ engine.load = function (resourceful, data, callback) {
 
   db.open(function (err) {
     if (err) return callback(err);
-
-    db.authenticate(engine.options.user, engine.options.pass, function (err, result) {
+    db.dropCollection(engine.options.collection, function (err) {
       if (err) return callback(err);
-      if (result !== true) return callback(new Error('Failed to authenticate.'));
 
-      db.dropCollection(engine.options.collection, function (err) {
+      db.createCollection(engine.options.collection, function (err, collection) {
         if (err) return callback(err);
 
-        db.createCollection(engine.options.collection, function (err, collection) {
+        collection.insert(data, {safe: true}, function (err) {
           if (err) return callback(err);
 
-          collection.insert(data, {safe: true}, function (err) {
-            if (err) return callback(err);
-
-            return callback(null);
-          });
+          return callback(null);
         });
       });
     });
