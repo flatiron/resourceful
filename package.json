@@ -1,7 +1,7 @@
 {
   "name": "resourceful",
-  "description": "A storage agnostic resource-oriented ODM for building prototypical models with validation and sanitization.",
-  "version": "0.3.1",
+  "description": "an isomorphic Resource engine for JavaScript",
+  "version": "0.3.2",
   "url": "http://github.com/flatiron/resourceful",
   "keywords": [
     "ODM",
