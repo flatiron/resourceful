@@ -43,20 +43,23 @@ function describeResourceWithMethods(){
     "description": "fires a lazer at a certain power and direction",
     "properties": {
       "options": {
-        "power": {
-          "type": "number",
-          "default": 1,
-          "required": true
-        },
-        "direction": {
-          "type": "string",
-          "enum": ["up", "down", "left", "right"],
-          "required": true,
-          "default": "up"
-        },
-        "callback": {
-          "type": "function",
-          "required": false
+        "type": "object",
+        "properties": {
+          "power": {
+            "type": "number",
+            "default": 1,
+            "required": true
+          },
+          "direction": {
+            "type": "string",
+            "enum": ["up", "down", "left", "right"],
+            "required": true,
+            "default": "up"
+          },
+          "callback": {
+            "type": "function",
+            "required": false
+          }
         }
       }
   }});
