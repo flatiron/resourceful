@@ -164,7 +164,7 @@ vows.describe('resourceful').addVows({
         this.r.get('aBc', this.callback);
       },
       "and be found by non-sanitized_id": function (r) {
-        assert.equal(r.toString(), '{"id":"abc","resource":"Resource6"}');
+        assert.equal(r.id, 'abc');
       }
     }
   },
