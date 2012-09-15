@@ -7,3 +7,5 @@ notifications:
     - travis@nodejitsu.com
   irc: "irc.freenode.org#nodejitsu"
 
+services:
+  - couchdb
