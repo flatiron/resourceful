@@ -94,6 +94,21 @@ vows.describe('resourceful/resource/view').addBatch({
             assert.equal(res.length,1);
             assert.equal(res[0].author,'yoda');
           }
+        },
+        "<by> ['yoda', 'fitzgerald']": {
+          topic: function (Article) {
+            Article.by({
+              keys: ['yoda', 'fitzgerald']
+            }, this.callback);
+          },
+          "should return an array of Article records by 'yoda' or 'fitzgerald'": function (e, res) {
+            assert.isArray(res);
+            assert.equal(res.length, 2);
+            assert(
+              (res[0].author === 'yoda' && res[1].author === 'fitzgerald') ||
+              (res[0].author === 'fitzgerald' && res[1].author === 'yoda')
+            );
+          }
         }
       }
     }
