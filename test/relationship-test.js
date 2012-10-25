@@ -132,6 +132,16 @@ engines.forEach(function (e) {
                 assert.isNull(err);
                 assert.equal(obj.user_id, 'pavan');
               }
+            },
+            "and when 'Parent.getChild()' is used with an invalid child id": {
+              topic: function (obj) {
+                resources[e].User.getRepository('pavan', 'pants', this.callback);
+              },
+              "should return 404": function (err, obj) {
+                assert.isObject(err);
+                assert.isUndefined(obj);
+                assert.equal(err.status, 404)
+              },
             }
           }
         }
