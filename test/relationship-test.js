@@ -97,11 +97,7 @@ engines.forEach(function (e) {
             },
             "and when 'Parent.getChild()' is used": {
               topic: function (obj) {
-                resources[e].User.getRepository(
-                  'pavan',
-                  'bullet', 
-                  this.callback
-                );
+                resources[e].User.getRepository('pavan', 'bullet', this.callback);
               },
               "should return one repository": function (err, obj) {
                 assert.isNull(err);
