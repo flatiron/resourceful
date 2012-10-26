@@ -94,6 +94,54 @@ engines.forEach(function (e) {
                 assert.equal(obj[0].user_id, 'pavan');
                 assert.equal(obj[1].user_id, 'pavan');
               }
+            },
+            "and when 'Parent.getChild()' is used": {
+              topic: function (obj) {
+                resources[e].User.getRepository('pavan', 'bullet', this.callback);
+              },
+              "should return one repository": function (err, obj) {
+                assert.isNull(err);
+                assert.isObject(obj);
+                assert.equal(obj.id, 'user/pavan/bullet');
+                assert.equal(obj.name, 'bullet');
+              },
+              "should be of proper resource type": function (err, obj) {
+                assert.isNull(err);
+                assert.equal(obj.resource, 'Repository');
+              },
+              "should have the user_id set correctly": function (err, obj) {
+                assert.isNull(err);
+                assert.equal(obj.user_id, 'pavan');
+              }
+            },
+            "and when 'Parent.prototype.getChild()' is used": {
+              topic: function (obj) {
+                obj.getRepository('bullet', this.callback);
+              },
+              "should return one repository": function (err, obj) {
+                assert.isNull(err);
+                assert.isObject(obj);
+                assert.equal(obj.id, 'user/pavan/bullet');
+                assert.equal(obj.name, 'bullet');
+              },
+              "should be of proper resource type": function (err, obj) {
+                assert.isNull(err);
+                assert.equal(obj.resource, 'Repository');
+              },
+              "should have the user_id set correctly": function (err, obj) {
+                assert.isNull(err);
+                assert.equal(obj.user_id, 'pavan');
+              }
+            },
+            "and when 'Parent.getChild()' is used with an invalid child id": {
+              topic: function (obj) {
+                resources[e].User.getRepository('pavan', 'pants', this.callback);
+              },
+              "should return 404": function (err, obj) {
+                assert.isObject(err);
+                assert.isUndefined(obj);
+                assert.equal(err.status, 404)
+              },
             }
           }
         }
