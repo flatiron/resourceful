@@ -1,7 +1,7 @@
 {
   "name": "resourceful",
   "description": "an isomorphic Resource engine for JavaScript",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "url": "http://github.com/flatiron/resourceful",
   "keywords": [
     "ODM",
