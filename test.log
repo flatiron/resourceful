@@ -1,0 +1,909 @@
+
+> resourceful@0.3.3 test /home/rick/Projects/resourceful
+> vows --spec
+
+ 
+  ♢ resourceful/events 
+  
+  an Article with a 'success' listener on save
+    ✓ should add the bound method to factory's listeners array
+  an Article with a 'success' listener on save when calling save() on an instance of Article
+    ✓ should trigger the bound function
+  
+  ♢ resourceful/hooks/sync 
+  
+  another Resource (save) synchronous 'after' hooks on save
+    ✓ should have two 'after' hooks registered
+  another Resource (create) with synchronous 'after' hooks on create
+    ✓ should have two 'after' hooks registered
+  a Resource (save) synchronous 'before' hooks on save when calling save() on an instance of Article
+    ✓ should trigger both hooks in the right order
+  a Resource (create) with synchronous 'before' hooks on create when calling create() on an instance of Article
+    ✓ should trigger both hooks in the right order
+  another Resource (save) synchronous 'after' hooks on save when calling save() on an instance of Article
+    ✓ should trigger both hooks in the right order
+  another Resource (create) with synchronous 'after' hooks on create when calling create() on an instance of Article
+    ✓ should trigger both hooks in the right order
+  
+  ♢ resourceful/redis/relationship 
+  
+  In database "test" with defined resources "forum"
+    ✓ will be successful
+  In database "test" with defined resources "user"
+    ✓ will be successful
+  In database "test" with defined resources "repository"
+    ✓ will be successful
+  In database "test" with defined resources "pull_request"
+    ✓ will be successful
+  In database "test" with defined resources "team"
+    ✓ will be successful
+  In database "test" with defined resources "member"
+    ✓ will be successful
+  In database "test" with defined resources "membership"
+    ✓ will be successful
+  In database "test" with defined resources "follower"
+    ✓ will be successful
+  In database "test" with defined resources "following"
+    ✓ will be successful
+'resourceful:test:id:user/pavan ---> {"name":"pavan","resource":"User","repository_ids":["bullet","octonode"],"membership_ids":["nodejitsu","nodeapps"],"follower_ids":["marak","christian"],"following_ids":["marak"],"id":"user/pavan"}'
+  In database 'test' getting an user named 'pavan'
+    ✓ should be successful
+  In database 'test' getting an user named 'pavan' and it should have children repositories
+    ✓ in an array
+'resourceful:test:id:repository/user/pavan/bullet ---> {"name":"bullet","resource":"Repository","user_id":"pavan","id":"repository/user/pavan/bullet"}'
+  In database 'test' getting an user named 'pavan' and it should have children repositories and when 'Parent.getChild()' is used
+    ✓ should return one repository
+    ✓ should be of proper resource type
+    ✓ should have the user_id set correctly
+'resourceful:test:id:repository/user/pavan/bullet ---> {"name":"bullet","resource":"Repository","user_id":"pavan","id":"repository/user/pavan/bullet"}'
+  In database 'test' getting an user named 'pavan' and it should have children repositories and when 'Parent.prototype.getChild()' is used
+    ✓ should return one repository
+    ✓ should be of proper resource type
+    ✓ should have the user_id set correctly
+'resourceful:test:id:repository/user/pavan/pants ---> null'
+  In database 'test' getting an user named 'pavan' and it should have children repositories and when 'Parent.getChild()' is used with an invalid child id
+    ✓ should return 404
+  In database 'test' getting an user named 'pavan' and it should have children repositories and when 'Parent.children()' is used
+    ✗ should return them 
+        » [33m       
+        [32mactual[39m [31mexpected[39m 
+         
+        user/pavan/[32mbulle[39m[31moc[39mt[31monode[39m 
+        [39m[90m // relationship-test.js:59[39m
+    ✓ should be of proper resource type
+    ✓ should have the user_id set correctly
+  In database 'test' getting an user named 'pavan' and it should have children repositories and when 'Parent.prototype.children()' is used
+    ✗ should return them 
+        » [33m       
+        [32mactual[39m [31mexpected[39m 
+         
+        user/pavan/[32mbulle[39m[31moc[39mt[31monode[39m 
+        [39m[90m // relationship-test.js:82[39m
+    ✓ should be of proper resource type
+    ✓ should have the user_id set correctly
+'resourceful:test:id:user/christian ---> {"name":"christian","resource":"User","repository_ids":["repository-1","repository-2"],"membership_ids":["nodejitsu"],"follower_ids":[],"following_ids":["marak","pavan"],"id":"user/christian"}'
+  In database 'test' getting an user named 'christian'
+    ✓ should be successful
+'resourceful:test:id:user/christian ---> {"name":"christian","resource":"User","repository_ids":["repository-1","repository-2"],"membership_ids":["nodejitsu"],"follower_ids":[],"following_ids":["marak","pavan"],"id":"user/christian"}'
+  In database 'test' getting an user named 'christian' and when 'Parent.prototype.createChild()' is used successfully
+    ✓ should return the newly created object
+    ✓ should set the user_id correctly
+'resourceful:test:id:user/christian ---> {"id":"resourceful:test:id:user/christian","name":"christian","repository_ids":["repository-1","repository-2","issues"],"membership_ids":["nodejitsu"],"follower_ids":[],"following_ids":["marak","pavan"],"resource":"User"}'
+  In database 'test' getting an user named 'christian' and when 'Parent.prototype.createChild()' is used successfully and reloading parent object
+    ✓ should be successful
+    ✓ should contain the new child object in the array
+'resourceful:test:id:repository/user/christian/issues ---> {"id":"resourceful:test:id:repository/user/christian/issues","name":"issues","user_id":"christian","pull_request_ids":[],"resource":"Repository"}'
+  In database 'test' getting an user named 'christian' and when 'Parent.prototype.createChild()' is used successfully should create the record in the db
+    ✓ should respond with the right object
+'resourceful:test:id:user/marak ---> {"name":"marak","resource":"User","repository_ids":["colors","npmtop"],"membership_ids":["nodedocs","nodejitsu","nodeapps"],"follower_ids":["pavan","christian"],"following_ids":["pavan"],"id":"user/marak"}'
+  In database 'test' getting an user named 'marak'
+    ✓ should be successful
+'resourceful:test:id:user/marak ---> {"name":"marak","resource":"User","repository_ids":["colors","npmtop"],"membership_ids":["nodedocs","nodejitsu","nodeapps"],"follower_ids":["pavan","christian"],"following_ids":["pavan"],"id":"user/marak"}'
+  In database 'test' getting an user named 'marak' and when 'Parent.createChild()' is used successfully
+    ✓ should return the newly created object
+    ✓ should set the user_id correctly
+'resourceful:test:id:repository/user/marak/haibu ---> {"id":"resourceful:test:id:repository/user/marak/haibu","name":"haibu","user_id":"marak","pull_request_ids":[],"resource":"Repository"}'
+  In database 'test' getting an user named 'marak' and when 'Parent.createChild()' is used successfully should create the record in the db
+    ✓ should respond with the right object
+'resourceful:test:id:user/marak ---> {"id":"resourceful:test:id:user/marak","name":"marak","repository_ids":["colors","npmtop","haibu"],"membership_ids":["nodedocs","nodejitsu","nodeapps"],"follower_ids":["pavan","christian"],"following_ids":["pavan"],"resource":"User"}'
+  In database 'test' getting an user named 'marak' and when 'Parent.createChild()' is used successfully and reloading parent object
+    ✓ should be successful
+    ✓ should contain the new child object in the array
+'resourceful:test:id:repository/user/pavan/bullet ---> {"name":"bullet","resource":"Repository","user_id":"pavan","id":"repository/user/pavan/bullet"}'
+  In database 'test' getting a repository 'user/pavan/bullet'
+    ✓ should be successful
+    ✓ should have user_id 'pavan'
+'resourceful:test:id:user/pavan ---> {"name":"pavan","resource":"User","repository_ids":["bullet","octonode"],"membership_ids":["nodejitsu","nodeapps"],"follower_ids":["marak","christian"],"following_ids":["marak"],"id":"user/pavan"}'
+  In database 'test' getting a repository 'user/pavan/bullet' and when 'Child.prototype.parent()' is used
+    ✓ should return the parent
+    ✓ should be of proper resource type
+    ✓ should have the children ids
+'resourceful:test:id:user/pavan ---> {"name":"pavan","resource":"User","repository_ids":["bullet","octonode"],"membership_ids":["nodejitsu","nodeapps"],"follower_ids":["marak","christian"],"following_ids":["marak"],"id":"user/pavan"}'
+  In database 'test' getting an user named 'pavan'
+    ✓ should be successful
+    ✓ should have children repositories
+[ { id: 'user/pavan/octonode',
+    name: 'octonode',
+    user_id: 'pavan',
+    pull_request_ids: [],
+    resource: 'Repository' },
+  { id: 'user/pavan/bullet',
+    name: 'bullet',
+    user_id: 'pavan',
+    pull_request_ids: [],
+    resource: 'Repository' } ]
+  In database 'test' getting an user named 'pavan' and when 'Child.byParent()' is used
+    ✗ should return the children 
+        » [33m       
+        [32mactual[39m [31mexpected[39m 
+         
+        user/pavan/[32mbulle[39m[31moc[39mt[31monode[39m 
+        [39m[90m // relationship-test.js:340[39m
+    ✓ should be of proper resource type
+    ✓ should have the parent id set correctly
+'resourceful:test:id:repository/user/christian/issues ---> {"id":"resourceful:test:id:repository/user/christian/issues","name":"issues","user_id":"christian","pull_request_ids":[],"resource":"Repository"}'
+  In database 'test' getting a repository 'user/christian/issues'
+    ✓ should be successful
+    ✓ should have the correct user_id
+'resourceful:test:id:user/christian ---> {"id":"resourceful:test:id:user/christian","name":"christian","repository_ids":["repository-1","repository-2","issues"],"membership_ids":["nodejitsu"],"follower_ids":[],"following_ids":["marak","pavan"],"resource":"User"}'
+  In database 'test' getting a repository 'user/christian/issues' and getting the parent
+    ✓ should be successful
+{ id: 'user/christian/issues',
+  name: 'issues',
+  user_id: 'christian',
+  pull_request_ids: [],
+  resource: 'Repository' }
+'resourceful:test:id:repository/user/christian/issues ---> {"id":"resourceful:test:id:repository/user/christian/issues","name":"issues","user_id":"christian","pull_request_ids":[],"resource":"Repository"}'
+'resourceful:test:id:user/christian ---> {"id":"resourceful:test:id:user/christian","name":"christian","repository_ids":["repository-1","repository-2","issues"],"membership_ids":["nodejitsu"],"follower_ids":[],"following_ids":["marak","pavan"],"resource":"User"}'
+'resourceful:test:id:repository/user/christian/issues ---> {"id":"resourceful:test:id:repository/user/christian/issues","name":"issues","user_id":"christian","pull_request_ids":[],"resource":"Repository"}'
+'resourceful:test:id:repository/user/christian/issues/*'
+[]
+  In database 'test' getting a repository 'user/christian/issues' and getting the parent and destroying the child
+    ✗ should be successful 
+        » [33mexpected [1m[][22m to be an Object[39m[90m // relationship-test.js:395[39m
+'resourceful:test:id:user/christian ---> {"id":"resourceful:test:id:user/christian","name":"christian","repository_ids":["repository-1","repository-2"],"membership_ids":["nodejitsu"],"follower_ids":[],"following_ids":["marak","pavan"],"resource":"User"}'
+  In database 'test' getting a repository 'user/christian/issues' and getting the parent and destroying the child should result in parent
+    ✓ being modified in the db
+'resourceful:test:id:user/christian ---> {"id":"resourceful:test:id:user/christian","name":"christian","repository_ids":["repository-1","repository-2"],"membership_ids":["nodejitsu"],"follower_ids":[],"following_ids":["marak","pavan"],"resource":"User"}'
+  In database 'test' getting an user named 'christian'
+    ✓ should be successful
+'resourceful:test:id:user/christian ---> {"id":"resourceful:test:id:user/christian","name":"christian","repository_ids":["repository-1","repository-2"],"membership_ids":["nodejitsu"],"follower_ids":[],"following_ids":["marak","pavan"],"resource":"User"}'
+'resourceful:test:id:repository/user/christian/repository-1 ---> {"name":"repository-1","resource":"Repository","pull_request_ids":["1"],"user_id":"christian","id":"repository/user/christian/repository-1"}'
+'resourceful:test:id:user/christian ---> {"id":"resourceful:test:id:user/christian","name":"christian","repository_ids":["repository-1","repository-2"],"membership_ids":["nodejitsu"],"follower_ids":[],"following_ids":["marak","pavan"],"resource":"User"}'
+'resourceful:test:id:repository/user/christian/repository-1 ---> {"name":"repository-1","resource":"Repository","pull_request_ids":["1"],"user_id":"christian","id":"repository/user/christian/repository-1"}'
+'resourceful:test:id:repository/user/christian/repository-1/*'
+[]
+'resourceful:test:id:repository/user/christian/repository-2 ---> {"name":"repository-2","resource":"Repository","user_id":"christian","id":"repository/user/christian/repository-2"}'
+'resourceful:test:id:user/christian ---> {"id":"resourceful:test:id:user/christian","name":"christian","repository_ids":["repository-2"],"membership_ids":["nodejitsu"],"follower_ids":[],"following_ids":["marak","pavan"],"resource":"User"}'
+'resourceful:test:id:repository/user/christian/repository-2 ---> {"name":"repository-2","resource":"Repository","user_id":"christian","id":"repository/user/christian/repository-2"}'
+'resourceful:test:id:repository/user/christian/repository-2/*'
+[]
+'resourceful:test:id:user/christian ---> {"id":"resourceful:test:id:user/christian","name":"christian","repository_ids":[],"membership_ids":["nodejitsu"],"follower_ids":[],"following_ids":["marak","pavan"],"resource":"User"}'
+'resourceful:test:id:membership/user/christian/nodejitsu ---> {"team":"nodejitsu","resource":"Membership","user_id":"christian","id":"membership/user/christian/nodejitsu"}'
+'resourceful:test:id:user/christian ---> {"id":"resourceful:test:id:user/christian","name":"christian","repository_ids":[],"membership_ids":["nodejitsu"],"follower_ids":[],"following_ids":["marak","pavan"],"resource":"User"}'
+'resourceful:test:id:membership/user/christian/nodejitsu/*'
+[]
+'resourceful:test:id:user/christian ---> {"id":"resourceful:test:id:user/christian","name":"christian","repository_ids":[],"membership_ids":[],"follower_ids":[],"following_ids":["marak","pavan"],"resource":"User"}'
+'resourceful:test:id:user/christian ---> {"id":"resourceful:test:id:user/christian","name":"christian","repository_ids":[],"membership_ids":[],"follower_ids":[],"following_ids":["marak","pavan"],"resource":"User"}'
+'resourceful:test:id:following/user/christian/pavan ---> {"name":"pavan","resource":"Following","user_id":"christian","id":"following/user/christian/pavan"}'
+'resourceful:test:id:user/christian ---> {"id":"resourceful:test:id:user/christian","name":"christian","repository_ids":[],"membership_ids":[],"follower_ids":[],"following_ids":["marak","pavan"],"resource":"User"}'
+'resourceful:test:id:following/user/christian/pavan/*'
+[]
+'resourceful:test:id:following/user/christian/marak ---> {"name":"marak","resource":"Following","user_id":"christian","id":"following/user/christian/marak"}'
+'resourceful:test:id:user/christian ---> {"id":"resourceful:test:id:user/christian","name":"christian","repository_ids":[],"membership_ids":[],"follower_ids":[],"following_ids":["marak"],"resource":"User"}'
+'resourceful:test:id:following/user/christian/marak/*'
+[]
+'resourceful:test:id:user/christian/*'
+[]
+  In database 'test' getting an user named 'christian' and destroying it
+    ✗ should be successful 
+        » [33mexpected [1m[][22m to be an Object[39m[90m // relationship-test.js:432[39m
+'resourceful:test:id:following/user/christian/marak ---> null'
+  In database 'test' getting an user named 'christian' and destroying it should result in his followings
+    ✓ getting destroyed
+'resourceful:test:id:repository/user/christian/repository-1 ---> null'
+  In database 'test' getting an user named 'christian' and destroying it should result in his repositories
+    ✓ getting destroyed
+'resourceful:test:id:membership/user/christian/nodejitsu ---> null'
+  In database 'test' getting an user named 'christian' and destroying it should result in his memberships
+    ✓ getting destroyed
+'resourceful:test:id:pull_request/repository/user/christian/repository-1/1 ---> {"title":"Resourceful rocks!","resource":"PullRequest","repository_id":"user/christian/repository-1","id":"pull_request/repository/user/christian/repository-1/1"}'
+{ id: 'repository/user/christian/repository-1/1',
+  title: 'Resourceful rocks!',
+  repository_id: 'user/christian/repository-1',
+  resource: 'PullRequest' }
+  In database 'test' pull requests of repositories of 'christian'
+    ✗ should be destroyed 
+      TypeError: Cannot read property 'status' of null 
+      at Object.engines.forEach.vows.describe.addBatch.addBatch.addBatch.addBatch.addBatch.addBatch.addBatch.addBatch.addBatch.In database 'test'.pull requests of repositories of 'christian'.should be destroyed (/home/rick/Projects/resourceful/test/relationship-test.js:477:27) 
+      at runTest (/home/rick/Projects/resourceful/node_modules/vows/lib/vows.js:132:26) 
+      at EventEmitter.<anonymous> (/home/rick/Projects/resourceful/node_modules/vows/lib/vows.js:78:9) 
+      at EventEmitter.emit (events.js:115:20) 
+      at EventEmitter.vows.describe.options.Emitter.emit (/home/rick/Projects/resourceful/node_modules/vows/lib/vows.js:237:24) 
+      at env.callback.that.emitter.ctx (/home/rick/Projects/resourceful/node_modules/vows/lib/vows/context.js:32:52) 
+      at env.callback (/home/rick/Projects/resourceful/node_modules/vows/lib/vows/context.js:46:29) 
+      at Resource.get (/home/rick/Projects/resourceful/lib/resourceful/resource.js:220:7) 
+      at Resource._request (/home/rick/Projects/resourceful/lib/resourceful/resource.js:167:13) 
+      at loop (/home/rick/Projects/resourceful/lib/resourceful/resource.js:91:9)
+'resourceful:test:id:forum/develop ---> {"name":"develop","resource":"Forum","forum_id":null,"forum_ids":["nodejitsu","flatiron"],"id":"forum/develop"}'
+  In database 'test' getting a forum named 'develop'
+    ✓ should be successful
+  In database 'test' getting a forum named 'develop' when Child.prototype.Parent() is used
+    ✓ should return parent as 'null'
+  In database 'test' getting a forum named 'develop' when Parent.prototype.children() is called
+    ✓ should return nodejitsu and flatiron
+'resourceful:test:id:forum/forum/develop/nodejitsu ---> {"name":"nodejitsu","resource":"Forum","forum_id":"develop","forum_ids":["orchestrion","conservatory"],"id":"forum/forum/develop/nodejitsu"}'
+  In database 'test' getting a forum named 'nodejitsu'
+    ✓ should be successful
+'resourceful:test:id:forum/develop ---> {"name":"develop","resource":"Forum","forum_id":null,"forum_ids":["nodejitsu","flatiron"],"id":"forum/develop"}'
+  In database 'test' getting a forum named 'nodejitsu' when Child.prototype.Parent() is used
+    ✓ should return parent forum
+'resourceful:test:id:forum/forum/develop/nodejitsu ---> {"name":"nodejitsu","resource":"Forum","forum_id":"develop","forum_ids":["orchestrion","conservatory"],"id":"forum/forum/develop/nodejitsu"}'
+  In database 'test' getting a forum named 'nodejitsu' when Parent.prototype.createChild() is called
+    ✓ should be successful
+'resourceful:test:id:forum/develop ---> {"name":"develop","resource":"Forum","forum_id":null,"forum_ids":["nodejitsu","flatiron"],"id":"forum/develop"}'
+  In database 'test' getting a forum named 'develop'
+    ✓ should be successful
+'resourceful:test:id:forum/develop ---> {"name":"develop","resource":"Forum","forum_id":null,"forum_ids":["nodejitsu","flatiron"],"id":"forum/develop"}'
+'resourceful:test:id:forum/develop ---> {"name":"develop","resource":"Forum","forum_id":null,"forum_ids":["nodejitsu","flatiron"],"id":"forum/develop"}'
+'resourceful:test:id:forum/forum/develop/nodejitsu ---> {"id":"resourceful:test:id:forum/forum/develop/nodejitsu","name":"nodejitsu","forum_id":"develop","forum_ids":["orchestrion","conservatory","haibu"],"resource":"Forum"}'
+'resourceful:test:id:forum/develop ---> {"name":"develop","resource":"Forum","forum_id":null,"forum_ids":["nodejitsu","flatiron"],"id":"forum/develop"}'
+'resourceful:test:id:forum/forum/develop/nodejitsu ---> {"id":"resourceful:test:id:forum/forum/develop/nodejitsu","name":"nodejitsu","forum_id":"develop","forum_ids":["orchestrion","conservatory","haibu"],"resource":"Forum"}'
+'resourceful:test:id:forum/forum/forum/develop/nodejitsu/conservatory ---> {"name":"conservatory","resource":"Forum","forum_id":"forum/develop/nodejitsu","forum_ids":[],"id":"forum/forum/forum/develop/nodejitsu/conservatory"}'
+'resourceful:test:id:forum/forum/develop/nodejitsu ---> {"id":"resourceful:test:id:forum/forum/develop/nodejitsu","name":"nodejitsu","forum_id":"develop","forum_ids":["orchestrion","conservatory","haibu"],"resource":"Forum"}'
+'resourceful:test:id:forum/forum/forum/develop/nodejitsu/conservatory ---> {"name":"conservatory","resource":"Forum","forum_id":"forum/develop/nodejitsu","forum_ids":[],"id":"forum/forum/forum/develop/nodejitsu/conservatory"}'
+'resourceful:test:id:forum/forum/forum/develop/nodejitsu/conservatory/*'
+[]
+'resourceful:test:id:forum/forum/forum/develop/nodejitsu/haibu ---> {"id":"resourceful:test:id:forum/forum/forum/develop/nodejitsu/haibu","name":"haibu","forum_id":"forum/develop/nodejitsu","forum_ids":[],"resource":"Forum"}'
+'resourceful:test:id:forum/forum/develop/nodejitsu ---> {"id":"resourceful:test:id:forum/forum/develop/nodejitsu","name":"nodejitsu","forum_id":"develop","forum_ids":["orchestrion","haibu"],"resource":"Forum"}'
+'resourceful:test:id:forum/forum/forum/develop/nodejitsu/haibu ---> {"id":"resourceful:test:id:forum/forum/forum/develop/nodejitsu/haibu","name":"haibu","forum_id":"forum/develop/nodejitsu","forum_ids":[],"resource":"Forum"}'
+'resourceful:test:id:forum/forum/forum/develop/nodejitsu/haibu/*'
+[]
+'resourceful:test:id:forum/forum/forum/develop/nodejitsu/orchestrion ---> {"name":"orchestrion","resource":"Forum","forum_id":"forum/develop/nodejitsu","forum_ids":[],"id":"forum/forum/forum/develop/nodejitsu/orchestrion"}'
+'resourceful:test:id:forum/forum/develop/nodejitsu ---> {"id":"resourceful:test:id:forum/forum/develop/nodejitsu","name":"nodejitsu","forum_id":"develop","forum_ids":["orchestrion"],"resource":"Forum"}'
+'resourceful:test:id:forum/forum/forum/develop/nodejitsu/orchestrion ---> {"name":"orchestrion","resource":"Forum","forum_id":"forum/develop/nodejitsu","forum_ids":[],"id":"forum/forum/forum/develop/nodejitsu/orchestrion"}'
+'resourceful:test:id:forum/forum/forum/develop/nodejitsu/orchestrion/*'
+[]
+'resourceful:test:id:forum/forum/develop/nodejitsu/*'
+[]
+'resourceful:test:id:forum/forum/develop/flatiron ---> {"name":"flatiron","resource":"Forum","forum_id":"develop","forum_ids":[],"id":"forum/forum/develop/flatiron"}'
+'resourceful:test:id:forum/develop ---> {"id":"resourceful:test:id:forum/develop","name":"develop","forum_id":null,"forum_ids":["flatiron"],"resource":"Forum"}'
+'resourceful:test:id:forum/forum/develop/flatiron ---> {"name":"flatiron","resource":"Forum","forum_id":"develop","forum_ids":[],"id":"forum/forum/develop/flatiron"}'
+'resourceful:test:id:forum/forum/develop/flatiron/*'
+[]
+'resourceful:test:id:forum/develop/*'
+[]
+  In database 'test' getting a forum named 'develop' and destroying it
+    ✗ should be successful 
+        » [33mexpected [1m[][22m to be an Object[39m[90m // relationship-test.js:579[39m
+'resourceful:test:id:forum/forum/forum/develop/nodejitsu/haibu ---> null'
+  In database 'test' getting a forum named 'develop' and destroying it should result in 'haibu' forum
+    ✓ getting destroyed
+  
+  ♢ resourceful/memory/relationship 
+  
+  In database "test" with defined resources "forum"
+    ✓ will be successful
+  In database "test" with defined resources "user"
+    ✓ will be successful
+  In database "test" with defined resources "repository"
+    ✓ will be successful
+  In database "test" with defined resources "pull_request"
+    ✓ will be successful
+  In database "test" with defined resources "team"
+    ✓ will be successful
+  In database "test" with defined resources "member"
+    ✓ will be successful
+  In database "test" with defined resources "membership"
+    ✓ will be successful
+  In database "test" with defined resources "follower"
+    ✓ will be successful
+  In database "test" with defined resources "following"
+    ✓ will be successful
+  In database 'test' getting an user named 'pavan'
+    ✓ should be successful
+  In database 'test' getting an user named 'pavan' and it should have children repositories
+    ✓ in an array
+  In database 'test' getting an user named 'pavan' and it should have children repositories and when 'Parent.children()' is used
+    ✓ should return them
+    ✓ should be of proper resource type
+    ✓ should have the user_id set correctly
+  In database 'test' getting an user named 'pavan' and it should have children repositories and when 'Parent.prototype.children()' is used
+    ✓ should return them
+    ✓ should be of proper resource type
+    ✓ should have the user_id set correctly
+  In database 'test' getting an user named 'pavan' and it should have children repositories and when 'Parent.getChild()' is used
+    ✓ should return one repository
+    ✓ should be of proper resource type
+    ✓ should have the user_id set correctly
+  In database 'test' getting an user named 'pavan' and it should have children repositories and when 'Parent.prototype.getChild()' is used
+    ✓ should return one repository
+    ✓ should be of proper resource type
+    ✓ should have the user_id set correctly
+  In database 'test' getting an user named 'pavan' and it should have children repositories and when 'Parent.getChild()' is used with an invalid child id
+    ✓ should return 404
+  In database 'test' getting an user named 'christian'
+    ✓ should be successful
+  In database 'test' getting an user named 'christian' and when 'Parent.prototype.createChild()' is used successfully
+    ✓ should return the newly created object
+    ✓ should set the user_id correctly
+  In database 'test' getting an user named 'christian' and when 'Parent.prototype.createChild()' is used successfully and reloading parent object
+    ✓ should be successful
+    ✓ should contain the new child object in the array
+  In database 'test' getting an user named 'christian' and when 'Parent.prototype.createChild()' is used successfully should create the record in the db
+    ✓ should respond with the right object
+  In database 'test' getting an user named 'marak'
+    ✓ should be successful
+  In database 'test' getting an user named 'marak' and when 'Parent.createChild()' is used successfully
+    ✓ should return the newly created object
+    ✓ should set the user_id correctly
+  In database 'test' getting an user named 'marak' and when 'Parent.createChild()' is used successfully and reloading parent object
+    ✓ should be successful
+    ✓ should contain the new child object in the array
+  In database 'test' getting an user named 'marak' and when 'Parent.createChild()' is used successfully should create the record in the db
+    ✓ should respond with the right object
+  In database 'test' getting a repository 'user/pavan/bullet'
+    ✓ should be successful
+    ✓ should have user_id 'pavan'
+  In database 'test' getting a repository 'user/pavan/bullet' and when 'Child.prototype.parent()' is used
+    ✓ should return the parent
+    ✓ should be of proper resource type
+    ✓ should have the children ids
+  In database 'test' getting an user named 'pavan'
+    ✓ should be successful
+    ✓ should have children repositories
+[ { id: 'user/pavan/bullet',
+    name: 'bullet',
+    user_id: 'pavan',
+    pull_request_ids: [],
+    resource: 'Repository' },
+  { id: 'user/pavan/octonode',
+    name: 'octonode',
+    user_id: 'pavan',
+    pull_request_ids: [],
+    resource: 'Repository' } ]
+  In database 'test' getting an user named 'pavan' and when 'Child.byParent()' is used
+    ✓ should return the children
+    ✓ should be of proper resource type
+    ✓ should have the parent id set correctly
+  In database 'test' getting a repository 'user/christian/issues'
+    ✓ should be successful
+    ✓ should have the correct user_id
+  In database 'test' getting a repository 'user/christian/issues' and getting the parent
+    ✓ should be successful
+{ id: 'user/christian/issues',
+  name: 'issues',
+  user_id: 'christian',
+  pull_request_ids: [],
+  resource: 'Repository' }
+  In database 'test' getting a repository 'user/christian/issues' and getting the parent and destroying the child
+    ✓ should be successful
+  In database 'test' getting a repository 'user/christian/issues' and getting the parent and destroying the child should result in parent
+    ✓ being modified in the db
+  In database 'test' getting an user named 'christian'
+    ✓ should be successful
+  In database 'test' getting an user named 'christian' and destroying it
+    ✓ should be successful
+  In database 'test' getting an user named 'christian' and destroying it should result in his repositories
+    ✓ getting destroyed
+  In database 'test' getting an user named 'christian' and destroying it should result in his followings
+    ✓ getting destroyed
+  In database 'test' getting an user named 'christian' and destroying it should result in his memberships
+    ✓ getting destroyed
+undefined
+  In database 'test' pull requests of repositories of 'christian'
+    ✓ should be destroyed
+  In database 'test' getting a forum named 'develop'
+    ✓ should be successful
+  In database 'test' getting a forum named 'develop' when Child.prototype.Parent() is used
+    ✓ should return parent as 'null'
+  In database 'test' getting a forum named 'develop' when Parent.prototype.children() is called
+    ✓ should return nodejitsu and flatiron
+  In database 'test' getting a forum named 'nodejitsu'
+    ✓ should be successful
+  In database 'test' getting a forum named 'nodejitsu' when Child.prototype.Parent() is used
+    ✓ should return parent forum
+  In database 'test' getting a forum named 'nodejitsu' when Parent.prototype.createChild() is called
+    ✓ should be successful
+  In database 'test' getting a forum named 'develop'
+    ✓ should be successful
+  In database 'test' getting a forum named 'develop' and destroying it
+    ✓ should be successful
+  In database 'test' getting a forum named 'develop' and destroying it should result in 'haibu' forum
+    ✓ getting destroyed
+  
+  ♢ resourceful/couchdb/relationship 
+  
+  In database "test" with defined resources "forum"
+    ✓ will be successful
+  In database "test" with defined resources "user"
+    ✓ will be successful
+  In database "test" with defined resources "repository"
+    ✓ will be successful
+  In database "test" with defined resources "pull_request"
+    ✓ will be successful
+  In database "test" with defined resources "team"
+    ✓ will be successful
+  In database "test" with defined resources "member"
+    ✓ will be successful
+  In database "test" with defined resources "membership"
+    ✓ will be successful
+  In database "test" with defined resources "follower"
+    ✓ will be successful
+  In database "test" with defined resources "following"
+    ✓ will be successful
+  In database 'test' getting an user named 'pavan'
+    ✓ should be successful
+  In database 'test' getting an user named 'pavan' and it should have children repositories
+    ✓ in an array
+  In database 'test' getting an user named 'pavan' and it should have children repositories and when 'Parent.getChild()' is used with an invalid child id
+    ✓ should return 404
+  In database 'test' getting an user named 'pavan' and it should have children repositories and when 'Parent.getChild()' is used
+    ✓ should return one repository
+    ✓ should be of proper resource type
+    ✓ should have the user_id set correctly
+  In database 'test' getting an user named 'pavan' and it should have children repositories and when 'Parent.prototype.getChild()' is used
+    ✓ should return one repository
+    ✓ should be of proper resource type
+    ✓ should have the user_id set correctly
+  In database 'test' getting an user named 'pavan' and it should have children repositories and when 'Parent.children()' is used
+    ✓ should return them
+    ✓ should be of proper resource type
+    ✓ should have the user_id set correctly
+  In database 'test' getting an user named 'pavan' and it should have children repositories and when 'Parent.prototype.children()' is used
+    ✓ should return them
+    ✓ should be of proper resource type
+    ✓ should have the user_id set correctly
+  In database 'test' getting an user named 'christian'
+    ✓ should be successful
+  In database 'test' getting an user named 'christian' and when 'Parent.prototype.createChild()' is used successfully
+    ✓ should return the newly created object
+    ✓ should set the user_id correctly
+  In database 'test' getting an user named 'christian' and when 'Parent.prototype.createChild()' is used successfully should create the record in the db
+    ✓ should respond with the right object
+  In database 'test' getting an user named 'christian' and when 'Parent.prototype.createChild()' is used successfully and reloading parent object
+    ✓ should be successful
+    ✓ should contain the new child object in the array
+  In database 'test' getting an user named 'marak'
+    ✓ should be successful
+  In database 'test' getting an user named 'marak' and when 'Parent.createChild()' is used successfully
+    ✓ should return the newly created object
+    ✓ should set the user_id correctly
+  In database 'test' getting an user named 'marak' and when 'Parent.createChild()' is used successfully should create the record in the db
+    ✓ should respond with the right object
+  In database 'test' getting an user named 'marak' and when 'Parent.createChild()' is used successfully and reloading parent object
+    ✓ should be successful
+    ✓ should contain the new child object in the array
+  In database 'test' getting a repository 'user/pavan/bullet'
+    ✓ should be successful
+    ✓ should have user_id 'pavan'
+  In database 'test' getting a repository 'user/pavan/bullet' and when 'Child.prototype.parent()' is used
+    ✓ should return the parent
+    ✓ should be of proper resource type
+    ✓ should have the children ids
+  In database 'test' getting an user named 'pavan'
+    ✓ should be successful
+    ✓ should have children repositories
+[ { id: 'user/pavan/bullet',
+    name: 'bullet',
+    user_id: 'pavan',
+    pull_request_ids: [],
+    resource: 'Repository',
+    _rev: '1-4b2ffef7898459fcc773c1edd9bc88eb' },
+  { id: 'user/pavan/octonode',
+    name: 'octonode',
+    user_id: 'pavan',
+    pull_request_ids: [],
+    resource: 'Repository',
+    _rev: '1-0aa233552ed472fc00a7eeeec07e7b9b' } ]
+  In database 'test' getting an user named 'pavan' and when 'Child.byParent()' is used
+    ✓ should return the children
+    ✓ should be of proper resource type
+    ✓ should have the parent id set correctly
+  In database 'test' getting a repository 'user/christian/issues'
+    ✓ should be successful
+    ✓ should have the correct user_id
+  In database 'test' getting a repository 'user/christian/issues' and getting the parent
+    ✓ should be successful
+{ id: 'user/christian/issues',
+  name: 'issues',
+  user_id: 'christian',
+  pull_request_ids: [],
+  resource: 'Repository',
+  _rev: '1-2e3f2b26f397e2674997323e74d5c354' }
+  In database 'test' getting a repository 'user/christian/issues' and getting the parent and destroying the child
+    ✓ should be successful
+  In database 'test' getting a repository 'user/christian/issues' and getting the parent and destroying the child should result in parent
+    ✓ being modified in the db
+  In database 'test' getting an user named 'christian'
+    ✓ should be successful
+  In database 'test' getting an user named 'christian' and destroying it
+    ✓ should be successful
+  In database 'test' getting an user named 'christian' and destroying it should result in his memberships
+    ✓ getting destroyed
+  In database 'test' getting an user named 'christian' and destroying it should result in his followings
+    ✓ getting destroyed
+  In database 'test' getting an user named 'christian' and destroying it should result in his repositories
+    ✓ getting destroyed
+undefined
+  In database 'test' pull requests of repositories of 'christian'
+    ✓ should be destroyed
+  In database 'test' getting a forum named 'develop'
+    ✓ should be successful
+  In database 'test' getting a forum named 'develop' when Child.prototype.Parent() is used
+    ✓ should return parent as 'null'
+  In database 'test' getting a forum named 'develop' when Parent.prototype.children() is called
+    ✓ should return nodejitsu and flatiron
+  In database 'test' getting a forum named 'nodejitsu'
+    ✓ should be successful
+  In database 'test' getting a forum named 'nodejitsu' when Child.prototype.Parent() is used
+    ✓ should return parent forum
+  In database 'test' getting a forum named 'nodejitsu' when Parent.prototype.createChild() is called
+    ✓ should be successful
+  In database 'test' getting a forum named 'develop'
+    ✓ should be successful
+  In database 'test' getting a forum named 'develop' and destroying it
+    ✓ should be successful
+  In database 'test' getting a forum named 'develop' and destroying it should result in 'haibu' forum
+    ✓ getting destroyed
+  
+  ♢ resourceful/validation 
+  
+  A Resource with complex validation when created with a valid object
+    ✓ it should be created correctly
+  A Resource with complex validation when created with an invalid object
+    ✓ it should respond with the correct errors
+  A Resource with complex validation when updated with an invalid object
+    ✓ it should respond with the correct errors
+  A Resource with complex validation when updated with a valid object
+    ✓ it should be created correctly
+  
+  ♢ resourceful 
+  
+  A Resource with methods
+    ✓ adds them to Resource
+    ✓ should be able to fire method with no schema and callback
+    ✓ should be able to fire method with no schema and no callback
+    ✓ should be able to fire method with one argument and a callback
+    ✓ should be able to fire method with two arguments and no callback
+    ✓ should be able to fire method method with oneargument and callback
+    ✓ should be able to fire method with single arguments and no callback
+    ✓ should error on firing method with invalid signature arguments and callback
+    ✓ should error on firing method with signature and no callback
+    ✓ should be able to fire method with good signature and callback
+    ✓ should be able to fire method with good signature and no callback
+    ✓ should error when firing methods with invalid schema values and no callback
+    ✓ should error when firing methods with invalid schema values with callback
+  An instance of that Resource
+    ✓ adds them to Resource
+    ✓ should be able to fire method with no schema and callback
+    ✓ should be able to fire method with no schema and no callback
+    ✓ should be able to fire method with one argument and a callback
+    ✓ should be able to fire method with two arguments and no callback
+    ✓ should be able to fire method method with oneargument and callback
+    ✓ should be able to fire method with single arguments and no callback
+    ✓ should error on firing method with invalid signature arguments and callback
+    ✓ should error on firing method with signature and no callback
+    ✓ should be able to fire method with good signature and callback
+    ✓ should be able to fire method with good signature and no callback
+    ✓ should error when firing methods with invalid schema values and no callback
+    ✓ should error when firing methods with invalid schema values with callback
+  
+  ♢ resourceful/engines/redis 
+  
+  In database "test" with defined resources "book"
+    ✓ will be successful
+  In database "test" with defined resources "author"
+    ✓ will be successful
+  In database "test" with defined resources "creature"
+    ✓ will be successful
+[ { id: 'mat', age: 29, hair: 'black', resource: 'Author' },
+  { id: 'bob', age: 35, hair: 'black', resource: 'Author' },
+  { id: 'tim', age: 16, hair: 'brown', resource: 'Author' } ]
+  In database "test" an Resource.all() request
+    ✗ should respond with an array of all records 
+        » [33m       
+        [32mactual[39m [31mexpected[39m 
+         
+        [32mbob[39m[31mmat[39m 
+        [39m[90m // engines-test.js:41[39m
+'resourceful:test:id:author/bob ---> {"resource":"Author","age":35,"hair":"black","id":"author/bob"}'
+  In database "test" a Resource.get() request when successful
+    ✓ should respond with a Resource instance
+    ✓ should respond with the right object
+    ✓ should not be a new record
+'resourceful:test:id:author/david ---> null'
+  In database "test" a Resource.get() request when unsuccessful
+    ✓ should respond with an error
+  In database "test" a Resource.create() request
+    ✓ should return the newly created object
+    ✓ should not be a new record
+'resourceful:test:id:author/han ---> {"id":"resourceful:test:id:author/han","age":30,"hair":"red","resource":"Author"}'
+  In database "test" a Resource.create() request should create the record in the db
+    ✓ should respond with a Resource instance
+    ✓ should respond with the right object
+    ✓ should not be a new record
+  In database "test" a diffirent Resource.create() request with the same id
+    ✓ should return the newly created object
+    ✓ should not be a new record
+'resourceful:test:id:creature/han ---> {"id":"resourceful:test:id:creature/han","resource":"Creature"}'
+  In database "test" a diffirent Resource.create() request with the same id should create the record in the db
+    ✓ should respond with a Resource instance
+    ✓ should respond with the right object
+    ✓ should not be a new record
+'resourceful:test:id:author/han/*'
+[]
+  In database "test" and a Resource.destroy() request
+    ✓ should be successful
+'resourceful:test:id:author/han ---> null'
+  In database "test" and a Resource.destroy() request and Resource.get() the destroyed object
+    ✓ should respond with an error
+  Instantiating a new instance
+    ✓ should be a new record
+'resourceful:test:id:author/han ---> null'
+  Instantiating a new instance should not be in the db
+    ✓ should respond with an error
+  Instantiating a new instance
+    ✓ should be a new record
+  Instantiating a new instance a Resource.prototype.save() request
+    ✓ should respond with a Resource instance
+    ✓ should respond with the right object
+    ✓ should not be a new record
+'resourceful:test:id:author/han ---> {"id":"resourceful:test:id:author/han","age":30,"hair":"red","resource":"Author"}'
+  Instantiating a new instance a Resource.prototype.save() request should create the object in db
+    ✓ should respond with a Resource instance
+    ✓ should respond with the right object
+    ✓ should not be a new record
+  In database "test" a Resource.find() request when successful
+    ✓ should respond with an array of length 2
+    ✗ should respond with an array of Resource instances 
+        » [33m       
+        [32mactual[39m [31mexpected[39m 
+         
+        [32mbob[39m[31mmat[39m 
+        [39m[90m // engines-test.js:287[39m
+    ✓ should not be a new record
+  In database "test" a Resource.find() request when unsuccessful
+    ✓ should respond with an empty array
+'resourceful:test:id:author/bob ---> {"resource":"Author","age":35,"hair":"black","id":"author/bob"}'
+  In database "test"
+    ✓ it should have 'bob' object
+    ✓ should not be a new record
+'resourceful:test:id:author/bob ---> {"resource":"Author","age":35,"hair":"black","id":"author/bob"}'
+  In database "test" a Resource.update() request when successful
+    ✓ should respond with a Resource instance
+    ✓ should respond with the right object
+    ✓ should not be a new record
+'resourceful:test:id:author/bob ---> {"resource":"Author","age":31,"hair":"black","id":"resourceful:test:id:author/bob"}'
+  In database "test" a Resource.update() request when successful should update the object in db
+    ✓ should respond with a Resource instance
+    ✓ should respond with the right object
+    ✓ should not be a new record
+'resourceful:test:id:author/bob ---> {"resource":"Author","age":31,"hair":"black","id":"resourceful:test:id:author/bob"}'
+  In database "test"
+    ✓ it should have 'bob' object
+    ✓ should not be a new record
+  In database "test" a Resource.save() request when successful
+    ✓ should respond with a Resource instance
+    ✓ should respond with the right object
+    ✓ should not be a new record
+'resourceful:test:id:author/bob ---> {"id":"resourceful:test:id:author/bob","age":35,"hair":"black","resource":"Author"}'
+  In database "test" a Resource.save() request when successful should update the object in db
+    ✓ should respond with a Resource instance
+    ✓ should respond with the right object
+    ✓ should not be a new record
+'resourceful:test:id:author/bob ---> {"id":"resourceful:test:id:author/bob","age":35,"hair":"black","resource":"Author"}'
+  In database "test"
+    ✓ it should have 'bob' object
+    ✓ should not be a new record
+  In database "test" a Resource.prototype.save() request
+    ✓ should respond with a Resource instance
+    ✓ should respond with the right object
+    ✓ should not be a new record
+'resourceful:test:id:author/bob ---> {"id":"resourceful:test:id:author/bob","age":31,"hair":"red","resource":"Author"}'
+  In database "test" a Resource.prototype.save() request should save the object in db
+    ✓ should respond with a Resource instance
+    ✓ should respond with the right object
+    ✓ should not be a new record
+'resourceful:test:id:author/bob ---> {"id":"resourceful:test:id:author/bob","age":31,"hair":"red","resource":"Author"}'
+  In database "test"
+    ✓ it should have 'bob' object
+    ✓ should not be a new record
+'resourceful:test:id:author/bob ---> {"id":"resourceful:test:id:author/bob","age":31,"hair":"red","resource":"Author"}'
+  In database "test" a Resource.prototype.update() request
+    ✓ should respond with a Resource instance
+    ✓ should respond with the right object
+    ✓ should not be a new record
+'resourceful:test:id:author/bob ---> {"id":"resourceful:test:id:author/bob","age":35,"hair":"black","resource":"Author"}'
+  In database "test" a Resource.prototype.update() request should update the object in db
+    ✓ should respond with a Resource instance
+    ✓ should respond with the right object
+    ✓ should not be a new record
+'resourceful:test:id:author/han ---> {"id":"resourceful:test:id:author/han","age":30,"hair":"red","resource":"Author"}'
+'resourceful:test:id:author/han/*'
+[]
+  In database "test" a Resource.prototype.destroy() request
+    ✓ should be successful
+'resourceful:test:id:author/han ---> null'
+  In database "test" a Resource.prototype.destroy() request should delete the object in db
+    ✓ should be missing
+'resourceful:test:id:author/bob ---> {"id":"resourceful:test:id:author/bob","age":35,"hair":"black","resource":"Author"}'
+'resourceful:test:id:author/bob ---> {"id":"resourceful:test:id:author/bob","age":35,"hair":"black","resource":"Author"}'
+  In database "test" a Resource.prototype.reload() request
+    ✓ should respond with a Resource instance
+    ✓ should respond with the right object
+    ✓ should not be a new record
+  Creating object without 'id'
+    ✓ should be successful
+'resourceful:test:id:author/bob,resourceful:test:id:author/pun,resourceful:test:id:author/tim ---> {"id":"resourceful:test:id:author/bob","age":35,"hair":"black","resource":"Author"},,{"resource":"Author","age":16,"hair":"brown","id":"author/tim"}'
+  Getting multiple objects from ids when one object isn't found
+    ✓ should be successful
+  
+  ♢ resourceful/resource/view 
+  
+  A database containing articles and other resources
+    ✓ is created
+  A database containing articles and other resources A Resource definition with filters
+    ✓ should respond to the filters
+  A database containing articles and other resources A Resource definition with filters can be used to query the database: <by> 'cloudhead'
+    ✓ should return an array of Article records by 'cloudhead'
+  A database containing articles and other resources A Resource definition with filters can be used to query the database: <by> 'yoda'
+    ✓ should return an array of Article records by 'yoda'
+  A database containing articles and other resources A Resource definition with filters can be used to query the database: <published>
+    ✓ should return an array of all published Articles
+  A database containing articles and other resources A Resource definition with filters can be used to query the database: <by> ['yoda', 'fitzgerald']
+    ✓ should return an array of Article records by 'yoda' or 'fitzgerald'
+  A database containing articles and other resources A Resource definition with filters can be used to query the database: <all>
+    ✓ should return an array of all Article records
+  A second Resource definition with filters
+    ✓ should have no side effects on the first resource views
+  
+  ♢ resourceful/hooks/async 
+  
+  another save-able Resource with 'after' hooks on save
+    ✓ should just have the two 'after' hooks registered
+  another create-able Resource with 'after' hooks on create
+    ✓ should just have the two 'after' hooks registered
+  another create-able Resource with 'after' hooks on create when calling create() on an instance of Article
+    ✓ should trigger both hooks in the right order
+  another save-able Resource with 'after' hooks on save when calling save() on an instance of Article
+    ✓ should trigger both hooks in the right order
+  save-able Resource with 'before' hooks on save when calling save() on an instance of Article
+    ✓ should trigger both hooks in the right order
+  create-able Resource with 'before' hooks on create when calling create() on an instance of Article
+    ✓ should trigger all hooks
+    ✓ should trigger all hooks in the right order
+    ✓ should have modified attributes
+  
+  ♢ resourceful/deferredRelationship 
+  
+  Defining a child resource of non-defined parent
+    ✓ should be successful
+    ✓ should have no parent
+  Defining a child resource of non-defined parent and defining the parent resource
+    ✓ should be successful
+    ✓ should have child set
+    ✓ and child should have parent set
+  
+  ♢ resourceful 
+  
+  Resource() returns a Resource factory
+    ✓ which is a function
+    ✓ and has the create/get/all/find methods
+  Resource('article') with a function returns an Article factory
+    ✓ with the resource name set
+    ✓ and access to the data attribute
+  Resource() returns a Resource factory which can be called
+    ✓ to return Resource instances which have prototype methods
+  Resource('article') with a function returns an Article factory which can be called
+    ✓ returning Article instances
+    ✓ returning an object which inherits from Resource's prototype
+    ✓ and doesn't have a value for key
+  Default Resource instances
+    ✓ have the resource, define and property methods
+    ✓ resource should be set to 'Resource'
+    ✓ the properties accessor returns an empty object
+    ✓ the key accessor is set to 'id' by default
+  A Resource with a couple of properties
+    ✓ adds them to Resource.properties
+  A Resource with duplicate properties
+    ✓ only keeps the last copy
+  A Resource with a couple of properties When instantiated
+    ✓ should respond to toString()
+    ✓ should respond to toJSON()
+    ✓ should respond to safeJSON() without filtered properties
+    ✓ should return the attributes, when Object.keys is called
+    ✓ should set the unspecified values to undefined
+  A Resource with sanitized _id should be saved
+    ✓ and be found by non-sanitized_id
+  The property() method returns an object which implements
+    ✓ requires
+    ✓ type
+    ✓ required
+    ✓ unique
+    ✓ title
+    ✓ description
+    ✓ format
+    ✓ storageName
+    ✓ conform
+    ✓ lazy
+  The property() method with a 'number' type
+    ✓ return an object which doesn't implement String 'definers'
+  Engine can be initialised by name
+    ✓ or without
+  Engine can be initialised by reference
+    ✓ or without
+  The property() method with a 'string' type returns an object which implements
+    ✓ pattern
+    ✓ minLength
+    ✓ maxLength
+    ✓ length
+  The property() method with a 'number' type returns an object which implements
+    ✓ minimum
+    ✓ maximum
+    ✓ within
+  Engine can be initialised by name with options
+    ✓ uri
+    ✓ uri + port
+    ✓ uri + port + database
+  Engine can be initialised by reference with options
+    ✓ uri
+    ✓ uri + port
+    ✓ uri + port + database
+  The property() method with a 'string' type returns an object which implements sanitize('upper')
+    ✓ and pass check
+  The property() method with a 'string' type returns an object which implements sanitize('lower')
+    ✓ and pass check
+  The property() method with a 'string' type returns an object which implements sanitize('capitalize')
+    ✓ and pass check
+  The property() method with a 'string' type returns an object which implements sanitize('pluralize')
+    ✓ and pass check
+  The property() method with a 'string' type returns an object which implements sanitize('upper').sanitize('replace')
+    ✓ and pass check
+  The property() method with a 'string' type returns an object which implements sanitize('replace')
+    ✓ and pass check
+  The property() method with a 'string' type returns an object which implements sanitize('lower').sanitize('prefix')
+    ✓ and pass check
+  The property() method with a 'number' type returns an object which implements sanitize('round')
+    ✓ and pass check
+  The property() method with a 'number' type returns an object which implements sanitize(function () {...})
+    ✓ and pass check
+  The property() method with a 'number' type returns an object which implements sanitize(function () {...}) with changing property's value
+    ✓ and pass check
+  Defining a Resource schema with property()
+    ✓ should add an entry to properties
+    ✓ should default to type:'string'
+  Defining a Resource schema with object()
+    ✓ should be type:'object'
+  Defining a Resource schema with string()
+    ✓ should add an entry to properties
+    ✓ should be type:'string'
+  Defining a Resource schema with number()
+    ✓ should add an entry to properties
+    ✓ should be type:'number'
+  Defining a Resource schema with bool()
+    ✓ should add an entry to properties
+    ✓ should be type:'boolean'
+  Defining a Resource schema with array()
+    ✓ should add an entry to properties
+    ✓ should be type:'array'
+  Defining a Resource schema with constructor's call
+    ✓ should add entries to properties
+  Defining a Resource schema with define()
+    ✓ should add entries to properties
+  Defining a Resource schema by chaining attribute setters
+    ✓ should work just the same
+  Defining a Resource schema by chaining attribute setters with string()
+    ✓ should work just the same
+  
+  ♢ resourceful/resource/cache 
+  
+  When creating an instance, and saving it and then loading it back up with get()
+    ✓ it should return the previous instance
+  When creating an instance, and saving it and then loading it back up with find()
+    ✓ it should return the previous instance
+  When creating an instance, and saving it and then clearing the cache and loading it back up with get()
+    ✓ it should return a new instance
+ 
+✗ Errored » 394 honored ∙ 8 broken ∙ 1 errored (2.587s) 
+  
