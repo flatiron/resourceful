@@ -69,9 +69,14 @@ Creature.prototype.feed = function (food) {
 
 ### Documentation
 
+See the [wiki](https://github.com/flatiron/resourceful/wiki) for more documention.
+
  * [Engines Usage](https://github.com/flatiron/resourceful/wiki/Engines-Usage)
  * [Engine Constructor](https://github.com/flatiron/resourceful/wiki/Engine-Constructor)
  * [Engine Caching](https://github.com/flatiron/resourceful/wiki/Engine-Caching)
+ * [Relational Resources](https://github.com/flatiron/resourceful/wiki/Relational-Resources)
+ * [Hooks and Events](https://github.com/flatiron/resourceful/wiki/Hooks-and-Events)
+ 
 
 # API
 
