@@ -126,6 +126,10 @@ vows.describe('resourceful').addVows({
 
         assert.ok(!restricted.title);
         assert.ok(restricted.kind);
+
+				assert.ok(!restricted._rev);
+				assert.ok(!restricted._id);
+				assert.ok(!restricted.resource);
       },
       "should return the attributes, when `Object.keys` is called": function (r) {
         var keys = Object.keys(r);
