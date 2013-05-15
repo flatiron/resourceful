@@ -27,6 +27,7 @@ vows.describe('resourceful/resource/view').addBatch({
           this.filter('all', {});
           this.filter('published', { published: true });
           this.filter('by', function (author) { return { author: author } });
+          this.filter('byTag', { map: function (doc) { if ( doc.resource == "Article" && doc.tags ) doc.tags.forEach(function(tag) { emit ( tag, doc );  }); } });
         })
 
         Article.register();
@@ -43,6 +44,7 @@ vows.describe('resourceful/resource/view').addBatch({
         assert.isFunction(R.published);
         assert.isFunction(R.all);
         assert.isFunction(R.by);
+       // assert.isFunction(R.byTag);
       },
       "can be used to query the database:": {
         "<published>": {
@@ -109,6 +111,48 @@ vows.describe('resourceful/resource/view').addBatch({
               (res[0].author === 'yoda' && res[1].author === 'fitzgerald') ||
               (res[0].author === 'fitzgerald' && res[1].author === 'yoda')
             );
+          }
+        },
+        "<byTag> 'classic'": {
+          topic: function (Article) {
+            Article.byTag('classic', this.callback);
+          },
+          "should return an array of Article records tagged 'classic'": function (e, res) {
+            var that = this;
+            assert.isArray(res);
+            assert.equal(res.length,1);
+            assert.equal(res[0].tags[0], 'classic');
+            res.forEach(function (d) {
+                assert.isObject(d);
+                assert.instanceOf(d,Article);
+                assert.equal(d.constructor,Article);
+                assert.equal(d.resource,'Article');
+                assert.ok(d.published);
+              });
+          }
+        },
+        "<byTag> ['classic', 'hacking']": {
+          topic: function (Article) {
+            Article.byTag({
+              keys: ['classic', 'hacking']
+            }, this.callback);
+          },
+          "should return an array of Article records tagged 'classic' or 'hacking'": function (e, res) {
+            var that = this;
+            assert.isArray(res);
+            assert.equal(res.length, 2);
+            
+            assert(
+              (res[0].tags[0] === 'classic' && res[1].tags[0] === 'hacking') ||
+              (res[0].tags[0] === 'hacking' && res[1].tags[0] === 'classic')
+            );
+            
+            res.forEach(function (d) {
+                assert.isObject(d);
+                assert.instanceOf(d,Article);
+                assert.equal(d.constructor,Article);
+                assert.equal(d.resource,'Article');
+              });
           }
         }
       }
