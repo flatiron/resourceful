@@ -3,7 +3,7 @@ var vows = require('vows'),
     macros = require('./macros/relationship'),
     fs   = require('fs'),
     assert = require('assert'),
-    resourceful = require('../lib/resourceful');
+    resourceful = require('./singleton');
 
 //
 // Load resourceful engines for testing from /engines/ folder

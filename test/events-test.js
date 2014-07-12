@@ -1,6 +1,6 @@
 var assert = require('assert'),
     vows = require('vows'),
-    resourceful = require('../lib/resourceful');
+    resourceful = require('./singleton');
 
 vows.describe('resourceful/events').addBatch({
   "an Article": {

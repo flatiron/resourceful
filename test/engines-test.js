@@ -4,7 +4,7 @@ var path = require('path')
   , vows = require('vows')
   , macros = require('./macros')
   , fixtures = require('./fixtures')
-  , resourceful = require('../lib/resourceful');
+  , resourceful = require('./singleton');
 
 //
 // Load resourceful engines for testing from /engines/ folder
@@ -329,7 +329,7 @@ engines.forEach(function (e) {
       "a Resource.update() request when successful": {
         topic: function () {
           resources[e].Author.update('bob', { age: 31 }, this.callback);
-        },				
+        },
 				"should not crash when not passed a callback": function (err, obj) {
 					resources[e].Author.update('mat', { age: 35, hair: 'brown' });
 				},
@@ -515,7 +515,7 @@ engines.forEach(function (e) {
         assert.isNull(err);
         assert.isFalse(obj.isNewRecord);
       },
-      "a Resource.prototype.update() request": {				
+      "a Resource.prototype.update() request": {
         topic: function (obj) {
           obj.update({ age: 35, hair: 'black' }, this.callback);
         },

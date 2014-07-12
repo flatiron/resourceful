@@ -2,7 +2,7 @@ var assert = require('assert'),
     events = require('events'),
     cradle = require('cradle'),
     vows = require('vows'),
-    resourceful = require('../lib/resourceful');
+    resourceful = require('./singleton');
 
 var Article;
 

@@ -1,6 +1,6 @@
 var assert = require('assert'),
     vows = require('vows'),
-    resourceful = require('../lib/resourceful');
+    resourceful = require('./singleton');
 
 var Article = resourceful.define('Article', function () {
   this.property('title');

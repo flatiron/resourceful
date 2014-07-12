@@ -2,7 +2,7 @@ var macros = exports,
     fixture = require('../fixtures'),
     assert = require('assert');
 
-var resourceful = require('../../lib/resourceful');
+var resourceful = require('../singleton');
 
 //
 // Define common macros that will be used for all tests
