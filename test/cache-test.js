@@ -1,11 +1,13 @@
 var assert = require('assert'),
     vows = require('vows'),
-    resourceful = require('./singleton');
+    Resourceful = require('..');
+
+var resourceful = new Resourceful().connect('memory://cache-test');
 
 var Article = resourceful.define('Article', function () {
   this.property('title');
   this.property('published', Boolean);
-}).connect('memory://cache-test');
+});
 
 vows.describe('resourceful/resource/cache', {
   "When creating an instance, and saving it": {
@@ -52,4 +54,4 @@ vows.describe('resourceful/resource/cache', {
       }
     }
   }
-}).export(module);
+});

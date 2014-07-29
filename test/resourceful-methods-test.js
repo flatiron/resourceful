@@ -1,6 +1,8 @@
 var assert = require('assert'),
     vows = require('vows'),
-    resourceful = require('./singleton');
+    Resourceful = require('..');
+
+var resourceful = new Resourceful();
 
 function describeResourceWithMethods(){
   var r = resourceful.define('creature');

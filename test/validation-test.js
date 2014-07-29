@@ -1,6 +1,8 @@
 var assert = require('assert'),
     vows = require('vows'),
-    resourceful = require('./singleton');
+    Resourceful = require('..');
+
+var resourceful = new Resourceful();
 
 var users = {
   valid: {

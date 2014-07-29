@@ -2,8 +2,9 @@ var assert = require('assert'),
     events = require('events'),
     cradle = require('cradle'),
     vows = require('vows'),
-    resourceful = require('./singleton');
+    Resourceful = require('..');
 
+var resourceful = new Resourceful();
 var Article;
 
 resourceful.env = 'test';

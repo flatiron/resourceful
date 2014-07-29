@@ -11,6 +11,6 @@ engine.load = function (resourceful, data, callback) {
     return r;
   });
 
-  new(resourceful.engines.Memory)(engine.options).load(data);
-  callback();
+  resourceful.connection.load(data);
+  process.nextTick(callback);
 };
