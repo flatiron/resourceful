@@ -9,8 +9,8 @@ var path = require('path')
 //
 // Load resourceful engines for testing from /engines/ folder
 //
-//var engines = fs.readdirSync(path.join(__dirname, 'engines')).map(function (e) { return require('./engines/' + e.slice(0,-3)); });
-var engines = [require('./engines/redis')];
+var engines = fs.readdirSync(path.join(__dirname, 'engines')).map(function (e) { return require('./engines/' + e.slice(0,-3)); });
+
 //
 // For every engine, we'll need to create a new resources,
 // that each connect to the respective engine
@@ -330,7 +330,7 @@ engines.forEach(function (e) {
       "a Resource.update() request when successful": {
         topic: function () {
           resources[e].Author.update('bob', { age: 31 }, this.callback);
-        },				
+        },
 				"should not crash when not passed a callback": function (err, obj) {
 					resources[e].Author.update('mat', { age: 35, hair: 'brown' });
 				},
@@ -516,7 +516,7 @@ engines.forEach(function (e) {
         assert.isNull(err);
         assert.isFalse(obj.isNewRecord);
       },
-      "a Resource.prototype.update() request": {				
+      "a Resource.prototype.update() request": {
         topic: function (obj) {
           obj.update({ age: 35, hair: 'black' }, this.callback);
         },
