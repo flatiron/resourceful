@@ -39,7 +39,7 @@ function describeResourceWithMethods(){
 
   r.method('poke', poke);
 
-  r.method('fire', fire, { 
+  r.method('fire', fire, {
     "description": "fires a lazer at a certain power and direction",
     "properties": {
       "options": {

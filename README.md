@@ -25,7 +25,7 @@
 
 # Installation
 
-``` bash 
+``` bash
 $ [sudo] npm install resourceful
 ```
 
@@ -41,7 +41,7 @@ var Creature = resourceful.define('creature', function () {
   // Specify a storage engine
   //
   this.use('couchdb');
-  
+
   //
   // Specify some properties with validation
   //
@@ -65,7 +65,7 @@ Creature.prototype.feed = function (food) {
 ```
 <a name="engines"></a>
 
-# Engines 
+# Engines
 
 ### Documentation
 
@@ -76,7 +76,7 @@ See the [wiki](https://github.com/flatiron/resourceful/wiki) for more documentio
  * [Engine Caching](https://github.com/flatiron/resourceful/wiki/Engine-Caching)
  * [Relational Resources](https://github.com/flatiron/resourceful/wiki/Relational-Resources)
  * [Hooks and Events](https://github.com/flatiron/resourceful/wiki/Hooks-and-Events)
- 
+
 
 # API
 

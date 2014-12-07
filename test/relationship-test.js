@@ -336,7 +336,7 @@ engines.forEach(function (e) {
           },
           "should return the children": function (err, obj) {
             assert.isNull(err);
-            console.dir(obj); 
+            console.dir(obj);
             assert.equal(obj[0].id, 'user/pavan/bullet');
             assert.equal(obj[0].name, 'bullet');
             assert.equal(obj[1].id, 'user/pavan/octonode');
@@ -387,7 +387,7 @@ engines.forEach(function (e) {
           },
           "and destroying the child": {
             topic: function (parent, child) {
-              console.dir(child); 
+              console.dir(child);
               child.destroy(this.callback);
             },
             "should be successful": function (err, obj) {

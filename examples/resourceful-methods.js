@@ -23,7 +23,7 @@ function fire (options, callback) {
 //
 //   name, Function, schema
 //
-//  The schema represents an optional JSON-Schema, 
+//  The schema represents an optional JSON-Schema,
 //  which if present, is enforced on the Function's arguments
 //
 //
